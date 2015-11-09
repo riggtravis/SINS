@@ -8,10 +8,11 @@ from sqlalchemy import (
 	Integer,
 	Unicode,			# Provides Unicode field
 	UnicodeText,		# Text field of unrestricted length
-	Char,				# Fixed lenth strings
+	CHAR,				# Fixed lenth strings
 	Boolean,			# Provides true/false values
 	DateTime,			# Time abstraction
-	UniqueConstraint	# We need to ensure that usernames are unique.
+	UniqueConstraint,	# We need to ensure that usernames are unique.
+	orm
 )
 
 class User(Base):
@@ -23,11 +24,11 @@ class User(Base):
 	username = Column(Unicode(30), unique=True, nullable=False)
 	
 	# Attributes
-	password = Column(Char(256), nullable=False)
-	avatar = Column(Char(5))
+	password = Column(CHAR(256), nullable=False)
+	avatar = Column(CHAR(5))
 	signature = Column(UnicodeText)
 	
 	# Relationships
-	bans = relationship("Ban", backref="people")
-	memberships = relationship("Membership", backref="people")
-	posts = relationship("Post", backref="people")
+	bans = orm.relationship("Ban", backref="people")
+	memberships = orm.relationship("Membership", backref="people")
+	posts = orm.relationship("Post", backref="people")

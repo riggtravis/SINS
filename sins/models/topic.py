@@ -8,10 +8,11 @@ from sqlalchemy import (
 	Integer,
 	Unicode,		# Provides Unicode field
 	UnicodeText,	# Text field of unrestricted length
-	Char,			# Fixed lenth strings
+	CHAR,			# Fixed lenth strings
 	Boolean,		# Provides true/false values
 	DateTime,		# Time abstraction
-	ForeignKey		# Topics must be part of forums.
+	ForeignKey,		# Topics must be part of forums.
+	orm
 )
 
 class Topic(Base):
@@ -29,4 +30,4 @@ class Topic(Base):
 	sticky_status = Column(Boolean)
 	
 	# Relationships
-	posts = relationship("Post", backref='topics')
+	posts = orm.relationship("Post", backref='topics')

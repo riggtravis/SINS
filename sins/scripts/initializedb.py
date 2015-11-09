@@ -29,9 +29,7 @@ def usage(argv):
 
 pass_contxt = CryptContext(
 	schemes = ["sha512_crypt"],
-	default = "sha512_crypt",
-	all_vary_rounds = 0.1,
-	sha512_crypt_default_rounds = 5000
+	default = "sha512_crypt"
 )
 
 def main(argv=sys.argv):
@@ -46,5 +44,5 @@ def main(argv=sys.argv):
     Base.metadata.create_all(engine)
 	
     with transaction.manager:
-        admin = User(name=u'one', password=pass_contxt.encrypt(u'admin'))
+        admin = User(username=u'one', password=pass_contxt.encrypt(u'admin'))
         DBSession.add(admin)

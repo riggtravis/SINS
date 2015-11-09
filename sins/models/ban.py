@@ -8,10 +8,11 @@ from sqlalchemy import (
 	Integer,
 	Unicode,		# Provides Unicode field
 	UnicodeText,	# Text field of unrestricted length
-	Char,			# Fixed length strings
+	CHAR,			# Fixed length strings
 	Boolean,		# Provides true/false values
-	DateTime		# Time abstraction
-	ForeignKey		# Allows tables to reference other tables.
+	DateTime,		# Time abstraction
+	ForeignKey,		# Allows tables to reference other tables.
+	orm
 )
 from sqlalchemy.orm import relationship, backref
 

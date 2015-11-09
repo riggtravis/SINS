@@ -8,10 +8,11 @@ from sqlalchemy import (
 	Integer,
 	Unicode,			# Provides Unicode field
 	UnicodeText,		# Text field of unrestricted length
-	Char,				# Fixed lenth strings
+	CHAR,				# Fixed lenth strings
 	Boolean,			# Provides true/false values
 	DateTime,			# Time abstraction
-	UniqueConstraint	# Titles must be unique
+	UniqueConstraint,	# Titles must be unique
+	orm
 )
 
 class Group(Base):
@@ -23,5 +24,5 @@ class Group(Base):
 	title = Column(Unicode(30), unique=True, nullable=False)
 	
 	# Relationships
-	members = relationship("Membership", backref="groups")
-	permissions = relationship("Permission", backref="groups")
+	members = orm.relationship("Membership", backref="groups")
+	permissions = orm.relationship("Permission", backref="groups")

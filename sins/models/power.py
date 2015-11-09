@@ -8,10 +8,11 @@ from sqlalchemy import (
 	Integer,
 	Unicode,			# Provides Unicode field
 	UnicodeText,		# Text field of unrestricted length
-	Char,				# Fixed lenth strings
+	CHAR,				# Fixed lenth strings
 	Boolean,			# Provides true/false values
 	DateTime,			# Time abstraction
-	UniqueConstraint	# Power titles must be unique.
+	UniqueConstraint,	# Power titles must be unique.
+	orm
 )
 
 class Power(Base):
@@ -23,4 +24,4 @@ class Power(Base):
 	title = Column(Unicode(30), unique=True, nullable=False)
 	
 	# Relationships
-	adepts = relationship("Permission", backref="powers")
+	adepts = orm.relationship("Permission", backref="powers")

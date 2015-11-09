@@ -8,11 +8,12 @@ from sqlalchemy import (
 	Integer,
 	Unicode,			# Provides Unicode field
 	UnicodeText,		# Text field of unrestricted length
-	Char,				# Fixed lenth strings
+	CHAR,				# Fixed lenth strings
 	Boolean,			# Provides true/false values
 	DateTime,			# Time abstraction
 	UniqueConstraint,	# We need to ensure that forum titles are unique
-	ForeignKey			# The table needs to make a reference to itself.
+	ForeignKey,			# The table needs to make a reference to itself.
+	orm
 )
 
 class Forum(Base):
@@ -27,4 +28,4 @@ class Forum(Base):
 	parent_id = Column(Integer, ForeignKey('forums.forum_id'))
 	
 	# Relationships
-	children = relationship("Forum")
+	children = orm.relationship("Forum")

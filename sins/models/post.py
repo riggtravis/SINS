@@ -8,10 +8,11 @@ from sqlalchemy import (
 	Integer,
 	Unicode,		# Provides Unicode field
 	UnicodeText,	# Text field of unrestricted length
-	Char,			# Fixed lenth strings
+	CHAR,			# Fixed lenth strings
 	Boolean,		# Provides true/false values
 	DateTime,		# Time abstraction
-	ForeignKey		# This table needs to reference users and topics.
+	ForeignKey,		# This table needs to reference users and topics.
+	orm
 )
 
 class Post(Base):
