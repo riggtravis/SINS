@@ -15,6 +15,12 @@ implementers can use languages that they are comfortable with using tools that
 offer different experiences in terms of responsiveness. The ultimate goal is to
 allow for smartphone apps that can easily interact with SFIM based forums.
 
+# What is done?
+The database models are written.
+
+# What is left to do?
+All of the logic that uses the models needs to be written.
+
 # Getting Started With SINS
 
 * cd <directory containing this file>
