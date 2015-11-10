@@ -24,4 +24,4 @@ class Ban(Base):
 	ban_id = Column(Integer, primary_key=True)
 	
 	# Foreign Keys
-	user_id = Column(Integer, ForeignKey('people.user_id'))
+	user_id = Column(Integer, ForeignKey('people.user_id'), nullable=False)
