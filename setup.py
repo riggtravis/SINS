@@ -18,20 +18,20 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
 	'passlib'
-    ]
+]
 
 setup(name='sins',
       version='0.0',
-      description='sins',
+      description='SINS is not SFIM',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
         "Programming Language :: Python",
         "Framework :: Pyramid",
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
-        ],
-      author='',
-      author_email='',
+      ],
+      author='Travis Rigg',
+      author_email='rigg.travis@gmail.com',
       url='',
       keywords='web wsgi bfg pylons pyramid',
       packages=find_packages(),
@@ -45,4 +45,4 @@ setup(name='sins',
       [console_scripts]
       initialize_sins_db = sins.scripts.initializedb:main
       """,
-      )
+)

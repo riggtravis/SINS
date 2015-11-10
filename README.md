@@ -30,3 +30,8 @@ All of the logic that uses the models needs to be written.
 
 # Licensing
 SINS is available under an MIT license.
+
+# Credits
+Special thanks go to Cody N Vaughn for helping me design a few of the non SFIM
+dictated portions of this program. He was much more help than he probably
+ever realized.
