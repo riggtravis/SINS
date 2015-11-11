@@ -107,3 +107,6 @@ class SinsFunctionalTests(unittest.TestCase):
 	#	category
 	#	discussion
 	#	participant
+	def test_home(self):
+		page = self.testapp.get('/', status=200)
+		self.assertIn(b'<title>Welcome!', page.head)
