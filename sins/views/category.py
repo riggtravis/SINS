@@ -42,21 +42,40 @@ class CategoryViews:
 		# the correctness of the home function.
 		
 		# return the landing page populated with those forums.
-	
-	def retrieve_records():
 		return {}
 	
-	# Time to start doing the CRUD actions. The reason I am using the term CRUD
-	# instead of BREAD is because I really only see how to use four RESTful API
-	# methods, and not five. There should be a one to one correspondence I feel
-	# between those things for the sake of clarity.
+	def retrieve_forums(self):
+		return {}
+
+# I have decided to put the actions in a seperate class so I don't have to
+# repeat myself several times.
+
+# Time to start doing the CRUD actions. The reason I am using the term CRUD
+# instead of BREAD is because I really only see how to use four RESTful API
+# methods, and not five. There should be a one to one correspondence I feel
+# between those things for the sake of clarity.
+
+# I will need to determine if the old renderer should be overwritten or
+# rather reworked so that an option can be used to view an edit forum on the
+# render page
+@view_config(route_name='forum_action')
+class CategoryActions:
+	def __init__(self, request):
+		self.request = request
 	
-	# I will need to determine if the old renderer should be overwritten or
-	# rather reworked so that an option can be used to view an edit forum on the
-	# render page
-	@view_config(
-			route_name='forum_action',
-			match_param='action=create',
-			renderer=''
-			):
-		
+	# Create.
+	# This is where WTForms start coming into play.
+	@view_config(match_param='action=create',
+		renderer='sins:templates/edit_forum.mako')
+	def create_forum(self):
+		return {}
+	
+	# Read.
+	
+	# Update.
+	@view_config(match_param='action=edit',
+		renderer='sins:templates/edit_forum.mako')
+	def edit_forum(self):
+		return {}
+	
+	# Delete.

@@ -25,3 +25,8 @@ class Ban(Base):
 	
 	# Foreign Keys
 	user_id = Column(Integer, ForeignKey('people.user_id'), nullable=False)
+	
+	# Attributes
+	start_date = Column(DateTime, nullable=False)
+	end_date = Column(DateTime)
+	reason = Column(UnicodeText, nullable=False)

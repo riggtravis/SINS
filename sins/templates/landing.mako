@@ -11,10 +11,10 @@
 -->
 
 <!-- I will have to figure out how best to display forums. For right now dump
-			them as raw data.
+			them as raw data. It is entirely possible that the best way to display 
+			this information is as a table.
 -->
-
-% for forum in forums
+% for forum in forums:
 		## Forum titles should be links to the forums they are titles of.
 		## I need to remind myself of how to do links within a Pyramid app.
 		<a>${forum.title}</a>
@@ -26,7 +26,11 @@
 -->
 
 <!-- The for loop shouldn't execute at all if there are no topics -->
-% for topic in topics
+<!-- There is probably other information that I will want to display as well,
+			including who posted the topic, and possibly their avatar.
+-->
+
+% for topic in topics:
 		## Link to the topic referenced. Also think about how to display the user
 		## that posted the topic.
 		## Also needs to be edited once I remember how to link to something within

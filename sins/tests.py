@@ -91,6 +91,17 @@ class SinsViewTests(unittest.TestCase):
 	# I have chosen to use the functionality based seperation scenario. I have
 	# used these view controllers:
 	#	category
+	# Here are the classes included in the category.py file.
+	#	CategoryViews
+	# Here are the functions that need to be tested in this class
+	#	home
+	#	retrieve_forums
+	
+	#	CategoryActions
+	# Here are the functions that need to be tested in this class
+	#	create_forum
+	#	edit_forum
+	
 	#	discussion
 	#	participant
 	
@@ -105,8 +116,16 @@ class SinsFunctionalTests(unittest.TestCase):
 	# Just like the unit tests, functional tests will need to test different
 	# functionalities. These functionalities include:
 	#	category
-	#	discussion
-	#	participant
 	def test_home(self):
 		page = self.testapp.get('/', status=200)
 		self.assertIn(b'<title>Welcome!', page.head)
+
+	# Test all of the forum actions.
+	def test_create(self):
+		
+	
+	def test_edit(self):
+		
+	
+	#	discussion
+	#	participant
