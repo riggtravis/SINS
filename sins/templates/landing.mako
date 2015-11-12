@@ -29,11 +29,17 @@
 <!-- There is probably other information that I will want to display as well,
 			including who posted the topic, and possibly their avatar.
 -->
-
+<!-- Finding a way to display information about the most recent post would be
+			really cool.
+-->
 % for topic in topics:
 		## Link to the topic referenced. Also think about how to display the user
 		## that posted the topic.
 		## Also needs to be edited once I remember how to link to something within
 		## a pyramid app.
+		## Use the original poster's username as a link to their profile.
 		<a>${topic.title}</a>
+		<a>${topic.user.username}</a>
+		<% avatar = topic.user.avater + ".png" %>
+		<img src=${avatar} alt=${topic.user.username} />
 % endfor

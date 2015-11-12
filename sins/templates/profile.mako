@@ -42,4 +42,5 @@
 <!-- Posts should link to the topic where they were posted. -->
 % for post in user.posts:
 		${post.date}
+		<a>${post.topic.title}</a>
 % endfor
