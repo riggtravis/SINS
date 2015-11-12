@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- This is boiler plate html that every template will need. -->
+<!-- This is boilerplate html that every template will need. -->
 
 <html>
 	<head>

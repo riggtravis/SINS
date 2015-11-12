@@ -8,7 +8,8 @@
 
 <!-- Step three. Make the body. -->
 <h1>${user.username}</h1>
-<img src=${avatar} alt=${user.username} />
+<% image_path = user.avatar %>
+<img src=${image_path} alt=${user.username} />
 
 <!-- Step four. List any current bans that are applied to the user -->
 <!-- I will need to decide how to display this information on the page. Until
@@ -21,7 +22,9 @@
 				${ban.end_date}
 		% endif
 		
-		${ban.reason}
+		<p>
+			${ban.reason}
+		</p>
 % endfor
 
 <!-- Step five. List all of the groups that the user is a member of. -->

@@ -1,9 +1,9 @@
+from pyramid.view import view_config
+from pyramid.view import view_defaults
+
 # I have chosen to include authentification/authorization views in the
 # participant file. The reason I have chosen to do this is that it relates
 # directly to users.
-
-# Remember when constructing a profile that the avatar has to be passed
-# seperately instead of as part of the user.
 class ParticipantViews:
 	def __init__(self, request):
 		self.request = request
@@ -19,13 +19,13 @@ class ParticipantViews:
 	@view_config(
 		route_name='auth',
 		match_param='action=in',
-		renderer='log.mako',
+		renderer='sins:templates/log.mako',
 		request_method='POST'
 	)
 	@view_config(
 		route_name='auth',
 		match_param='action=out',
-		renderer='log.mako'
+		renderer='sins:templates/log.mako'
 	)
 	def sign_in_out(self):
 		# Make sure to pass a sign out message if the user is logging out.

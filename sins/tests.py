@@ -129,3 +129,11 @@ class SinsFunctionalTests(unittest.TestCase):
 	
 	#	discussion
 	#	participant
+	# Test to see if the authentification messages are being displayed correctly
+	def test_login(self):
+		page = self.testapp.get('/sign/in', status=200)
+		self.assertIn(b'<title>Sign In', page.head)
+	
+	def test_logout(self):
+		page = self.testapp.get('/sighn/out', status=200)
+		self.assertIn(b'Successfully logged out', page.body)
