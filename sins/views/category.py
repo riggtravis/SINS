@@ -6,6 +6,10 @@
 from pyramid.view import view_config
 from pyramid.view import view_defaults
 
+# We're going to want to be able to use our services. Specifically in this view
+# file we want to use the forum service.
+from ..models.services.forum import ForumRecordService
+
 # Views should be contained in classes instead of being handled by lose
 # functions. Such is the hobo way. I mean the Pyramid way. More than likely that
 # stems from it being the Python way.
@@ -35,17 +39,14 @@ class CategoryViews:
 	@view_config(route_name='home')
 	def home(self):
 		# Get all of the forums from the database that do not have a parent id.
-		
-		# It will be easier to perform testing if instead of trying to do
-		# everything at once if there is a get forums function. That way we can
-		# test that that function is retrieving records properly as well as test
-		# the correctness of the home function.
+		forums = ForumRecordService.by_parent(None)
 		
 		# return the landing page populated with those forums.
-		return {}
+		return {'forums': forums, 'title_message': "Welcome!", 'topics': None}
 	
-	def retrieve_forums(self):
-		return {}
+	# I am removing the retrieve forums method from this class. Now that there
+	# are service classes the view classes should call upon those classes
+	# instead of querying the database themselves.
 
 # I have decided to put the actions in a seperate class so I don't have to
 # repeat myself several times.

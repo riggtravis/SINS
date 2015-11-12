@@ -15,6 +15,9 @@ from sqlalchemy import (
 	orm
 )
 
+# We should display a slug when the user visits.
+from webhelpers2.text import urlify
+
 class Group(Base):
 	# Metadata
 	__tablename__ = 'groups'
@@ -26,3 +29,8 @@ class Group(Base):
 	# Relationships
 	members = orm.relationship("Membership", backref="groups")
 	permissions = orm.relationship("Permission", backref="groups")
+	
+	# Create a human readable slug for when a user visits.
+	@property
+	def slug(self):
+		return urlify(self.title)

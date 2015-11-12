@@ -14,6 +14,8 @@ from sqlalchemy import (
 	ForeignKey,		# This table needs to reference users and topics.
 	orm
 )
+# The date should be human readable.
+from webhelpers2.date import distance_of_time_in_words
 
 class Post(Base):
 	# Metadata
@@ -29,3 +31,11 @@ class Post(Base):
 	# Attributes
 	posted_date = Column(DateTime, nullable=False)
 	message = Column(UnicodeText, nullable=False)
+	
+	# The date the topic was posted needs to be human readable.
+	@property 
+	def posted_in_words(self):
+		return distance_of_time_in_words(
+			self.posted_date,
+			datetime.datetime.utcnow()
+		)

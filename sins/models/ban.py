@@ -16,6 +16,9 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship, backref
 
+# The date should be human readable.
+from webhelpers2.date import distance_of_time_in_words
+
 class Ban(Base):
 	# Metadata
 	__tablename__ = 'bans'
@@ -30,3 +33,18 @@ class Ban(Base):
 	start_date = Column(DateTime, nullable=False)
 	end_date = Column(DateTime)
 	reason = Column(UnicodeText, nullable=False)
+	
+	# Display dates in a human readable format.
+	@property
+	def start_in_words(self):
+		return distance_of_time_in_words(
+			self.start_date,
+			datetime.datetime.utcnow()
+		)
+	
+	@property
+	def end_in_words(self):
+		return distance_of_time_in_words(
+			self.end_date,
+			datetime.datetime.utcnow()
+		)

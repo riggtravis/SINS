@@ -15,6 +15,9 @@ from sqlalchemy import (
 	orm
 )
 
+# Create a human readable slug in the url
+from webhelpers2.text import urlify
+
 class Power(Base):
 	# Metadata
 	__tablename__ = 'powers'
@@ -25,3 +28,8 @@ class Power(Base):
 	
 	# Relationships
 	adepts = orm.relationship("Permission", backref="powers")
+	
+	# Create a human readable slug that makes it easy to parse the page.
+	@property
+	def slug(self):
+		return urlify(self.title)

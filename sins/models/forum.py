@@ -16,6 +16,9 @@ from sqlalchemy import (
 	orm
 )
 
+# We have a slug that needs to be created when visiting the page.
+from webhelpers2.text import urlify
+
 class Forum(Base):
 	# Metadata
 	__tablename__ = 'forums'
@@ -29,3 +32,8 @@ class Forum(Base):
 	
 	# Relationships
 	children = orm.relationship("Forum")
+	
+	# It'd be nice to have a readable slug.
+	@property
+	def slug(self):
+		return urlify(self.title)

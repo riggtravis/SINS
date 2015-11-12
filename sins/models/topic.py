@@ -15,6 +15,12 @@ from sqlalchemy import (
 	orm
 )
 
+# The date should be human readable.
+from webhelpers2.date import distance_of_time_in_words
+
+# There should be a readable slug for the user's sake.
+from webhelpers2.text import urlify
+
 class Topic(Base):
 	# Metadata
 	__tablename__ = 'topics'
@@ -26,8 +32,21 @@ class Topic(Base):
 	forum_id = Column(Integer, ForeignKey('forums.forum_id'), nullable=False)
 	
 	# Attributes
+	start_date = Column(DateTime, nullable=False)
 	subject = Column(Unicode(140), nullable=False)
 	sticky_status = Column(Boolean)
 	
 	# Relationships
 	posts = orm.relationship("Post", backref='topics')
+	
+	# When the topic was posted should be human readable
+	def start_in_words(self):
+		return distance_of_time_in_words(
+			self.start_date,
+			datetime.datetime.utcnow()
+		)
+	
+	# Create a slug that the user should be able to read.
+	@property
+	def slug(self):
+		return urlify(self.subject)

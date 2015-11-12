@@ -15,6 +15,12 @@ from sqlalchemy import (
 	orm
 )
 
+# The date should be human readable.
+from webhelpers2.date import distance_of_time_in_words
+
+# We also have a slug that needs to be created.
+from webhelpers2.text import urlify
+
 class User(Base):
 	# Metadata
 	__tablename__ = 'people'
@@ -27,8 +33,22 @@ class User(Base):
 	password = Column(CHAR(256), nullable=False)
 	avatar = Column(CHAR(5))
 	signature = Column(UnicodeText)
+	join_date = Column(DateTime, nullable=False)
 	
 	# Relationships
 	bans = orm.relationship("Ban", backref="people")
 	memberships = orm.relationship("Membership", backref="people")
 	posts = orm.relationship("Post", backref="people")
+	
+	# The date the user joined should be human readable
+	@property
+	def joined_in_words(self):
+		return distance_of_time_in_words(
+			self.join_date,
+			datetime.datetime.utcnow()
+		)
+	
+	# There should be a nice readable slug when the user visitss.
+	@property
+	def slug(self):
+		return urlify(self.username)

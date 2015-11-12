@@ -95,7 +95,6 @@ class SinsViewTests(unittest.TestCase):
 	#	CategoryViews
 	# Here are the functions that need to be tested in this class
 	#	home
-	#	retrieve_forums
 	
 	#	CategoryActions
 	# Here are the functions that need to be tested in this class
@@ -104,6 +103,12 @@ class SinsViewTests(unittest.TestCase):
 	
 	#	discussion
 	#	participant
+	
+	# We have service classes with functions that need to be tested.
+	# There is one service class for every model. All service models have the
+	# the following two methods:
+	#	all
+	#	by_id
 	
 class SinsFunctionalTests(unittest.TestCase):
 	def setUp(self):

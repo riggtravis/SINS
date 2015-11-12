@@ -30,7 +30,7 @@ def main(global_config, **settings):
 	
 	# CRUD actions for users.
 	config.add_route('user_action', 'user/{action}')
-	config.add_route('user', 'user/{user_id:\d+}/{username}')
+	config.add_route('user', 'user/{user_id:\d+}/{slug}')
 	config.add_route('auth', 'sign/{action}')
 	
 	# CRUD actions for bans
@@ -39,11 +39,11 @@ def main(global_config, **settings):
 	
 	# CRUD actions for forums
 	config.add_route('forum_action', 'forum/{action}')
-	config.add_route('forum', 'forum/{forum_id:\d+}/{title}')
+	config.add_route('forum', 'forum/{forum_id:\d+}/{slug}')
 	
 	# CRUD actions for groups
 	config.add_route('group_action', 'forum/{action}')
-	config.add_route('group', 'group/{group_id:\d+}/{title}')
+	config.add_route('group', 'group/{group_id:\d+}/{slug}')
 	
 	# CRUD actions for memberships
 	config.add_route('membership_action', 'membership/{action}')
@@ -51,7 +51,7 @@ def main(global_config, **settings):
 	
 	# CRUD actions for powers
 	config.add_route('power_action', 'permission/{action}')
-	config.add_route('power', 'power/{power_id:\d+}/{title}')
+	config.add_route('power', 'power/{power_id:\d+}/{slug}')
 	
 	# CRUD actions for permissions
 	config.add_route('permission_action', 'permission/{action}')
@@ -63,7 +63,7 @@ def main(global_config, **settings):
 	
 	# CRUD actions for topics
 	config.add_route('topic_action', 'topic/{action}')
-	config.add_route('topic', 'topic/{topic_id:\d+}/{subject}')
+	config.add_route('topic', 'topic/{topic_id:\d+}/{slug}')
 	
     config.scan()
     return config.make_wsgi_app()

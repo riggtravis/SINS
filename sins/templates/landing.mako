@@ -1,7 +1,7 @@
 <%inherit file="base.mako"/>
 
 <%block name="title">
-  Discussion Categories
+  ${title_message}
 </%block>
 
 <!-- From here is the body of the forum landing page. It will need to list all

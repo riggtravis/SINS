@@ -17,7 +17,8 @@ requires = [
     'transaction',
     'zope.sqlalchemy',
     'waitress',
-	'passlib'
+	'passlib',
+	'webhelpers2',			# Various web building related helpers
 ]
 
 setup(name='sins',
