@@ -35,3 +35,10 @@ SINS is available under an MIT license.
 Special thanks go to Cody N Vaughn for helping me design a few of the non SFIM
 dictated portions of this program. He was much more help than he probably
 ever realized.
+
+More thanks also go to Brock Jahnke, who helped me design SFIM and helped me
+figure out what the key features for SINS should be.
+
+Also thanks to Jan Pierce, who gave me a reason to see this project through to
+the end. It may not be there yet, but if it does get there it will be because of
+the opportunity I have been given.

@@ -68,17 +68,25 @@
 								set the names of their forums. That said, this might actually be
 								the only place where this branding appears.
 					-->
+					<!-- It's time to create a logo -->
 					<a class="navbar-brand" href="/">SINS</a>
 				</div>
 				
 				<!-- Collect the nav links, forms, and other content for toggling. -->
 				<!-- This is the stuff that will appear in the navbar and the menu. -->
 				<div class="collapse navbar-collapse" id="main-navbar">
-					<ul class="nav navbar-nav">
-						<!-- Here is where our main navigation links go. I need to consider
-									what the main navigational requests will be.
-						-->
-					</ul>
+					<!-- Here is where our main navigation links go. I need to consider
+								what the main navigational requests will be.
+					-->
+					<!-- The things that need to be available all the time are: -->
+					<!--	make searches -->
+					<!-- actually, I should use WTForms for this. -->
+					
+					<!-- For the following actions it will be necessary to know who a
+								user is. I will leave this for later.
+					-->
+					<!--	view their profile/register -->
+					<!--	log in/out -->
 				</div>
 			</div>
 		</nav>
