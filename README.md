@@ -16,10 +16,12 @@ offer different experiences in terms of responsiveness. The ultimate goal is to
 allow for smartphone apps that can easily interact with SFIM based forums.
 
 # What is done?
-The database models are written.
+* The database models are written.
+* Templates are using bootstrap
 
 # What is left to do?
-All of the logic that uses the models needs to be written.
+* All of the logic that uses the models needs to be written.
+* Forms need to be used
 
 # Getting Started With SINS
 
