@@ -92,7 +92,9 @@
 			</div>
 		</nav>
 		
+		<!-- There's the possibility we need to change this to next.body() -->
 		${self.body()}
+		
 		<script
 			src="https://maxcdn.bootstrap.cdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
 			integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ=="
