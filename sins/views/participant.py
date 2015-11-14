@@ -1,5 +1,7 @@
 from pyramid.view import view_config
 from pyramid.view import view_defaults
+from ..models.services.user import UserRecordService
+from ..models.services.post import PostRecordService
 
 # I have chosen to include authentification/authorization views in the
 # participant file. The reason I have chosen to do this is that it relates
@@ -12,8 +14,12 @@ class ParticipantViews:
 	@view_config(route_name='user', renderer='sins:templates/profile.mako')
 	def profile(self):
 		# Search the database for a user whose id matches the user_id passed
-		# through the URI 
-		return {}
+		# through the URI.
+		user = ForumRecordService.by_id() # Get the id from the URI.
+		
+		# In order for pagination to work, we need to specify what page we want.
+		paginated_posts = # Get paginated posts that were made by this user.
+		return {'user': user, 'posts': paginated_posts}
 	
 	# Let the participant log in and out.
 	@view_config(

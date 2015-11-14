@@ -18,7 +18,9 @@ class PostRecordService(object):
 	# each page.
 	@classmethod
 	def get_paginator(cls, request, page=1):
+		# I think we can do this action by just calling all()
 		query = DBSession.query(Post).order_by(sa.desc(Post.start_date))
+		
 		query_params = request.GET.mixed()
 		
 		def url_maker(link_page):
@@ -30,3 +32,8 @@ class PostRecordService(object):
 			items_per_page=5,	# Adjust as needed.
 			url_maker=url_maker
 		)
+	
+	# I need to figure out a way to get the paginaed posts from a single user.
+	@classmethod
+	def paginated_by_user(cls, request, page=1):
+		# Get all the posts made by a user.

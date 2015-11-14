@@ -15,6 +15,7 @@
 			then I will just leave it as raw data. I think more than likely it will
 			probably end up being displayed in a table
 -->
+<!-- I forgot to bootstrap this. I will have to bootstrap this. -->
 % for ban in user.bans:
 		${ban.start_date}
 		% if end_date:
@@ -41,7 +42,7 @@
 <!-- Posts should link to the topic where they were posted. -->
 <!-- This looks like a great place for a list group -->
 <div class="list-group">
-% for post in user.posts:
+% for post in posts:
 		<a href="topic/${post.topic.topic_id}" class="list-group-item">
 			<h4 class="list-group-item-heading">${post.date}</h4>
 			<p class="list${post.topic.title}-group-item-text">
