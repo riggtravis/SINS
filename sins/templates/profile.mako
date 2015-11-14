@@ -8,8 +8,7 @@
 
 <!-- Step three. Make the body. -->
 <h1>${user.username}</h1>
-<% image_path = user.avatar %>
-<img src=${image_path} alt=${user.username} />
+<img src="${request.static_url('sins:static/avatars/%(name)s' % topic.user.avatar)}" alt=${user.username} />
 
 <!-- Step four. List any current bans that are applied to the user -->
 <!-- I will need to decide how to display this information on the page. Until
@@ -40,7 +39,14 @@
 			going to put this off for just right now.
 -->
 <!-- Posts should link to the topic where they were posted. -->
+<!-- This looks like a great place for a list group -->
+<div class="list-group">
 % for post in user.posts:
-		${post.date}
-		<a>${post.topic.title}</a>
+		<a href="topic/${post.topic.topic_id}" class="list-group-item">
+			<h4 class="list-group-item-heading">${post.date}</h4>
+			<p class="list${post.topic.title}-group-item-text">
+				${post.topic.title}
+			</p>
+		</a>
 % endfor
+</div>

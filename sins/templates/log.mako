@@ -7,7 +7,9 @@
 </%block>
 
 <!-- Step three. Deliver the message to the user if they have logged out. -->
-${message}
+<div class="alert alert-success" role="alert">
+	${message}
+</div>
 
 <!-- Step four. Create a form that can be used for logging in. -->
 <!-- This is another place where WTForms come into play. -->

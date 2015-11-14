@@ -18,12 +18,25 @@
 			the user table. But until I am sure of that, this will remain as is.
 -->	
 <!-- Because of the backref, every post entity should have a user attribute. -->
-% for post in topic.posts:
-		<h2>${post.user.username}</h2>
-		<% image_path = post.user.avatar + ".png" %>
-		<img src=${image_path} alt=${post.user.username} />
-		<h3>${post.posted_date}</h3>
-		<p>
-			${post.message}
-		</p>
-% endfor
+<!-- Let's do a media list -->
+<ul class="media-list">
+	% for post in topic.posts:
+			<li class="media">
+				<div class="media-left">
+					<a href="user/${post.user.user_id}">
+						<img 
+							src="${request.static_url('sins:static/avatars/%(name)s' % topic.user.avatar)}"
+							alt=${post.user.username}
+						/>
+					</a>
+				</div>
+				<div class="media-body">
+					<h4 class="media-heading">${post.user.username}</h4>
+					<h5 class="media-heading">${post.posted_date}</h5>
+					<p>
+						${post.message}
+					</p>
+				</div>
+			</li>
+	% endfor
+</ul>

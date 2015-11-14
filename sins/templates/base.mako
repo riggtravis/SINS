@@ -55,13 +55,8 @@
 									know about the expand collapse button.
 						-->
 						<span class="sr-only">Toggle navigation</span>
-						
-						<!-- These three lines of code create the hamburger icon in the
-									button. I'm sure other icons could also be used.
-						-->
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
+						<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true">
+						</span>
 					</button>
 					<!-- This line of code creates the big title for this whole thing. I
 								need to seriously consider creating a variable so that users can
@@ -69,7 +64,13 @@
 								the only place where this branding appears.
 					-->
 					<!-- It's time to create a logo -->
-					<a class="navbar-brand" href="/">SINS</a>
+					<a class="navbar-brand" href="/">
+						<object 
+							data="${request.static_url('sins:static/pyramid-16x16.png')}"
+							type="image/svg+xml"
+						>
+						</object>
+					</a>
 				</div>
 				
 				<!-- Collect the nav links, forms, and other content for toggling. -->

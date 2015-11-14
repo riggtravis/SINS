@@ -14,11 +14,16 @@
 			them as raw data. It is entirely possible that the best way to display 
 			this information is as a table.
 -->
-% for forum in forums:
-		## Forum titles should be links to the forums they are titles of.
-		## I need to remind myself of how to do links within a Pyramid app.
-		<a>${forum.title}</a>
-% endfor
+<ul class="list-group">
+	% for forum in forums:
+			## Forum titles should be links to the forums they are titles of.
+			## I need to remind myself of how to do links within a Pyramid app.
+			<li class="list-group-item">
+				<a href="/forum/${forum.forum_id}">${forum.title}</a>
+			</li>
+	% endfor
+</ul>
+
 
 <!-- We should also be ready to list all of the topics that might be in a forum
 			since we are also handling the landing page of forums with parents, which
@@ -32,14 +37,31 @@
 <!-- Finding a way to display information about the most recent post would be
 			really cool.
 -->
-% for topic in topics:
-		## Link to the topic referenced. Also think about how to display the user
-		## that posted the topic.
-		## Also needs to be edited once I remember how to link to something within
-		## a pyramid app.
-		## Use the original poster's username as a link to their profile.
-		<a>${topic.title}</a>
-		<a>${topic.user.username}</a>
-		<% avatar = topic.user.avater + ".png" %>
-		<img src=${avatar} alt=${topic.user.username} />
-% endfor
+<!-- This actually seems like a great place for a media list. -->
+<ul class="media-list">
+	% for topic in topics:
+			## Link to the topic referenced. Also think about how to display the user
+			## that posted the topic.
+			## Also needs to be edited once I remember how to link to something within
+			## a pyramid app.
+			## Use the original poster's username as a link to their profile.
+			<li class="media">
+				<div class="media-left">
+					<a href="user/${topic.user.user_id}">
+						<img 
+							src="${request.static_url('sins:static/avatars/%(name)s' % topic.user.avatar)}"
+							alt=${topic.user.username}
+						/>
+					</a>
+				</div>
+				<div class="media-body">
+					<h4 class="media-heading">
+						<a href="topic/${topic.topic_id}">${topic.title}</a>
+					</h4>
+					<a href="user/${topic.user.user_id}">${topic.user.username}</a>
+				</div>
+
+				
+			</li>
+	% endfor
+</ul>
