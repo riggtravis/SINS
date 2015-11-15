@@ -58,6 +58,9 @@ def main(global_config, **settings):
 	config.add_route('permission', 'permission/{power_id:\d+}/{group_id:\d+}')
 	
 	# CRUD actions for posts
+	# Realistically posts shouldn't be linked directly. I need to find a way to
+	# safely eliminate this routing method and instead link to the topic where
+	# the post was made.
 	config.add_route('post_action', 'post/{action}')
 	config.add_route('post', 'post/{post_id:\d+}')
 	

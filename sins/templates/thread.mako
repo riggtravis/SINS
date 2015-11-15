@@ -23,7 +23,9 @@
 	% for post in topic.posts:
 			<li class="media">
 				<div class="media-left">
-					<a href="user/${post.user.user_id}">
+					<a href=
+						"request.route_url('user', id=post.user.user_id, slug=post.user.slug)"
+					>
 						<img 
 							src="${request.static_url('sins:static/avatars/%(name)s' % topic.user.avatar)}"
 							alt=${post.user.username}

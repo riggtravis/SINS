@@ -14,15 +14,18 @@
 			them as raw data. It is entirely possible that the best way to display 
 			this information is as a table.
 -->
-<ul class="list-group">
+<div class="list-group">
 	% for forum in forums:
 			## Forum titles should be links to the forums they are titles of.
 			## I need to remind myself of how to do links within a Pyramid app.
-			<li class="list-group-item">
-				<a href="/forum/${forum.forum_id}">${forum.title}</a>
-			</li>
+			<a href=
+				"${request.route_url('forum', forum_id=forum.forum_id, slug=forum.slug)}"
+				class="list-group-item"
+			>
+				${forum.title}
+			</a>
 	% endfor
-</ul>
+</div>
 
 
 <!-- We should also be ready to list all of the topics that might be in a forum
@@ -47,21 +50,30 @@
 			## Use the original poster's username as a link to their profile.
 			<li class="media">
 				<div class="media-left">
-					<a href="user/${topic.user.user_id}">
+					<a href=
+						"${request.route_url('user', user_id=topic.user.user_id, slug=topic.slug)}"
+					>
 						<img 
 							src="${request.static_url('sins:static/avatars/%(name)s' % topic.user.avatar)}"
 							alt=${topic.user.username}
 						/>
 					</a>
 				</div>
+				
 				<div class="media-body">
 					<h4 class="media-heading">
-						<a href="topic/${topic.topic_id}">${topic.title}</a>
+						<a href=
+							"${request.route_url('topic', topic_id=topic.topic_id, slug=topic.slug)}"
+						>
+							${topic.title}
+						</a>
 					</h4>
-					<a href="user/${topic.user.user_id}">${topic.user.username}</a>
+					<a href=
+						"${request.request_url('user', user_id=topic.user.user_id, slug=topic.user.slug)}"
+					>
+						${topic.user.username}
+					</a>
 				</div>
-
-				
 			</li>
 	% endfor
 </ul>

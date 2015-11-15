@@ -95,6 +95,11 @@
 		<!-- There's the possibility we need to change this to next.body() -->
 		${self.body()}
 		
+		<!-- Put in copyright information for the forum's organization. -->
+		<div class="row">
+			Copyright &copy; Travis Rigg 2015
+		</div>
+		
 		<script
 			src="https://maxcdn.bootstrap.cdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
 			integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ=="
