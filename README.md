@@ -20,15 +20,29 @@ allow for smartphone apps that can easily interact with SFIM based forums.
 * Templates are using bootstrap
 
 # What is left to do?
-* All of the logic that uses the models needs to be written.
+* Most of the logic that uses the models needs to be written.
 * Forms need to be used
 
 # Getting Started With SINS
+## For contributors:
+1. Make sure python is installed on your system.
+2. Create a directory for a virtual environment. An example of what this might be like is "web-app"
+3. Run the following command
+    python easy_install virtualenv
+4. Change directories into the directory you created for your virtual environment.
+5. Clone this repository in the usual way. Make sure that SINS resides in a directory inside of the virtual environment directory.
+6. The directory for the virtual environment will from now on be referred to as $VENV. If you cannot create a session variable for whatever reason, replace $VENV with the path to this directory.
+7. Run these commands:
+    cd $VENV/sins                                 <- This might be SINS
+    $VENV/bin/python setup.py develop
 
-* cd <directory containing this file>
-* $VENV/bin/python setup.py develop
-* $VENV/bin/initialize_sins_db development.ini
-* $VENV/bin/pserve development.ini
+## Running
+SINS is not currently in a state where it can run. It also needs to be run in a virtual environment. For this, follow
+the instructions that have been provided to contributors all the way to step six. Instead of step seven, run the
+following commands:
+    cd $VENV/sins
+    $VENV/bin/python setup.py
+    $VENV/bin/initialize_sins_db production.ini
 
 # Licensing
 SINS is available under an MIT license.
