@@ -70,15 +70,15 @@
 			backreffed to eachother.
 -->
 <div class="list-group">
-% for post in posts:
-		<a 
-			href="${request.rout_url('post', post_id=post.post_id, slug=post.slug)}"
-			class="list-group-item"
-		>
-			<h4 class="list-group-item-heading">${post.date}</h4>
-			<p class="list${post.topic.title}-group-item-text">
-				${post.topic.title}
-			</p>
-		</a>
-% endfor
+	% for post in posts:
+			<a 
+				href="${request.rout_url('post', post_id=post.post_id, slug=post.slug)}"
+				class="list-group-item"
+			>
+				<h4 class="list-group-item-heading">${post.date}</h4>
+				<p class="list${post.topic.title}-group-item-text">
+					${post.topic.title}
+				</p>
+			</a>
+	% endfor
 </div>
