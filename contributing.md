@@ -1,4 +1,16 @@
 # How to contribute to SINS
+
+## 1. Submit issues
+When you encounter a problem, tell us about it. But before you do, make sure someone else hasn't already told us about
+it.
+
+## 2. Write Code
+If you want to jump into SINS, start by looking at the issues page and picking something you think you can tackle. We
+have a variety of issues of varying levels of difficulty. Some are especially good for people wanting to get started.
+Anything that involves the words "comments," "documentation," or "cleaning" or any variation thereof is a great place to
+start. These issues usually involve going through much of the project and poking around. While you're doing this, you
+will probably start to notice how things work in the project and start coming up with ideas of how you can help.
+
 The easiest way to contribute to SINS is to fork the project and make a pull request. This way we can discuss what
 changes you want to make. Always make sure that your pull request has a clear title. Really good titles are also good
 commit messages for how to write good commit messages read [this article](http://chris.beams.io/posts/git-commit/). **Do
