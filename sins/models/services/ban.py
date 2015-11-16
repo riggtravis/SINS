@@ -6,7 +6,7 @@ from ..topic import Topic
 class BanRecordService(object):
 	@classmethod
 	def all(cls):
-		return DBSession.query(Ban).order_by(sa.desc(Ban.start_date))
+		return DBSession.query(Ban).order_by(sqlalchemy.desc(Ban.start_date))
 	
 	@classmethod
 	def by_id(cls, id):
@@ -18,7 +18,7 @@ class BanRecordService(object):
 	# items appear on each page.
 	@classmethod
 	def get_paginator(cls, request, page=1):
-		query = DBSession.query(Ban).order_by(sa.desc(Ban.start_date))
+		query = DBSession.query(Ban).order_by(sqlalchemy.desc(Ban.start_date))
 		query_params = request.GET.mixed()
 		
 		def url_maker(link_page):

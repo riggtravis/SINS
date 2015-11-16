@@ -8,7 +8,7 @@ class ForumRecordService(object):
 	#	retrieve all records.
 	@classmethod
 	def all(cls):
-		return DBSession.query(Forum).order_by(sa.desc(Forum.forum_id))
+		return DBSession.query(Forum).order_by(sqlalchemy.desc(Forum.forum_id))
 	
 	#	retrieve record by id.
 	@classmethod
