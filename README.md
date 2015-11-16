@@ -33,16 +33,16 @@ allow for smartphone apps that can easily interact with SFIM based forums.
 5. Clone this repository in the usual way. Make sure that SINS resides in a directory inside of the virtual environment directory.
 6. The directory for the virtual environment will from now on be referred to as $VENV. If you cannot create a session variable for whatever reason, replace $VENV with the path to this directory.
 7. Run these commands:
-    cd $VENV/sins                                 <- This might be SINS
-    $VENV/bin/python setup.py develop
+      cd $VENV/sins                                 <- This might be SINS
+      $VENV/bin/python setup.py develop
 
 ## Running
 SINS is not currently in a state where it can run. It also needs to be run in a virtual environment. For this, follow
 the instructions that have been provided to contributors all the way to step six. Instead of step seven, run the
 following commands:
-    cd $VENV/sins
-    $VENV/bin/python setup.py
-    $VENV/bin/initialize_sins_db production.ini
+      cd $VENV/sins
+      $VENV/bin/python setup.py
+      $VENV/bin/initialize_sins_db production.ini
 
 # Licensing
 SINS is available under an MIT license.
