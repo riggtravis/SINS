@@ -47,7 +47,7 @@
 								time, regardless of who is viewing the page.
 					-->
 					<a href=
-						"${request.rout_url('post_action', action='edit', _query={'post_id':post.post_id})}"
+						"${request.route_url('post_action', action='edit', _query={'post_id':post.post_id})}"
 					>
 						Edit post
 					</a>
