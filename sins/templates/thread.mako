@@ -32,12 +32,25 @@
 						/>
 					</a>
 				</div>
+				
 				<div class="media-body">
 					<h4 class="media-heading">${post.user.username}</h4>
 					<h5 class="media-heading">${post.posted_date}</h5>
 					<p>
 						${post.message}
 					</p>
+					
+					<!-- If the user who is viewing this page is the person who made this
+								post, they should be able to edit what they have said. 
+					-->
+					<!-- For right now what I have just displays the edit ability all the
+								time, regardless of who is viewing the page.
+					-->
+					<a href=
+						"${request.route_url('post_action', action='edit', _query={'post_id':post.post_id})}"
+					>
+						Edit post
+					</a>
 				</div>
 			</li>
 	% endfor

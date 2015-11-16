@@ -1,5 +1,8 @@
 from pyramid.view import view_config
 from pyramid.view import view_defaults
+from pyramid.httpexceptions import HTTPFound, HTTPNotFound
+from ..models.meta import DBSession
+from ..models.user import User
 from ..models.services.user import UserRecordService
 from ..models.services.post import PostRecordService
 
@@ -15,11 +18,16 @@ class ParticipantViews:
 	def profile(self):
 		# Search the database for a user whose id matches the user_id passed
 		# through the URI.
-		user = ForumRecordService.by_id() # Get the id from the URI.
+		user_id = int(sef.request.matchdict.get('user_id', -1))
+		user = UserRecordService.by_id(user_id) # Get the id from the URI.
 		
-		# In order for pagination to work, we need to specify what page we want.
-		paginated_posts = # Get paginated posts that were made by this user.
-		return {'user': user, 'posts': paginated_posts}
+		if user:
+			# Don't forget that in order for pagination to work we need to
+			# specify what page we want.
+			paginated_posts = # Get paginated posts that were made by this user.
+			return {'user': user, 'posts': paginated_posts}
+		else:
+			return HTTPNotFound()
 	
 	# Let the participant log in and out.
 	@view_config(

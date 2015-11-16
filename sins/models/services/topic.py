@@ -46,7 +46,7 @@ class TopicRecordService(object):
 		# much about unintentional interactions. This is just one way to manage
 		# databases in SQLalchemy, but it probably what I am going to stick to
 		# since it is well documented by the pyramid project.
-		return DBSession.query(Topic).order_by(sa.desc(Topic.start_date))
+		return DBSession.query(Topic).order_by(sqlalchemy.desc(Topic.start_date))
 	
 	# Search topics by the id.
 	@classmethod
@@ -65,7 +65,7 @@ class TopicRecordService(object):
 	# items appear on each page.
 	@classmethod
 	def get_paginator(cls, request, page=1):
-		query = DBSession.query(Topic).order_by(sa.desc(Topic.start_date))
+		query = DBSession.query(Topic).order_by(sqlalchemy.desc(Topic.start_date))
 		
 		# I can't find documentation for this action.
 		# I got the command from this tutorial on how to build a web app:

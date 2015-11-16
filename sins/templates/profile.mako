@@ -8,7 +8,10 @@
 
 <!-- Step three. Make the body. -->
 <h1>${user.username}</h1>
-<img src="${request.static_url('sins:static/avatars/%(name)s' % topic.user.avatar)}" alt=${user.username} />
+<img 
+	src="${request.static_url('sins:static/avatars/%(name)s' % topic.user.avatar)}" 
+	alt=${user.username} 
+/>
 
 <!-- Step four. List any current bans that are applied to the user -->
 <!-- I will need to decide how to display this information on the page. Until
@@ -43,7 +46,17 @@
 			be able to get that information directly
 -->
 
-<!-- Step six. List the most recent posts by the user. -->
+<!-- Step six. Give the user the opportunity to edit their post. This should be
+			displayed only if the user viewing the page is also the user whose page it
+			belongs to. For right now this is displaying for all users.
+-->
+<a href=
+	"${request.route_url('user_action', action='edit', _query={'user_id':user.user_id})}"
+>
+	Edit profile
+</a>
+
+<!-- Step seven. List the most recent posts by the user. -->
 <!-- This will take a little more logic than what is here right now.  -->
 <!-- This, much like memberships might be a little more complicated than it
 			appears. More than likely it will be fine because of the backref. But I'm
@@ -58,7 +71,10 @@
 -->
 <div class="list-group">
 % for post in posts:
-		<a href="${request.rout_url('post', post_id=post.post_id, slug=post.slug)}" class="list-group-item">
+		<a 
+			href="${request.rout_url('post', post_id=post.post_id, slug=post.slug)}"
+			class="list-group-item"
+		>
 			<h4 class="list-group-item-heading">${post.date}</h4>
 			<p class="list${post.topic.title}-group-item-text">
 				${post.topic.title}

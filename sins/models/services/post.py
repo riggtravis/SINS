@@ -6,7 +6,7 @@ from ..topic import Topic
 class PostRecordService(object):
 	@classmethod
 	def all(cls):
-		return DBSession.query(Post).order_by(sa.desc(Post.start_date))
+		return DBSession.query(Post).order_by(sqlalchemy.desc(Post.start_date))
 	
 	@classmethod
 	def by_id(cls, post_id):
@@ -19,7 +19,7 @@ class PostRecordService(object):
 	@classmethod
 	def get_paginator(cls, request, page=1):
 		# I think we can do this action by just calling all()
-		query = DBSession.query(Post).order_by(sa.desc(Post.start_date))
+		query = DBSession.query(Post).order_by(sqlalchemy.desc(Post.start_date))
 		
 		query_params = request.GET.mixed()
 		
@@ -37,7 +37,7 @@ class PostRecordService(object):
 	@classmethod
 	def paginated_by_user(cls, request, user_id, page=1):
 		# Get all the posts made by a user.
-		query = DBSession.query(Post).filter(Post.user_id == user_id).order_py(sa.desc(Post.start_date))
+		query = DBSession.query(Post).filter(Post.user_id == user_id).order_py(sqlalchemy.desc(Post.start_date))
 		
 		query_params = request.GET.mixed()
 		
