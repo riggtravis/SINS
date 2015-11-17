@@ -69,6 +69,8 @@ class CategoryActions:
 	@view_config(match_param='action=create',
 		renderer='sins:templates/edit_forum.mako')
 	def create_forum(self):
+		# Make sure to populate the choices field of the parent_id SelectField.
+		
 		return {}
 	
 	# Read.

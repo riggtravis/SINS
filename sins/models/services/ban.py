@@ -30,3 +30,7 @@ class BanRecordService(object):
 			items_per_page=5,	# Adjust as needed
 			url_maker=url_maker
 		)
+	
+	# Create a list of current bans. These are bans whose end_date has not come
+	# yet. I assume that we can just compare using less than and greater than
+	# comparison operators.
