@@ -4,6 +4,7 @@ from wtforms import StringField
 from wtforms import TextAreaField
 from wtforms import DateTimeField
 from wtforms import SelectField
+from wtforms import PasswordField
 
 from wtforms import validators
 
@@ -57,7 +58,7 @@ class BanUpdateForm(BanCreateForm):
 class ForumCreateForm(Form):
 	title = StringField(
 		'Title',
-		[validators.Length(min=1, max=30)],
+		[validators.Length(min=1, max=30), validators.required()],
 		filters=[strip_filter]
 	)
 	
@@ -78,6 +79,7 @@ class ForumCreateForm(Form):
 	# in our view controller.
 	parent_id = SelectField(
 		'Parent',
+		[validators.optional()],
 		filters=[strip_filter]
 	)
 
@@ -91,7 +93,7 @@ class ForumUpdateForm(ForumCreateForm):
 class GroupCreateForm(Form):
 	title = StringField(
 		'Group Name',
-		[validators.Length(min=1, max=30)]
+		[validators.Length(min=1, max=30), validators.required()]
 		filters=[strip_filter]
 	)
 
@@ -111,6 +113,7 @@ class MembershipCreateForm(form):
 	# Rember that the SelectField must be populated dynamically later.
 	group_id = SelectField(
 		'Group',
+		[validators.required()]
 		filters=[strip_filter]
 	)
 
@@ -127,7 +130,11 @@ class MembershipCreateForm(form):
 # the only field should be which power is being given to a group.
 
 class PermissionCreateForm(Form):
-	
+	power_id = SelectField(
+		'Group',
+		[validators.required()]
+		filters=[strip_filter]
+	)
 
 ##################
 # Post Forms
@@ -136,7 +143,7 @@ class PermissionCreateForm(Form):
 class  PostCreateForm(Form):
 	message = TextAreaField(
 		'Message',
-		[validators.Length(min=1)],
+		[validators.Length(min=1), validators.required()],
 		filters=[strip_filter]
 	)
 
@@ -146,6 +153,9 @@ class PostUpdateForm(PostCreateForm):
 ##################
 # Power Forms
 ##################
+
+# I'm not sure it actually makes sense to have power forms. I think instead this
+# will be implemented in the initialize DB scripts.
 
 ##################
 # Topic Forms
@@ -159,7 +169,7 @@ class TopicCreateForm(Form):
 	
 	subject = StringField(
 		'Subject',
-		[validators.Length(min=1, max=140)],
+		[validators.Length(min=1, max=140), validators.required()],
 		filters=[strip_filter]
 	)
 	
@@ -178,3 +188,31 @@ class TopicUpdateForm(TopicCreateForm):
 ##################
 # User Forms
 ##################
+
+# Think of this as registration.
+class UserCreateForm(Form):
+	username = StringField(
+		'Username',
+		[validators.Length(min=1, max=30), validators.required()],
+		filters=[strip_filter]
+	)
+	
+	# I'm not sure how to implement password. There might be a specific field.
+	# There sure is.
+	password = PasswordField(
+		'Password',
+		[validators.Length(min=8), validators.required()],
+		filters=[strip_filter]
+	)
+	
+	# An email address field makes sense at sign up, even if I don't decide to
+	# make it a required value.
+	email = StringField(
+		'E-Mail Address',
+		[validators.email(), validators.required()],
+		filters=[strip_filter]
+	)
+	
+	# It doesn't make sense for the user to upload an avatar at registration
+	# Similarly it doesn't make sense to let the user create a signature at the
+	# time of registration.
