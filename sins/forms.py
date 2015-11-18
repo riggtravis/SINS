@@ -5,6 +5,7 @@ from wtforms import TextAreaField
 from wtforms import DateTimeField
 from wtforms import SelectField
 from wtforms import PasswordField
+from wtforms import FileField
 
 from wtforms import validators
 
@@ -205,6 +206,8 @@ class UserCreateForm(Form):
 		filters=[strip_filter]
 	)
 	
+	# Confirming the password is important. Typos are annoying.
+	
 	# An email address field makes sense at sign up, even if I don't decide to
 	# make it a required value.
 	email = StringField(
@@ -216,3 +219,25 @@ class UserCreateForm(Form):
 	# It doesn't make sense for the user to upload an avatar at registration
 	# Similarly it doesn't make sense to let the user create a signature at the
 	# time of registration.
+
+# This of updates as customizing a user's profile.
+class UserUpdateForm(UserCreateForm):
+	user_id = HiddenField()
+	username = HiddenField()
+	
+	# Instead of a text form for the avatar, I need a way to upload a file.
+	avatar = FileField('Avatar', [validators.regexp('^[^/\\]\.png$')])
+	
+	# I'm not sure what this function does. I believe it ensures that the file
+	# uploaded by the user is actually an image file and not a text file that is
+	# wearing a disquise.
+	def validate_image(form, field):
+		if field.data:
+			field.data = re.sub('[^a-z0-9_.-]', '_', field.data)
+
+##################
+# Login Forms
+##################
+
+# I will work on learning how to do this later. For right now I need to work on
+# uploading files.
