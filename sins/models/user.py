@@ -34,6 +34,7 @@ class User(Base):
 	password = Column(CHAR(256), nullable=False)
 	avatar = Column(CHAR(5))
 	signature = Column(UnicodeText)
+	bio = Column(UnicodeText)
 	join_date = Column(DateTime, nullable=False)
 	
 	# Relationships
