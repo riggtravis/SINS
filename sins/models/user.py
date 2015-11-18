@@ -28,6 +28,7 @@ class User(Base):
 	# Keys
 	user_id = Column(Integer, primary_key=True)
 	username = Column(Unicode(30), unique=True, nullable=False)
+	email_address = Column(Unicode(254), unique=True, nullable=False)
 	
 	# Attributes
 	password = Column(CHAR(256), nullable=False)
