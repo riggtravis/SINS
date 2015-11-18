@@ -24,11 +24,11 @@
 			<li class="media">
 				<div class="media-left">
 					<a href=
-						"request.route_url('user', id=post.user.user_id, slug=post.user.slug)"
+						"${request.route_url('user', id=post.user.user_id, slug=post.user.slug)}"
 					>
 						<img 
-							src="${request.static_url('sins:static/avatars/%(name)s' % topic.user.avatar)}"
-							alt=${post.user.username}
+							src="${request.static_url('sins:static/avatars/%(name)s.png' % topic.user.avatar)}"
+							alt="${post.user.username}"
 						/>
 					</a>
 				</div>

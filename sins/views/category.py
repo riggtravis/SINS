@@ -44,6 +44,21 @@ class CategoryViews:
 		# return the landing page populated with those forums.
 		return {'forums': forums, 'title_message': "Welcome!", 'topics': None}
 	
+	# I need a function for viewing a forum instead of the forum index.
+	@view_config(rout_name='forum')
+	def view_category(self):
+		forum_id = int(self.request.matchdict.get('forum_id', -1))
+		forum = ForumRecordService.by_id(forum_id)
+		
+		if forum:
+			return {
+				'forums': forum.forums,
+				'title_message': forum.title,
+				'topics': forum.topics
+			}
+		else:
+			return HTTPNotFound()
+	
 	# I am removing the retrieve forums method from this class. Now that there
 	# are service classes the view classes should call upon those classes
 	# instead of querying the database themselves.
@@ -59,7 +74,7 @@ class CategoryViews:
 # I will need to determine if the old renderer should be overwritten or
 # rather reworked so that an option can be used to view an edit forum on the
 # render page
-@view_config(route_name='forum_action')
+@view_defaults(route_name='forum_action')
 class CategoryActions:
 	def __init__(self, request):
 		self.request = request
