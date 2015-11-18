@@ -58,3 +58,5 @@ target/
 
 # Database files, not for distribution
 *.sqlite
+
+# Pointless change
