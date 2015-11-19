@@ -47,3 +47,26 @@ class ParticipantViews:
 		# or out so that there can be a sensible title like "success" or
 		# "log in"
 		return {}
+	
+	# I am including the ban view in the participant class because it relates to
+	# participants. A ban is not something that affects forums or posts.
+	@view_config(
+		route_name='ban_action',
+		match_param='action=create'
+	)
+	def ban(self):
+		entry = Ban()
+		form = BanCreateForm()
+		
+		if self.request.method = 'POST' and form.validate:
+			forum_populate.populate_obj(entry)
+			user_id = self.request.matchdict.get('user_id')
+			entry.user_id = user_id
+			DBSession.add(entry)
+			return HTTPFound(location=self.request.route_url(
+					'user', 
+					user_id=user_id
+				)
+			)
+		else:
+			return {'form': form, 'action': request.matchdict,get('action')}

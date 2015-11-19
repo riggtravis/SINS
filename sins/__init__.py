@@ -42,7 +42,7 @@ def main(global_config, **settings):
 	
 	# CRUD actions for bans
 	##############################
-	config.add_route('ban_action', 'ban/{action}')
+	config.add_route('ban_action', 'ban/{action}/{user_id:\d+}')
 	config.add_route('ban', 'ban/{ban_id:\d+}')
 	
 	# CRUD actions for forums

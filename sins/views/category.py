@@ -107,7 +107,14 @@ class CategoryActions:
 			DBSession.add(entry)
 			
 			# Change this so it returns to its original context.
-			return HTTPFound(location=request.route_url('home'))
+			if parent_id:
+				return HTTPFound(location=self.request.route_url(
+						'forum', 
+						forum_id=parent_id
+					)
+				)
+			else:
+				return HTTPFound(location=self.request.route_url('home'))
 		else:
 			return {'form': form, 'action': request.matchdict.get('action')}
 	

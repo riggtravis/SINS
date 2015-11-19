@@ -10,7 +10,7 @@
 <h1>${action} forum</h1>
 
 <form 
-	action="${request.route_url('blog_action', action=action)}" 
+	action="${request.route_url('forum_action', action=action)}" 
 	method="post" 
 	class="form"
 >
@@ -24,7 +24,8 @@
 			</div>
 	% endfor
 	
-	<!-- Because there is only one field, let's use a button addons -->
+	<!-- Because there is only one field, let's use a button addon -->
+	<!-- I couldn't figure out how to use a button addon. -->
 	<div class="form-group">
 		<label for="title">${form.title.label}</label>
 		${form.title(class_='form-control')}
