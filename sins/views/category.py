@@ -100,6 +100,10 @@ class CategoryActions:
 		
 		if self.request.method = 'POST' and form.validate:
 			form_populate.populate_obj(entry)
+			
+			# From the form url, set the parent_id of the new entry
+			entry.parent_id = self.request.matchdict.get('parent_id')
+			
 			DBSession.add(entry)
 			
 			# Change this so it returns to its original context.
@@ -115,7 +119,9 @@ class CategoryActions:
 		renderer='sins:templates/edit_forum.mako'
 	)
 	def edit_forum(self):
+		# I need to figure out how in the hell this works.
 		forum_id = int(request.params.get('forum_id', -1))
+		
 		entry = ForumRecordService.by_id(forum_id)
 		if entry:
 			form = ForumUpdateForm(request.POST, entry)
@@ -179,5 +185,11 @@ class CategoryActions:
 				form.parent_id.choices = choices
 		else:
 			return HTTPNotFound()
+		
+		# This looks odd, but it's the best way to ensure that what the if
+		# statement performed is returned correctly. So this statement will only
+		# run if the if statement ran, even though it is outside of the if
+		# if statement's codeblock.
+		return {'form': form, 'action': self.request.matchdict('action')}
 	
 	# Delete.
