@@ -118,8 +118,6 @@ class CategoryActions:
 		else:
 			return {'form': form, 'action': request.matchdict.get('action')}
 	
-	# Read.
-	
 	# Update.
 	@view_config(
 		match_param='action=edit',

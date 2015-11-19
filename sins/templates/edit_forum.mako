@@ -24,12 +24,13 @@
 			</div>
 	% endfor
 	
-	<!-- Because there is only one field, let's use a button addon -->
 	<!-- I couldn't figure out how to use a button addon. -->
 	<div class="form-group">
 		<label for="title">${form.title.label}</label>
 		${form.title(class_='form-control')}
 	</div>
+	
+	<!-- There needs to be a dropdown to use to select the parent forum -->
 	
 	<div class="form-group">
 		<label>submit</label>

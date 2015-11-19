@@ -52,7 +52,8 @@ class ParticipantViews:
 	# participants. A ban is not something that affects forums or posts.
 	@view_config(
 		route_name='ban_action',
-		match_param='action=create'
+		match_param='action=create',
+		renderer='sins:templates/ban_hammer.mako'
 	)
 	def ban(self):
 		entry = Ban()
@@ -70,3 +71,12 @@ class ParticipantViews:
 			)
 		else:
 			return {'form': form, 'action': request.matchdict,get('action')}
+	
+	# This view is for when a user becomes a member of a group.
+	@view_config(
+		route_name='membership_action',
+		match_param='action=create',
+		renderer='sins:templates/promotion.mako'
+	)
+	def promote(self):
+		
