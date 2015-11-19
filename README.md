@@ -1,5 +1,13 @@
 # SINS
-SINS is not SFIM
+SINS is not SFIM.
+
+You could also probably say that SINS is what it is because because the
+developers have prefered readability at the expense of speed, even when the
+majority of programmers looking over the code base would have understand the
+mildly faster version. The SINS codebase is not witty or clever. Depending on
+the programmer, they might not even find it elegant. SINS, however, should be
+approachable even by programmers who aren't very familiar with some of the
+common things that most programmers do.
 
 ## Well if it's not SFIM then what is it?
 It's forum software based on SFIM. In fact it's the reference implementation of

@@ -1,7 +1,11 @@
 import sqlalchemy
 from paginate_sqlalchemy import SqlalchemyOrmPage	# For pagination purposes
 from ..meta import DBSession
-from ..topic import Topic
+from ..forum import forum
+
+# So I understand now why we need to have classmethods for each of the member
+# functions. It seems to be that it's allowing this class to operate as a
+# construtor of sorts for the forum class.
 
 class ForumRecordService(object):
 	# Every class needs a minimum two functions. Those functions are:
