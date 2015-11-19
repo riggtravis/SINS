@@ -1,7 +1,16 @@
 # SINS
 
 [![Join the chat at https://gitter.im/riggtravis/SINS](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/riggtravis/SINS?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 SINS is not SFIM
+
+You could also probably say that SINS is what it is because because the
+developers have prefered readability at the expense of speed, even when the
+majority of programmers looking over the code base would have understand the
+mildly faster version. The SINS codebase is not witty or clever. Depending on
+the programmer, they might not even find it elegant. SINS, however, should be
+approachable even by programmers who aren't very familiar with some of the
+common things that most programmers do.
 
 ## Well if it's not SFIM then what is it?
 It's forum software based on SFIM. In fact it's the reference implementation of
@@ -36,17 +45,17 @@ allow for smartphone apps that can easily interact with SFIM based forums.
 6. The directory for the virtual environment will from now on be referred to as $VENV. If you cannot create a session variable for whatever reason, replace $VENV with the path to this directory.
 7. Run these commands:
 
-        cd $VENV/sins                                 <- This might be SINS
-        $VENV/bin/python setup.py develop
+    cd $VENV/sins                                 <- This might be SINS
+    $VENV/bin/python setup.py develop
 
 ## Running
 SINS is not currently in a state where it can run. It also needs to be run in a virtual environment. For this, follow
 the instructions that have been provided to contributors all the way to step six. Instead of step seven, run the
 following commands:
 
-        cd $VENV/sins
-        $VENV/bin/python setup.py
-        $VENV/bin/initialize_sins_db production.ini
+    cd $VENV/sins
+    $VENV/bin/python setup.py
+    $VENV/bin/initialize_sins_db production.ini
 
 # Licensing
 SINS is available under an MIT license.

@@ -10,6 +10,10 @@
 			be handled by the view logic.
 -->
 
+<!-- It might be nice to replace this simple header with a jumbotron -->
+
+<h1>${title_message}</h1>
+
 <!-- I will have to figure out how best to display forums. For right now dump
 			them as raw data. It is entirely possible that the best way to display 
 			this information is as a table.

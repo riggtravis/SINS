@@ -10,6 +10,9 @@ from pyramid.view import view_defaults
 # file we want to use the forum service.
 from ..models.services.forum import ForumRecordService
 
+# We need our forms.
+from ..forms import ForumCreateForm, ForumUpdateForm
+
 # Views should be contained in classes instead of being handled by lose
 # functions. Such is the hobo way. I mean the Pyramid way. More than likely that
 # stems from it being the Python way.
@@ -81,19 +84,112 @@ class CategoryActions:
 	
 	# Create.
 	# This is where WTForms start coming into play.
-	@view_config(match_param='action=create',
-		renderer='sins:templates/edit_forum.mako')
+	@view_config(
+		match_param='action=create',
+		renderer='sins:templates/edit_forum.mako'
+	)
 	def create_forum(self):
+		# I'm not sure that calling this variable entry is the most sensible
+		entry = Forum()
+		form = ForumCreateForm()
+		
 		# Make sure to populate the choices field of the parent_id SelectField.
 		
-		return {}
+		# The thing I need to figure out is how to get the context that the
+		# request was made from.
+		
+		if self.request.method = 'POST' and form.validate:
+			form_populate.populate_obj(entry)
+			
+			# From the form url, set the parent_id of the new entry
+			entry.parent_id = self.request.matchdict.get('parent_id')
+			
+			DBSession.add(entry)
+			
+			# Change this so it returns to its original context.
+			return HTTPFound(location=request.route_url('home'))
+		else:
+			return {'form': form, 'action': request.matchdict.get('action')}
 	
 	# Read.
 	
 	# Update.
-	@view_config(match_param='action=edit',
-		renderer='sins:templates/edit_forum.mako')
+	@view_config(
+		match_param='action=edit',
+		renderer='sins:templates/edit_forum.mako'
+	)
 	def edit_forum(self):
-		return {}
+		# I need to figure out how in the hell this works.
+		forum_id = int(request.params.get('forum_id', -1))
+		
+		entry = ForumRecordService.by_id(forum_id)
+		if entry:
+			form = ForumUpdateForm(request.POST, entry)
+			
+			# If I could do all of this using a switch statement somehow, that
+			# would be great.
+			
+			# Before checking to see if the forum has been set up, populate the
+			# parent option. This should be possible by asking for the parent of
+			# the forum we're editing's parent. If this does not exist, offer
+			# all of the top level categories.
+			
+			# Because there are multiple situations in which all of the forums
+			# without parents will be needed, it will be easier to write the
+			# code to do that outside of the branching if then else logic. This
+			# will be slower, but I am willing to sacrifice speed for more
+			# concise code.
+			
+			# I picked the name jotnar because that is the norsk word for the
+			# ice giants to whome all other norse entities in some way or 
+			# another originate from. I picked a norsk word because I have norse
+			# horses dammit.
+			jotnar = ForumRecordService.by_parent(None)
+			
+			# We will also need to populate a list here, or else populate it
+			# later in the if then else branching pattern.
+			choices = list()
+			
+			# jotun is the singular form of jotnar
+			for jotun in jotnar:
+				choice = (child.forum_id, child.title)
+				choices.append(choice)
+			
+			if entry.parent_id:
+				parent = ForumRecordService.by_id(entry.parent_id)
+				if parent.parent_id:
+					grandparent = ForumRecordService.by_id(parent.parent_id)
+					
+					# There has to be a more readable way of doing this.
+					# 
+					# form.parent_id.choices = [
+					# 	(choice.forum_id, choice.title) for choice in grandparent.children
+					# ]
+					#
+					
+					# Reset the choices list so that it isn't populated with the
+					# jotun choices.
+					
+					choices = list()
+					for child in grandparent.children:
+						# It will be more readable to have tuples set up before
+						# adding tuples to the list. This way we won't have
+						# difficult to parse nested parentheses.
+						choice = (child.forum_id, child.title)
+						choices.append(choice)
+					
+					form.parent_id.choices = choices
+				else:
+					form.parent_id.choices = choices
+			else:
+				form.parent_id.choices = choices
+		else:
+			return HTTPNotFound()
+		
+		# This looks odd, but it's the best way to ensure that what the if
+		# statement performed is returned correctly. So this statement will only
+		# run if the if statement ran, even though it is outside of the if
+		# if statement's codeblock.
+		return {'form': form, 'action': self.request.matchdict('action')}
 	
 	# Delete.
