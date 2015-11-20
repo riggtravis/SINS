@@ -52,3 +52,30 @@ class ManagementActions:
 		else:
 			return HTTPNotFound()
 		return {'form': form, 'action': self.request.matchdict('action')}
+	
+	# Delete
+
+# Add the permission view to this to this file. I have chosen to include the
+# permission view with this class because it is something that is given to
+# groups. To me this made sense for the seperation of concerns.
+@view_defaults(route_name="permission_action")
+class PermissionActions:
+	def __init__(self, request):
+		self.request = request
+	
+	# Create
+	
+	# Create for permissions is context dependent upon the group that the view
+	# was reached from. This means that we need to get it from the URL
+	@view_config(
+		match_param='action=create'
+		renderer='sins:templates/permission_slip.mako'
+	)
+	def create_permission(self):
+		entry = Permission()
+		form = PermissionCreateForm()
+		
+		if self.request.method = 'POST' and form.validate:
+			form_populate.populate_obj(entry)
+			
+			# From the form url, set the group_id of the new entry

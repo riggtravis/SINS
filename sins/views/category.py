@@ -93,11 +93,6 @@ class CategoryActions:
 		entry = Forum()
 		form = ForumCreateForm()
 		
-		# Make sure to populate the choices field of the parent_id SelectField.
-		
-		# The thing I need to figure out is how to get the context that the
-		# request was made from.
-		
 		if self.request.method = 'POST' and form.validate:
 			form_populate.populate_obj(entry)
 			
