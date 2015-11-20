@@ -79,4 +79,4 @@ class ParticipantViews:
 		renderer='sins:templates/promotion.mako'
 	)
 	def promote(self):
-		
+		entry = 
