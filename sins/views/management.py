@@ -74,8 +74,22 @@ class PermissionActions:
 	def create_permission(self):
 		entry = Permission()
 		form = PermissionCreateForm()
+		group_id = self.request.matchdict.get('group')
 		
-		if self.request.method = 'POST' and form.validate:
-			form_populate.populate_obj(entry)
-			
-			# From the form url, set the group_id of the new entry
+		if group_id:
+			if self.request.method = 'POST' and form.validate:
+				form_populate.populate_obj(entry)
+				
+				# From the form url, set the group_id of the new entry
+				entry.group_id = group_id
+
+				DBSession.add(entry)
+				return HTTPFound(location=self.request.route_url(
+						'group',
+						user_id=user_id
+					)
+				)
+			else:
+				return {'form': form, 'action': self.request.matchdict('action')}
+		else:
+			return HTTPNotFound()

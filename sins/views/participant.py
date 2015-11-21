@@ -79,4 +79,26 @@ class ParticipantViews:
 		renderer='sins:templates/promotion.mako'
 	)
 	def promote(self):
-		entry = 
+		entry = Membership()
+		form = MembershipCreateForm()
+		user_id = self.request.matchdict.get('parent_id')
+		
+		if user_id:
+			if self.request.method = 'POST' and form.validate:
+				forum_populate.populate_obj(entry)
+				
+				# From the form url, set the user_id of the new entry.
+				entry.user_id = user_id
+
+				# The user_id is a required field.
+				# The database should only be updated if there was a user_id
+				DBSession.add(entry)
+				return HTTPFound(loaction=self.request.route_url(
+						'user',
+						user_id=user_id
+					)
+				)
+			else:
+				return {'form': form, 'action': self.request.matchdict('action')}
+		else:
+			return HTTPNotFound()
