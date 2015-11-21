@@ -89,16 +89,13 @@ class CategoryActions:
 		renderer='sins:templates/edit_forum.mako'
 	)
 	def create_forum(self):
+		# This function needs to create a dynamic list of potential parents.
 		# I'm not sure that calling this variable entry is the most sensible
 		entry = Forum()
-		form = ForumCreateForm()
+		form = ForumCreateForm(request.POST)
 		
-		if self.request.method = 'POST' and form.validate:
+		if self.request.method = 'POST' and form.validate: # How does this work?
 			form_populate.populate_obj(entry)
-			
-			# From the form url, set the parent_id of the new entry
-			entry.parent_id = self.request.matchdict.get('parent_id')
-			
 			DBSession.add(entry)
 			
 			# Change this so it returns to its original context.
@@ -111,6 +108,30 @@ class CategoryActions:
 			else:
 				return HTTPFound(location=self.request.route_url('home'))
 		else:
+			# Populate the choices list with potential forums.
+			# Get the context the create action was initiated from.
+			current_forum = ForumRecordService.by_id(
+				request.matchdict.get('forum_id')
+			)
+			
+			# If there is a current_forum, it should be a potential choice as
+			# well as all of its children.
+			if current_forum:
+				choices = [(current_forum.forum_id, current_forum.title)]
+				
+				# Add all of the current forum's children to the choices.
+				for child in current_forum.children:
+					choice = (child.forum_id, child.title)
+					choices.append(choice)
+			
+			# Otherwise the choices should be the jotnar
+			else:
+				jotnar = ForumRecordService.by_parent(None)
+				choices = list()
+				for jotun in jotnar:
+					choice = (jotun.forum_id, jotun.title)
+					choices.append(choice)
+			
 			return {'form': form, 'action': request.matchdict.get('action')}
 	
 	# Update.
@@ -152,7 +173,7 @@ class CategoryActions:
 			
 			# jotun is the singular form of jotnar
 			for jotun in jotnar:
-				choice = (child.forum_id, child.title)
+				choice = (jotun.forum_id, jotun.title)
 				choices.append(choice)
 			
 			if entry.parent_id:
@@ -169,8 +190,8 @@ class CategoryActions:
 					
 					# Reset the choices list so that it isn't populated with the
 					# jotun choices.
-					
 					choices = list()
+
 					for child in grandparent.children:
 						# It will be more readable to have tuples set up before
 						# adding tuples to the list. This way we won't have
