@@ -47,3 +47,58 @@ class ParticipantViews:
 		# or out so that there can be a sensible title like "success" or
 		# "log in"
 		return {}
+	
+	# I am including the ban view in the participant class because it relates to
+	# participants. A ban is not something that affects forums or posts.
+	@view_config(
+		route_name='ban_action',
+		match_param='action=create',
+		renderer='sins:templates/ban_hammer.mako'
+	)
+	def ban(self):
+		entry = Ban()
+		form = BanCreateForm()
+		
+		if self.request.method = 'POST' and form.validate:
+			forum_populate.populate_obj(entry)
+			user_id = self.request.matchdict.get('user_id')
+			entry.user_id = user_id
+			DBSession.add(entry)
+			return HTTPFound(location=self.request.route_url(
+					'user', 
+					user_id=user_id
+				)
+			)
+		else:
+			return {'form': form, 'action': request.matchdict,get('action')}
+	
+	# This view is for when a user becomes a member of a group.
+	@view_config(
+		route_name='membership_action',
+		match_param='action=create',
+		renderer='sins:templates/promotion.mako'
+	)
+	def promote(self):
+		entry = Membership()
+		form = MembershipCreateForm()
+		user_id = self.request.matchdict.get('parent_id')
+		
+		if user_id:
+			if self.request.method = 'POST' and form.validate:
+				forum_populate.populate_obj(entry)
+				
+				# From the form url, set the user_id of the new entry.
+				entry.user_id = user_id
+
+				# The user_id is a required field.
+				# The database should only be updated if there was a user_id
+				DBSession.add(entry)
+				return HTTPFound(loaction=self.request.route_url(
+						'user',
+						user_id=user_id
+					)
+				)
+			else:
+				return {'form': form, 'action': self.request.matchdict('action')}
+		else:
+			return HTTPNotFound()

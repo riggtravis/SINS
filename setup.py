@@ -18,7 +18,7 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
 	'passlib',
-	'webhelpers2',			# Various web building related helpers
+	'webhelpers2'			# Various web building related helpers
 ]
 
 setup(name='sins',
@@ -29,7 +29,7 @@ setup(name='sins',
         "Programming Language :: Python",
         "Framework :: Pyramid",
         "Topic :: Internet :: WWW/HTTP",
-        "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+        "Topic :: Internet :: WWW/HTTP :: WSGI :: Application"
       ],
       author='Travis Rigg',
       author_email='rigg.travis@gmail.com',

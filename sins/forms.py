@@ -94,7 +94,7 @@ class ForumUpdateForm(ForumCreateForm):
 class GroupCreateForm(Form):
 	title = StringField(
 		'Group Name',
-		[validators.Length(min=1, max=30), validators.required()]
+		[validators.Length(min=1, max=30), validators.required()],
 		filters=[strip_filter]
 	)
 
@@ -114,7 +114,7 @@ class MembershipCreateForm(form):
 	# Rember that the SelectField must be populated dynamically later.
 	group_id = SelectField(
 		'Group',
-		[validators.required()]
+		[validators.required()],
 		filters=[strip_filter]
 	)
 
@@ -133,7 +133,7 @@ class MembershipCreateForm(form):
 class PermissionCreateForm(Form):
 	power_id = SelectField(
 		'Group',
-		[validators.required()]
+		[validators.required()],
 		filters=[strip_filter]
 	)
 

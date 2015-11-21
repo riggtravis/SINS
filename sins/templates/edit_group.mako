@@ -1,16 +1,17 @@
-<!-- Step one. Fetch the bolerplate html -->
+<!-- Step one. Import the base template -->
 <%inherit file="base.mako"/>
 
 <!-- Step two. Set the title. -->
 <%block name="title">
-  ${action} forum
+  ${action} group
 </%block>
 
-<!-- Step three. Present the user with an obvious header for their action. -->
-<h1>${action} forum</h1>
+<!-- Step three. Present the user with an obvious header for their action -->
+<h1>${action} group</h1>
 
+<!-- Step four. Present the user with a form to edit the group. -->
 <form 
-	action="${request.route_url('forum_action', action=action)}" 
+	action="${request.route_url('group_action', action=action)}" 
 	method="post" 
 	class="form"
 >
@@ -24,13 +25,10 @@
 			</div>
 	% endfor
 	
-	<!-- I couldn't figure out how to use a button addon. -->
 	<div class="form-group">
 		<label for="title">${form.title.label}</label>
 		${form.title(class_='form-control')}
 	</div>
-	
-	<!-- There needs to be a dropdown to use to select the parent forum -->
 	
 	<div class="form-group">
 		<label>submit</label>

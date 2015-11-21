@@ -93,11 +93,6 @@ class CategoryActions:
 		entry = Forum()
 		form = ForumCreateForm()
 		
-		# Make sure to populate the choices field of the parent_id SelectField.
-		
-		# The thing I need to figure out is how to get the context that the
-		# request was made from.
-		
 		if self.request.method = 'POST' and form.validate:
 			form_populate.populate_obj(entry)
 			
@@ -107,11 +102,16 @@ class CategoryActions:
 			DBSession.add(entry)
 			
 			# Change this so it returns to its original context.
-			return HTTPFound(location=request.route_url('home'))
+			if parent_id:
+				return HTTPFound(location=self.request.route_url(
+						'forum', 
+						forum_id=parent_id
+					)
+				)
+			else:
+				return HTTPFound(location=self.request.route_url('home'))
 		else:
 			return {'form': form, 'action': request.matchdict.get('action')}
-	
-	# Read.
 	
 	# Update.
 	@view_config(

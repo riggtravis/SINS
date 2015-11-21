@@ -4,7 +4,7 @@ from sqlalchemy import engine_from_config
 from .models.meta import (
     DBSession,
     Base,
-    )
+)
 
 
 def main(global_config, **settings):
@@ -42,7 +42,7 @@ def main(global_config, **settings):
 	
 	# CRUD actions for bans
 	##############################
-	config.add_route('ban_action', 'ban/{action}')
+	config.add_route('ban_action', 'ban/{action}/{user_id:\d+}')
 	config.add_route('ban', 'ban/{ban_id:\d+}')
 	
 	# CRUD actions for forums
@@ -64,12 +64,21 @@ def main(global_config, **settings):
 	
 	# CRUD actions for powers
 	##############################
-	config.add_route('power_action', 'permission/{action}')
+	
+	# I don't actually think that I will be using the power_action route because
+	# powers are so intertwined with logic. More than likely these will have to
+	# be set up in the initialize_sins_db script, and use global constants to
+	# determine which power to use. It might even be a good idea to have a
+	# powers object that contains as member variables all of the different
+	# permission values. This way when a power is used in the code it can be
+	# clear which permission it is. It would be a lot easer to have something
+	# like BAN_USER instead of just the power number like 8.
+	config.add_route('power_action', 'power/{action}')
 	config.add_route('power', 'power/{power_id:\d+}/{slug}')
 	
 	# CRUD actions for permissions
 	##############################
-	config.add_route('permission_action', 'permission/{action}')
+	config.add_route('permission_action', 'permission/{action}/')
 	config.add_route('permission', 'permission/{power_id:\d+}/{group_id:\d+}')
 	
 	# CRUD actions for posts
