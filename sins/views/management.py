@@ -90,6 +90,21 @@ class PermissionActions:
 					)
 				)
 			else:
+				# We need a dynamic list of choices for the form.
+				# Step 1: get all of the permissions
+				powers = PowerRecordService.all()
+				
+				# Step 2: create a list in the correct scope.
+				choices = list()
+				
+				# Step 3: populate the choices list.
+				for power in powers:
+					choice = (power.power_id, power.title)
+					choices.append(choice)
+				
+				# Step 4: set the form power_id choices.
+				form.power_id.choices = choices
+				
 				return {'form': form, 'action': self.request.matchdict('action')}
 		else:
 			return HTTPNotFound()

@@ -26,7 +26,10 @@
 	% endfor
 	
 	<!-- Use a dropdown to determine which group the user is being added to. -->
-	
+	<div class="form-group">
+		<label for="group_id">Group</label>
+		${form.group_id(class_='form-control')}
+	</div>
 	
 	<div class="form-group">
 		<label>submit</label>
