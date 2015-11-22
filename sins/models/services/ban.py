@@ -1,7 +1,7 @@
 import sqlalchemy
 from paginate_sqlalchemy import SqlalchemyOrmPage	# For pagination purposes
 from ..meta import DBSession
-from ..topic import Topic
+from ..ban import Ban
 
 class BanRecordService(object):
 	@classmethod
@@ -10,6 +10,9 @@ class BanRecordService(object):
 	
 	@classmethod
 	def by_id(cls, id):
+		# The first method pulls the first item out of the list. Even though
+		# there is only one item in the list, this is still necessary because it
+		# is a list.
 		return DBSession.query(Ban).filter(Ban.ban_id == id).first()
 	
 	# Bans are a type that should be paginated.

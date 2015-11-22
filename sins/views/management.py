@@ -86,10 +86,32 @@ class PermissionActions:
 				DBSession.add(entry)
 				return HTTPFound(location=self.request.route_url(
 						'group',
-						user_id=user_id
+						group_id=group_id
 					)
 				)
 			else:
-				return {'form': form, 'action': self.request.matchdict('action')}
+				# We need a dynamic list of choices for the form.
+				# Step 1: get all of the permissions
+				powers = PowerRecordService.all()
+				
+				# Step 2: create a list in the correct scope.
+				choices = list()
+				
+				# Step 3: populate the choices list.
+				for power in powers:
+					choice = (power.power_id, power.title)
+					choices.append(choice)
+				
+				# Step 4: set the form power_id choices.
+				form.power_id.choices = choices
+				
+				# Get the group from the group id.
+				group = GroupRecordService.by_id(group_id)
+				
+				return {
+					'form': form, 
+					'action': self.request.matchdict('action'),
+					'group': group
+				}
 		else:
 			return HTTPNotFound()

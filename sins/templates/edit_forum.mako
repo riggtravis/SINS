@@ -1,4 +1,4 @@
-<!-- Step one. Fetch the bolerplate html -->
+<!-- Step one. Fetch the boilerplate html -->
 <%inherit file="base.mako"/>
 
 <!-- Step two. Set the title. -->
@@ -31,6 +31,10 @@
 	</div>
 	
 	<!-- There needs to be a dropdown to use to select the parent forum -->
+	<div class="form-group">
+		<label for="parent_id">${form.parent_id.label}</label>
+		${form.parent_id(class_='form-control')}
+	</div>
 	
 	<div class="form-group">
 		<label>submit</label>

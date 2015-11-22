@@ -129,7 +129,6 @@ class MembershipCreateForm(form):
 # This will work almost identically to the membership form. This time, the form
 # should be reached by clicking on a link to add a new power to a group. So
 # the only field should be which power is being given to a group.
-
 class PermissionCreateForm(Form):
 	power_id = SelectField(
 		'Group',

@@ -27,6 +27,7 @@ class Power(Base):
 	title = Column(Unicode(30), unique=True, nullable=False)
 	
 	# Relationships
+	# This member variable should probably have a norsk name.
 	adepts = orm.relationship("Permission", backref="powers")
 	
 	# Create a human readable slug that makes it easy to parse the page.

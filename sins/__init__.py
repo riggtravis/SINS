@@ -48,8 +48,8 @@ def main(global_config, **settings):
 	# CRUD actions for forums
 	##############################
 	
-	# We need to a parameter for the parent_id to use when creating forums.
-	config.add_route('forum_action', 'forum/{action}/{parent_id:\d+}')
+	# We need to a parameter for the context to use when creating forums.
+	config.add_route('forum_action', 'forum/{action}/{forum_id:\d+}')
 	config.add_route('forum', 'forum/{forum_id:\d+}/{slug}')
 	
 	# CRUD actions for groups
