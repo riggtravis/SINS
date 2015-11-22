@@ -86,7 +86,7 @@ class PermissionActions:
 				DBSession.add(entry)
 				return HTTPFound(location=self.request.route_url(
 						'group',
-						user_id=user_id
+						group_id=group_id
 					)
 				)
 			else:
@@ -105,6 +105,13 @@ class PermissionActions:
 				# Step 4: set the form power_id choices.
 				form.power_id.choices = choices
 				
-				return {'form': form, 'action': self.request.matchdict('action')}
+				# Get the group from the group id.
+				group = GroupRecordService.by_id(group_id)
+				
+				return {
+					'form': form, 
+					'action': self.request.matchdict('action'),
+					'group': group
+				}
 		else:
 			return HTTPNotFound()

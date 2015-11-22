@@ -27,7 +27,7 @@
 	
 	<!-- Use a dropdown to determine which group the user is being added to. -->
 	<div class="form-group">
-		<label for="group_id">Group</label>
+		<label for="group_id">${form.group_id.label}</label>
 		${form.group_id(class_='form-control')}
 	</div>
 	
