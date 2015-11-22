@@ -31,6 +31,10 @@
 	</div>
 	
 	<!-- There needs to be a dropdown to use to select the parent forum -->
+	<div class="form-group">
+		<label for="parent_id">Parent Forum</label>
+		${form.parent_id(class_='form-control')}
+	</div>
 	
 	<div class="form-group">
 		<label>submit</label>

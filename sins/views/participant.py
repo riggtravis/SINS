@@ -85,7 +85,7 @@ class ParticipantViews:
 		
 		if user_id:
 			if self.request.method = 'POST' and form.validate:
-				forum_populate.populate_obj(entry)
+				form_populate.populate_obj(entry)
 				
 				# From the form url, set the user_id of the new entry.
 				entry.user_id = user_id
@@ -99,6 +99,22 @@ class ParticipantViews:
 					)
 				)
 			else:
+				# Populate the choices for the group field.
+				# Step 1: Get all of the groups.
+				groups = GroupRecordService.all()
+				
+				# Step 2: Create a properly scoped list.
+				choices = list()
+				
+				# Step 3: Populate the choices list.
+				for group in groups:
+					choice = (group.group_id, group.title)
+					choices.append(choice)
+				
+				# Step 4: Set the choices list as the choices for the group id
+				# in the form.
+				form.group_id.choices = choices
+				
 				return {'form': form, 'action': self.request.matchdict('action')}
 		else:
 			return HTTPNotFound()

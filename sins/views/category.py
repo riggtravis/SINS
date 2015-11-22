@@ -116,8 +116,12 @@ class CategoryActions:
 			
 			# If there is a current_forum, it should be a potential choice as
 			# well as all of its children.
+			
+			# No matter what happens in this if then else branching statement we
+			# will need a list that has a scope outside the branches.
+			choices = list()
 			if current_forum:
-				choices = [(current_forum.forum_id, current_forum.title)]
+				choices = append((current_forum.forum_id, current_forum.title))
 				
 				# Add all of the current forum's children to the choices.
 				for child in current_forum.children:
@@ -127,10 +131,13 @@ class CategoryActions:
 			# Otherwise the choices should be the jotnar
 			else:
 				jotnar = ForumRecordService.by_parent(None)
-				choices = list()
 				for jotun in jotnar:
 					choice = (jotun.forum_id, jotun.title)
 					choices.append(choice)
+			
+			# Now that we are out of the branching statement, set the choices
+			# list as the choices for the parent id in the form.
+			form.parent_id.choices = choices
 			
 			return {'form': form, 'action': request.matchdict.get('action')}
 	
@@ -198,12 +205,11 @@ class CategoryActions:
 						# difficult to parse nested parentheses.
 						choice = (child.forum_id, child.title)
 						choices.append(choice)
-					
-					form.parent_id.choices = choices
-				else:
-					form.parent_id.choices = choices
-			else:
-				form.parent_id.choices = choices
+						
+			# We have form.parent_id.choices = choices repeated three times here
+			# and there has to be a better way to do this.			
+			form.parent_id.choices = choices
+				
 		else:
 			return HTTPNotFound()
 		
