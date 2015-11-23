@@ -76,13 +76,13 @@ class CategoryViews(ViewBase):
 	# instead of querying the database themselves.
 
 #########
-  #####                                                       #                                        
- #     #   ##   ##### ######  ####   ####  #####  #   #      # #    ####  ##### #  ####  #    #  ####  
- #        #  #    #   #      #    # #    # #    #  # #      #   #  #    #   #   # #    # ##   # #      
- #       #    #   #   #####  #      #    # #    #   #      #     # #        #   # #    # # #  #  ####  
- #       ######   #   #      #  ### #    # #####    #      ####### #        #   # #    # #  # #      # 
- #     # #    #   #   #      #    # #    # #   #    #      #     # #    #   #   # #    # #   ## #    # 
-  #####  #    #   #   ######  ####   ####  #    #   #      #     #  ####    #   #  ####  #    #  ####  
+  #####                                                    #######                      #                                        
+ #     #   ##   ##### ######  ####   ####  #####  #   #    #       #####  # #####      # #    ####  ##### #  ####  #    #  ####  
+ #        #  #    #   #      #    # #    # #    #  # #     #       #    # #   #       #   #  #    #   #   # #    # ##   # #      
+ #       #    #   #   #####  #      #    # #    #   #      #####   #    # #   #      #     # #        #   # #    # # #  #  ####  
+ #       ######   #   #      #  ### #    # #####    #      #       #    # #   #      ####### #        #   # #    # #  # #      # 
+ #     # #    #   #   #      #    # #    # #   #    #      #       #    # #   #      #     # #    #   #   # #    # #   ## #    # 
+  #####  #    #   #   ######  ####   ####  #    #   #      ####### #####  #   #      #     #  ####    #   #  ####  #    #  ####  
 #########
 # I have decided to put the actions in a seperate class so I don't have to
 # repeat myself several times.
@@ -95,14 +95,14 @@ class CategoryViews(ViewBase):
 # I will need to determine if the old renderer should be overwritten or
 # rather reworked so that an option can be used to view an edit forum on the
 # render page
-@view_defaults(route_name='forum_action')
-class CategoryActions(ViewBase):
+@view_defaults(
+	route_name='forum_action',
+	renderer='sins:templates/edit_forum.mako'
+)
+class CategoryEditActions(ViewBase):
 	# Create.
 	# This is where WTForms start coming into play.
-	@view_config(
-		match_param='action=create',
-		renderer='sins:templates/edit_forum.mako'
-	)
+	@view_config(match_param='action=create')
 	def create_forum(self):
 		# This function needs to create a dynamic list of potential parents.
 		# I'm not sure that calling this variable entry is the most sensible
@@ -167,13 +167,13 @@ class CategoryActions(ViewBase):
 			}
 	
 	# Update.
-	@view_config(
-		match_param='action=edit',
-		renderer='sins:templates/edit_forum.mako'
-	)
+	@view_config(match_param='action=edit')
 	def edit_forum(self):
 		# I need to figure out how in the hell this works.
 		forum_id = int(request.params.get('forum_id', -1))
+		
+		# Make sure the form variable is available outside the if branch scope.
+		form = None
 		
 		entry = ForumRecordService.by_id(forum_id)
 		if entry:
@@ -243,5 +243,3 @@ class CategoryActions(ViewBase):
 		# run if the if statement ran, even though it is outside of the if
 		# if statement's codeblock.
 		return {'form': form, 'action': self.request.matchdict('action')}
-	
-	# Delete.

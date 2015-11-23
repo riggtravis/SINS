@@ -44,20 +44,17 @@ class DiscussionViews(ViewBase):
 			return HTTPNotFound()
 
 #########
- #######                              #                                        
-    #     ####  #####  #  ####       # #    ####  ##### #  ####  #    #  ####  
-    #    #    # #    # # #    #     #   #  #    #   #   # #    # ##   # #      
-    #    #    # #    # # #         #     # #        #   # #    # # #  #  ####  
-    #    #    # #####  # #         ####### #        #   # #    # #  # #      # 
-    #    #    # #      # #    #    #     # #    #   #   # #    # #   ## #    # 
-    #     ####  #      #  ####     #     #  ####    #   #  ####  #    #  ####  
+ #######                           #######                      #                                        
+    #     ####  #####  #  ####     #       #####  # #####      # #    ####  ##### #  ####  #    #  ####  
+    #    #    # #    # # #    #    #       #    # #   #       #   #  #    #   #   # #    # ##   # #      
+    #    #    # #    # # #         #####   #    # #   #      #     # #        #   # #    # # #  #  ####  
+    #    #    # #####  # #         #       #    # #   #      ####### #        #   # #    # #  # #      # 
+    #    #    # #      # #    #    #       #    # #   #      #     # #    #   #   # #    # #   ## #    # 
+    #     ####  #      #  ####     ####### #####  #   #      #     #  ####    #   #  ####  #    #  ####   
 #########
-@view_defaults(route_name='topic_action')
-class TopicActions(ViewBase):
-	@view_config(
-		match_param='action=create',
-		renderer='sins:templates/edit_topic.mako'
-	)
+@view_defaults(route_name='topic_action', renderer='sins:templates/edit_topic')
+class TopicEditActions(ViewBase):
+	@view_config(match_param='action=create')
 	def create_topic(self):
 		entry = Topic()
 		form = TopicCreateForm(request.POST)
@@ -84,6 +81,38 @@ class TopicActions(ViewBase):
 					'action': request.matchdict.get('action'),
 					'forum': forum
 				}
+		else:
+			return HTTPNotFound()
+	
+	@view_config(match_param='action=edit')
+	def edit_topic(self):
+		topic_id = int(request.params.get('forum_id', -1))
+		entry = TopicRecordService.by_id(forum_id)
+		if entry:
+			form = ForumUpdateForm(request.POST, entry)
+			
+			# Users who are members of groups with the power to do so should be
+			# able to move topics to a better forum.
+			
+			# For right now just let anyone with the ability to edit the topic
+			# move the topic.
+			
+			# I hate doing this, but I think every forum in the community should
+			# be a choice.
+			forums = ForumRecordService.all()
+			choices = list()
+			for forum in forums:
+				choice = (forum.forum_id, forum.title)
+				choices.append(choice)
+			
+			forum.forum_id.choices = choices
+			
+			return {
+				'form': form,
+				'action': self.request.matchdict('action'),
+				'forum': entry.forum
+			}
+		
 		else:
 			return HTTPNotFound()
 ########

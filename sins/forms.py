@@ -232,6 +232,12 @@ class TopicUpdateForm(TopicCreateForm):
 	# not include this line, then the update form will give the user access to
 	# change the primary key. Which is bad.
 	topic_id = HiddenField()
+	
+	forum_id = SelectField(
+		'Forum',
+		[validators.optional()],
+		filters=[strip_filter]
+	)
 
 ##################
  #     #                         #######                             
