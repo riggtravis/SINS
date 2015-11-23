@@ -6,6 +6,9 @@
 from pyramid.view import view_config
 from pyramid.view import view_defaults
 
+# We need our view base
+from .view_base import ViewBase
+
 # We're going to want to be able to use our services. Specifically in this view
 # file we want to use the forum service.
 from ..models.services.forum import ForumRecordService
@@ -21,6 +24,15 @@ from ..forms import ForumCreateForm, ForumUpdateForm
 # every single template. There should be ways to combine templates together to
 # create what the user sees.
 
+########
+  #####                                                 #     #                        
+ #     #   ##   ##### ######  ####   ####  #####  #   # #     # # ###### #    #  ####  
+ #        #  #    #   #      #    # #    # #    #  # #  #     # # #      #    # #      
+ #       #    #   #   #####  #      #    # #    #   #   #     # # #####  #    #  ####  
+ #       ######   #   #      #  ### #    # #####    #    #   #  # #      # ## #      # 
+ #     # #    #   #   #      #    # #    # #   #    #     # #   # #      ##  ## #    # 
+  #####  #    #   #   ######  ####   ####  #    #   #      #    # ###### #    #  ####  
+#########
 # Let's start by thinking about what to call the landing page that users will
 # see when they look at a list of forums.
 
@@ -33,10 +45,7 @@ from ..forms import ForumCreateForm, ForumUpdateForm
 # this class are going to involve using the landing template. Since the landing
 # template already includes the base template, we don't have to worry about it.
 @view_defaults(renderer='sins:templates/landing.mako')
-class CategoryViews:
-	def __init__(self, request):
-		self.request = request
-	
+class CategoryViews(ViewBase):
 	# We know that the home route will be directed to a top level landing page
 	# that will have a listing of all root forums.
 	@view_config(route_name='home')
@@ -66,6 +75,15 @@ class CategoryViews:
 	# are service classes the view classes should call upon those classes
 	# instead of querying the database themselves.
 
+#########
+  #####                                                    #######                      #                                        
+ #     #   ##   ##### ######  ####   ####  #####  #   #    #       #####  # #####      # #    ####  ##### #  ####  #    #  ####  
+ #        #  #    #   #      #    # #    # #    #  # #     #       #    # #   #       #   #  #    #   #   # #    # ##   # #      
+ #       #    #   #   #####  #      #    # #    #   #      #####   #    # #   #      #     # #        #   # #    # # #  #  ####  
+ #       ######   #   #      #  ### #    # #####    #      #       #    # #   #      ####### #        #   # #    # #  # #      # 
+ #     # #    #   #   #      #    # #    # #   #    #      #       #    # #   #      #     # #    #   #   # #    # #   ## #    # 
+  #####  #    #   #   ######  ####   ####  #    #   #      ####### #####  #   #      #     #  ####    #   #  ####  #    #  ####  
+#########
 # I have decided to put the actions in a seperate class so I don't have to
 # repeat myself several times.
 
@@ -77,24 +95,29 @@ class CategoryViews:
 # I will need to determine if the old renderer should be overwritten or
 # rather reworked so that an option can be used to view an edit forum on the
 # render page
-@view_defaults(route_name='forum_action')
-class CategoryActions:
-	def __init__(self, request):
-		self.request = request
-	
+@view_defaults(
+	route_name='forum_action',
+	renderer='sins:templates/edit_forum.mako'
+)
+class CategoryEditActions(ViewBase):
 	# Create.
 	# This is where WTForms start coming into play.
-	@view_config(
-		match_param='action=create',
-		renderer='sins:templates/edit_forum.mako'
-	)
+	@view_config(match_param='action=create')
 	def create_forum(self):
 		# This function needs to create a dynamic list of potential parents.
 		# I'm not sure that calling this variable entry is the most sensible
 		entry = Forum()
 		form = ForumCreateForm(request.POST)
 		
-		if self.request.method = 'POST' and form.validate: # How does this work?
+		# Get the context the create action was initiated from.
+		current_forum = ForumRecordService.by_id(
+			request.matchdict.get('forum_id')
+		)
+		
+		# This works by checking what the server received from the client. The
+		# form.validate statement works because our form might already be
+		# populated by request.POST
+		if self.request.method = 'POST' and form.validate:
 			form_populate.populate_obj(entry)
 			DBSession.add(entry)
 			
@@ -102,17 +125,13 @@ class CategoryActions:
 			if parent_id:
 				return HTTPFound(location=self.request.route_url(
 						'forum', 
-						forum_id=parent_id
+						forum_id=current_forum.forum_id
 					)
 				)
 			else:
 				return HTTPFound(location=self.request.route_url('home'))
 		else:
 			# Populate the choices list with potential forums.
-			# Get the context the create action was initiated from.
-			current_forum = ForumRecordService.by_id(
-				request.matchdict.get('forum_id')
-			)
 			
 			# If there is a current_forum, it should be a potential choice as
 			# well as all of its children.
@@ -139,16 +158,22 @@ class CategoryActions:
 			# list as the choices for the parent id in the form.
 			form.parent_id.choices = choices
 			
-			return {'form': form, 'action': request.matchdict.get('action')}
+			# In case there is an error and the system has to be started again,
+			# make sure to pass the current_forum
+			return {
+				'form': form, 
+				'action': request.matchdict.get('action'),
+				'current_forum_id': current_forum.forum_id
+			}
 	
 	# Update.
-	@view_config(
-		match_param='action=edit',
-		renderer='sins:templates/edit_forum.mako'
-	)
+	@view_config(match_param='action=edit')
 	def edit_forum(self):
 		# I need to figure out how in the hell this works.
 		forum_id = int(request.params.get('forum_id', -1))
+		
+		# Make sure the form variable is available outside the if branch scope.
+		form = None
 		
 		entry = ForumRecordService.by_id(forum_id)
 		if entry:
@@ -218,5 +243,3 @@ class CategoryActions:
 		# run if the if statement ran, even though it is outside of the if
 		# if statement's codeblock.
 		return {'form': form, 'action': self.request.matchdict('action')}
-	
-	# Delete.

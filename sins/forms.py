@@ -33,7 +33,13 @@ def strip_filter(x):
 		return None
 
 ##################
-# Ban Forms
+ ######                   #######                             
+ #     #   ##   #    #    #        ####  #####  #    #  ####  
+ #     #  #  #  ##   #    #       #    # #    # ##  ## #      
+ ######  #    # # #  #    #####   #    # #    # # ## #  ####  
+ #     # ###### #  # #    #       #    # #####  #    #      # 
+ #     # #    # #   ##    #       #    # #   #  #    # #    # 
+ ######  #    # #    #    #        ####  #    # #    #  ####  
 ##################
 
 # Bans should be initiated by administators or moderators from a user's profile
@@ -51,7 +57,13 @@ class BanUpdateForm(BanCreateForm):
 	ban_id = HiddenField()
 
 ##################
-# Forum Forms
+ #######                                #######                             
+ #        ####  #####  #    # #    #    #        ####  #####  #    #  ####  
+ #       #    # #    # #    # ##  ##    #       #    # #    # ##  ## #      
+ #####   #    # #    # #    # # ## #    #####   #    # #    # # ## #  ####  
+ #       #    # #####  #    # #    #    #       #    # #####  #    #      # 
+ #       #    # #   #  #    # #    #    #       #    # #   #  #    # #    # 
+ #        ####  #    #  ####  #    #    #        ####  #    # #    #  ####  
 ##################
 
 # Creation of a forum is a big deal. This is something that should only be done
@@ -88,7 +100,13 @@ class ForumUpdateForm(ForumCreateForm):
 	forum_id = HiddenField()
 
 ##################
-# Group Forms
+  #####                                 #######                             
+ #     # #####   ####  #    # #####     #        ####  #####  #    #  ####  
+ #       #    # #    # #    # #    #    #       #    # #    # ##  ## #      
+ #  #### #    # #    # #    # #    #    #####   #    # #    # # ## #  ####  
+ #     # #####  #    # #    # #####     #       #    # #####  #    #      # 
+ #     # #   #  #    # #    # #         #       #    # #   #  #    # #    # 
+  #####  #    #  ####   ####  #         #        ####  #    # #    #  ####  
 ##################
 
 class GroupCreateForm(Form):
@@ -102,7 +120,13 @@ class GroupUpdateForm(GroupCreateForm):
 	group_id = HiddenField()
 
 ##################
-# Membership Forms
+ #     #                                                              #######                             
+ ##   ## ###### #    # #####  ###### #####   ####  #    # # #####     #        ####  #####  #    #  ####  
+ # # # # #      ##  ## #    # #      #    # #      #    # # #    #    #       #    # #    # ##  ## #      
+ #  #  # #####  # ## # #####  #####  #    #  ####  ###### # #    #    #####   #    # #    # # ## #  ####  
+ #     # #      #    # #    # #      #####       # #    # # #####     #       #    # #####  #    #      # 
+ #     # #      #    # #    # #      #   #  #    # #    # # #         #       #    # #   #  #    # #    # 
+ #     # ###### #    # #####  ###### #    #  ####  #    # # #         #        ####  #    # #    #  ####  
 ##################
 
 # This is another dynamically scoped form. This form should be accessed from a
@@ -123,7 +147,13 @@ class MembershipCreateForm(form):
 # membership attribute should be deleted.
 
 ##################
-# Permission Forms
+ ######                                                          #######                             
+ #     # ###### #####  #    # #  ####   ####  #  ####  #    #    #        ####  #####  #    #  ####  
+ #     # #      #    # ##  ## # #      #      # #    # ##   #    #       #    # #    # ##  ## #      
+ ######  #####  #    # # ## # #  ####   ####  # #    # # #  #    #####   #    # #    # # ## #  ####  
+ #       #      #####  #    # #      #      # # #    # #  # #    #       #    # #####  #    #      # 
+ #       #      #   #  #    # # #    # #    # # #    # #   ##    #       #    # #   #  #    # #    # 
+ #       ###### #    # #    # #  ####   ####  #  ####  #    #    #        ####  #    # #    #  ####  
 ##################
 
 # This will work almost identically to the membership form. This time, the form
@@ -137,10 +167,16 @@ class PermissionCreateForm(Form):
 	)
 
 ##################
-# Post Forms
+ ######                         #######                             
+ #     #  ####   ####  #####    #        ####  #####  #    #  ####  
+ #     # #    # #        #      #       #    # #    # ##  ## #      
+ ######  #    #  ####    #      #####   #    # #    # # ## #  ####  
+ #       #    #      #   #      #       #    # #####  #    #      # 
+ #       #    # #    #   #      #       #    # #   #  #    # #    # 
+ #        ####   ####    #      #        ####  #    # #    #  ####  
 ##################
 
-class  PostCreateForm(Form):
+class PostCreateForm(Form):
 	message = TextAreaField(
 		'Message',
 		[validators.Length(min=1), validators.required()],
@@ -151,14 +187,26 @@ class PostUpdateForm(PostCreateForm):
 	post_id = HiddenField()
 
 ##################
-# Power Forms
+ ######                                 #######                             
+ #     #  ####  #    # ###### #####     #        ####  #####  #    #  ####  
+ #     # #    # #    # #      #    #    #       #    # #    # ##  ## #      
+ ######  #    # #    # #####  #    #    #####   #    # #    # # ## #  ####  
+ #       #    # # ## # #      #####     #       #    # #####  #    #      # 
+ #       #    # ##  ## #      #   #     #       #    # #   #  #    # #    # 
+ #        ####  #    # ###### #    #    #        ####  #    # #    #  ####  
 ##################
 
 # I'm not sure it actually makes sense to have power forms. I think instead this
 # will be implemented in the initialize DB scripts.
 
 ##################
-# Topic Forms
+ #######                           #######                             
+    #     ####  #####  #  ####     #        ####  #####  #    #  ####  
+    #    #    # #    # # #    #    #       #    # #    # ##  ## #      
+    #    #    # #    # # #         #####   #    # #    # # ## #  ####  
+    #    #    # #####  # #         #       #    # #####  #    #      # 
+    #    #    # #      # #    #    #       #    # #   #  #    # #    # 
+    #     ####  #      #  ####     #        ####  #    # #    #  ####  
 ##################
 
 class TopicCreateForm(Form):
@@ -184,9 +232,21 @@ class TopicUpdateForm(TopicCreateForm):
 	# not include this line, then the update form will give the user access to
 	# change the primary key. Which is bad.
 	topic_id = HiddenField()
+	
+	forum_id = SelectField(
+		'Forum',
+		[validators.optional()],
+		filters=[strip_filter]
+	)
 
 ##################
-# User Forms
+ #     #                         #######                             
+ #     #  ####  ###### #####     #        ####  #####  #    #  ####  
+ #     # #      #      #    #    #       #    # #    # ##  ## #      
+ #     #  ####  #####  #    #    #####   #    # #    # # ## #  ####  
+ #     #      # #      #####     #       #    # #####  #    #      # 
+ #     # #    # #      #   #     #       #    # #   #  #    # #    # 
+  #####   ####  ###### #    #    #        ####  #    # #    #  ####  
 ##################
 
 # Think of this as registration.
@@ -235,7 +295,13 @@ class UserUpdateForm(UserCreateForm):
 			field.data = re.sub('[^a-z0-9_.-]', '_', field.data)
 
 ##################
-# Login Forms
+ #                                 #######                             
+ #        ####   ####  # #    #    #        ####  #####  #    #  ####  
+ #       #    # #    # # ##   #    #       #    # #    # ##  ## #      
+ #       #    # #      # # #  #    #####   #    # #    # # ## #  ####  
+ #       #    # #  ### # #  # #    #       #    # #####  #    #      # 
+ #       #    # #    # # #   ##    #       #    # #   #  #    # #    # 
+ #######  ####   ####  # #    #    #        ####  #    # #    #  ####  
 ##################
 
 # I will work on learning how to do this later. For right now I need to work on
