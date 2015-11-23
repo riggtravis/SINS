@@ -94,7 +94,15 @@ class CategoryActions:
 		entry = Forum()
 		form = ForumCreateForm(request.POST)
 		
-		if self.request.method = 'POST' and form.validate: # How does this work?
+		# Get the context the create action was initiated from.
+		current_forum = ForumRecordService.by_id(
+			request.matchdict.get('forum_id')
+		)
+		
+		# This works by checking what the server received from the client. The
+		# form.validate statement works because our form might already be
+		# populated by request.POST
+		if self.request.method = 'POST' and form.validate:
 			form_populate.populate_obj(entry)
 			DBSession.add(entry)
 			
@@ -102,17 +110,13 @@ class CategoryActions:
 			if parent_id:
 				return HTTPFound(location=self.request.route_url(
 						'forum', 
-						forum_id=parent_id
+						forum_id=current_forum.forum_id
 					)
 				)
 			else:
 				return HTTPFound(location=self.request.route_url('home'))
 		else:
 			# Populate the choices list with potential forums.
-			# Get the context the create action was initiated from.
-			current_forum = ForumRecordService.by_id(
-				request.matchdict.get('forum_id')
-			)
 			
 			# If there is a current_forum, it should be a potential choice as
 			# well as all of its children.

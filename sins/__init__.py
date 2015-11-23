@@ -87,8 +87,8 @@ def main(global_config, **settings):
 	# Realistically posts shouldn't be linked directly. I need to find a way to
 	# safely eliminate this routing method and instead link to the topic where
 	# the post was made.
-	config.add_route('post_action', 'post/{action}')
-	config.add_route('post', 'post/{post_id:\d+}')
+	config.add_route('post_action', 'post/{action}/{topic_id:\d+}')
+	config.add_route('post', 'post/{post_id:\d+}/{slug}')
 	
 	# CRUD actions for topics
 	##############################

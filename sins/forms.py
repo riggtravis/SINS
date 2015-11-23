@@ -140,7 +140,7 @@ class PermissionCreateForm(Form):
 # Post Forms
 ##################
 
-class  PostCreateForm(Form):
+class PostCreateForm(Form):
 	message = TextAreaField(
 		'Message',
 		[validators.Length(min=1), validators.required()],

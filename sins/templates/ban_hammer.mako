@@ -19,7 +19,7 @@
 </p>
 
 <form 
-	action="${request.route_url('ban_action', action=action)}" 
+	action="${request.route_url('ban_action', action=action, user_id=user.user_id)}" 
 	method="post" 
 	class="form"
 >
