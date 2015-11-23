@@ -33,7 +33,13 @@ def strip_filter(x):
 		return None
 
 ##################
-# Ban Forms
+ ######                   #######                             
+ #     #   ##   #    #    #        ####  #####  #    #  ####  
+ #     #  #  #  ##   #    #       #    # #    # ##  ## #      
+ ######  #    # # #  #    #####   #    # #    # # ## #  ####  
+ #     # ###### #  # #    #       #    # #####  #    #      # 
+ #     # #    # #   ##    #       #    # #   #  #    # #    # 
+ ######  #    # #    #    #        ####  #    # #    #  ####  
 ##################
 
 # Bans should be initiated by administators or moderators from a user's profile
@@ -51,7 +57,13 @@ class BanUpdateForm(BanCreateForm):
 	ban_id = HiddenField()
 
 ##################
-# Forum Forms
+ #######                                #######                             
+ #        ####  #####  #    # #    #    #        ####  #####  #    #  ####  
+ #       #    # #    # #    # ##  ##    #       #    # #    # ##  ## #      
+ #####   #    # #    # #    # # ## #    #####   #    # #    # # ## #  ####  
+ #       #    # #####  #    # #    #    #       #    # #####  #    #      # 
+ #       #    # #   #  #    # #    #    #       #    # #   #  #    # #    # 
+ #        ####  #    #  ####  #    #    #        ####  #    # #    #  ####  
 ##################
 
 # Creation of a forum is a big deal. This is something that should only be done
@@ -88,7 +100,14 @@ class ForumUpdateForm(ForumCreateForm):
 	forum_id = HiddenField()
 
 ##################
-# Group Forms
+
+  #####                                 #######                             
+ #     # #####   ####  #    # #####     #        ####  #####  #    #  ####  
+ #       #    # #    # #    # #    #    #       #    # #    # ##  ## #      
+ #  #### #    # #    # #    # #    #    #####   #    # #    # # ## #  ####  
+ #     # #####  #    # #    # #####     #       #    # #####  #    #      # 
+ #     # #   #  #    # #    # #         #       #    # #   #  #    # #    # 
+  #####  #    #  ####   ####  #         #        ####  #    # #    #  ####  
 ##################
 
 class GroupCreateForm(Form):
@@ -102,7 +121,14 @@ class GroupUpdateForm(GroupCreateForm):
 	group_id = HiddenField()
 
 ##################
-# Membership Forms
+
+ #     #                                                              #######                             
+ ##   ## ###### #    # #####  ###### #####   ####  #    # # #####     #        ####  #####  #    #  ####  
+ # # # # #      ##  ## #    # #      #    # #      #    # # #    #    #       #    # #    # ##  ## #      
+ #  #  # #####  # ## # #####  #####  #    #  ####  ###### # #    #    #####   #    # #    # # ## #  ####  
+ #     # #      #    # #    # #      #####       # #    # # #####     #       #    # #####  #    #      # 
+ #     # #      #    # #    # #      #   #  #    # #    # # #         #       #    # #   #  #    # #    # 
+ #     # ###### #    # #####  ###### #    #  ####  #    # # #         #        ####  #    # #    #  ####  
 ##################
 
 # This is another dynamically scoped form. This form should be accessed from a
@@ -123,7 +149,7 @@ class MembershipCreateForm(form):
 # membership attribute should be deleted.
 
 ##################
-# Permission Forms
+Permission Forms
 ##################
 
 # This will work almost identically to the membership form. This time, the form

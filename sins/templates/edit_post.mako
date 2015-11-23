@@ -26,6 +26,11 @@
 	method="post" 
 	class="form"
 >
+	% if action == 'edit'
+			## I'm not clear on why this is being treated as a funcion.
+			${form.post_id()}
+	% endif
+	
 	% for error in form.message.errors:
 			<div class="error">
 				${error}
