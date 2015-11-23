@@ -107,7 +107,7 @@ class CategoryEditActions(ViewBase):
 		# This function needs to create a dynamic list of potential parents.
 		# I'm not sure that calling this variable entry is the most sensible
 		entry = Forum()
-		form = ForumCreateForm(request.POST)
+		form = ForumCreateForm(self.request.POST)
 		
 		# Get the context the create action was initiated from.
 		current_forum = ForumRecordService.by_id(
@@ -169,6 +169,8 @@ class CategoryEditActions(ViewBase):
 	# Update.
 	@view_config(match_param='action=edit')
 	def edit_forum(self):
+		# I have forgotten to include the HTTPFound() call for this function.
+		
 		# I need to figure out how in the hell this works.
 		forum_id = int(request.params.get('forum_id', -1))
 		
@@ -177,64 +179,73 @@ class CategoryEditActions(ViewBase):
 		
 		entry = ForumRecordService.by_id(forum_id)
 		if entry:
-			form = ForumUpdateForm(request.POST, entry)
+			form = ForumUpdateForm(self.request.POST, entry)
 			
-			# If I could do all of this using a switch statement somehow, that
-			# would be great.
-			
-			# Before checking to see if the forum has been set up, populate the
-			# parent option. This should be possible by asking for the parent of
-			# the forum we're editing's parent. If this does not exist, offer
-			# all of the top level categories.
-			
-			# Because there are multiple situations in which all of the forums
-			# without parents will be needed, it will be easier to write the
-			# code to do that outside of the branching if then else logic. This
-			# will be slower, but I am willing to sacrifice speed for more
-			# concise code.
-			
-			# I picked the name jotnar because that is the norsk word for the
-			# ice giants to whome all other norse entities in some way or 
-			# another originate from. I picked a norsk word because I have norse
-			# horses dammit.
-			jotnar = ForumRecordService.by_parent(None)
-			
-			# We will also need to populate a list here, or else populate it
-			# later in the if then else branching pattern.
-			choices = list()
-			
-			# jotun is the singular form of jotnar
-			for jotun in jotnar:
-				choice = (jotun.forum_id, jotun.title)
-				choices.append(choice)
-			
-			if entry.parent_id:
-				parent = ForumRecordService.by_id(entry.parent_id)
-				if parent.parent_id:
-					grandparent = ForumRecordService.by_id(parent.parent_id)
-					
-					# There has to be a more readable way of doing this.
-					# 
-					# form.parent_id.choices = [
-					# 	(choice.forum_id, choice.title) for choice in grandparent.children
-					# ]
-					#
-					
-					# Reset the choices list so that it isn't populated with the
-					# jotun choices.
-					choices = list()
-
-					for child in grandparent.children:
-						# It will be more readable to have tuples set up before
-						# adding tuples to the list. This way we won't have
-						# difficult to parse nested parentheses.
-						choice = (child.forum_id, child.title)
-						choices.append(choice)
-						
-			# We have form.parent_id.choices = choices repeated three times here
-			# and there has to be a better way to do this.			
-			form.parent_id.choices = choices
+			# First check to see if the form has already been filled out.
+			if request.method == 'POST' and form.validate():
+				form.populate_obj(entry)
+				return HTTPFound(location=request.route_url(
+						'forum',
+						forum_id=entry.forum_id,
+						slug=entry.slug
+					)
+				)
+			else:	# Do all the other stuff we were already doing.
+				# If I could do all of this using a switch statement somehow, that
+				# would be great.
 				
+				# Before checking to see if the forum has been set up, populate the
+				# parent option. This should be possible by asking for the parent of
+				# the forum we're editing's parent. If this does not exist, offer
+				# all of the top level categories.
+				
+				# Because there are multiple situations in which all of the forums
+				# without parents will be needed, it will be easier to write the
+				# code to do that outside of the branching if then else logic. This
+				# will be slower, but I am willing to sacrifice speed for more
+				# concise code.
+				
+				# I picked the name jotnar because that is the norsk word for the
+				# ice giants to whome all other norse entities in some way or 
+				# another originate from. I picked a norsk word because I have norse
+				# horses dammit.
+				jotnar = ForumRecordService.by_parent(None)
+				
+				# We will also need to populate a list here, or else populate it
+				# later in the if then else branching pattern.
+				choices = list()
+				
+				# jotun is the singular form of jotnar
+				for jotun in jotnar:
+					choice = (jotun.forum_id, jotun.title)
+					choices.append(choice)
+				
+				if entry.parent_id:
+					parent = ForumRecordService.by_id(entry.parent_id)
+					if parent.parent_id:
+						grandparent = ForumRecordService.by_id(parent.parent_id)
+						
+						# There has to be a more readable way of doing this.
+						# 
+						# form.parent_id.choices = [
+						# 	(choice.forum_id, choice.title) for choice in grandparent.children
+						# ]
+						#
+						
+						# Reset the choices list so that it isn't populated with the
+						# jotun choices.
+						choices = list()
+
+						for child in grandparent.children:
+							# It will be more readable to have tuples set up before
+							# adding tuples to the list. This way we won't have
+							# difficult to parse nested parentheses.
+							choice = (child.forum_id, child.title)
+							choices.append(choice)
+							
+				# We have form.parent_id.choices = choices repeated three times here
+				# and there has to be a better way to do this.			
+				form.parent_id.choices = choices
 		else:
 			return HTTPNotFound()
 		
