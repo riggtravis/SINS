@@ -3,15 +3,30 @@
 from pyramid.view import view_config
 from pyramid.view import view_defaults
 from pyramid.httpexceptions import HTTPNotFound, HTTPFound
+from .view_base import ViewBase
 from ..models.meta import DBSession
 from ..models.topic import Topic
 from ..models.services.topic import TopicRecordService
 
+########
+ ######                                                          #     #                        
+ #     # #  ####   ####  #    #  ####   ####  #  ####  #    #    #     # # ###### #    #  ####  
+ #     # # #      #    # #    # #      #      # #    # ##   #    #     # # #      #    # #      
+ #     # #  ####  #      #    #  ####   ####  # #    # # #  #    #     # # #####  #    #  ####  
+ #     # #      # #      #    #      #      # # #    # #  # #     #   #  # #      # ## #      # 
+ #     # # #    # #    # #    # #    # #    # # #    # #   ##      # #   # #      ##  ## #    # 
+ ######  #  ####   ####   ####   ####   ####  #  ####  #    #       #    # ###### #    #  ####  
+########
+
+# Because many classes have this code:
+#
+#	def __init__(self, request):
+#		self.request = request
+#
+# there's probably an object oriented method of maintaining a don't repeat
+# yourself mentality.
 @view_defaults(route_name='topic')
-class DiscussionViews:
-	def __init__(self, request):
-		self.request = request
-	
+class DiscussionViews(ViewBase):
 	# Show the conversation
 	@view_config(renderer='sins:templates/thread.mako')
 	def view_discussion(self):
@@ -28,13 +43,62 @@ class DiscussionViews:
 		else:
 			return HTTPNotFound()
 
+#########
+ #######                              #                                        
+    #     ####  #####  #  ####       # #    ####  ##### #  ####  #    #  ####  
+    #    #    # #    # # #    #     #   #  #    #   #   # #    # ##   # #      
+    #    #    # #    # # #         #     # #        #   # #    # # #  #  ####  
+    #    #    # #####  # #         ####### #        #   # #    # #  # #      # 
+    #    #    # #      # #    #    #     # #    #   #   # #    # #   ## #    # 
+    #     ####  #      #  ####     #     #  ####    #   #  ####  #    #  ####  
+#########
+@view_defaults(route_name='topic_action')
+class TopicActions(ViewBase):
+	@view_config(
+		match_param='action=create',
+		renderer='sins:templates/edit_topic.mako'
+	)
+	def create_topic(self):
+		entry = Topic()
+		form = TopicCreateForm(request.POST)
+		
+		# Get the forum where the topic was to be created.
+		forum_id = request.matchdict.get('forum_id')
+		
+		# If there is a forum_id we can continue
+		if forum_id:
+			if self.request.method = 'POST' and form.validate:
+				form_populate.populate_obj(entry)
+				DBSession.add(entry)
+				return HTTPFound(location=self.request.route_url(
+						'forum',
+						forum_id=forum_id
+					)
+				)
+			else:
+				# Get the forum itself from the database.
+				forum = ForumRecordService.by_id(forum_id)
+				
+				return {
+					'form': form,
+					'action': request.matchdict.get('action'),
+					'forum': forum
+				}
+		else:
+			return HTTPNotFound()
+########
+ ######                            #                                        
+ #     #  ####   ####  #####      # #    ####  ##### #  ####  #    #  ####  
+ #     # #    # #        #       #   #  #    #   #   # #    # ##   # #      
+ ######  #    #  ####    #      #     # #        #   # #    # # #  #  ####  
+ #       #    #      #   #      ####### #        #   # #    # #  # #      # 
+ #       #    # #    #   #      #     # #    #   #   # #    # #   ## #    # 
+ #        ####   ####    #      #     #  ####    #   #  ####  #    #  ####  
+########
 # Because posts will mostly be seen in the discussion view, I think it makes
 # sense to have their actions included here with the other discussion views.
 @view_defaults(route_name='post_action')
-class PostActions:
-	def __init__(self, request):
-		self.request = request
-	
+class PostActions(ViewBase):
 	# Create.
 	@view_config(
 		match_param='action=create',

@@ -6,6 +6,9 @@
 from pyramid.view import view_config
 from pyramid.view import view_defaults
 
+# We need our view base
+from .view_base import ViewBase
+
 # We're going to want to be able to use our services. Specifically in this view
 # file we want to use the forum service.
 from ..models.services.forum import ForumRecordService
@@ -21,6 +24,15 @@ from ..forms import ForumCreateForm, ForumUpdateForm
 # every single template. There should be ways to combine templates together to
 # create what the user sees.
 
+########
+  #####                                                 #     #                        
+ #     #   ##   ##### ######  ####   ####  #####  #   # #     # # ###### #    #  ####  
+ #        #  #    #   #      #    # #    # #    #  # #  #     # # #      #    # #      
+ #       #    #   #   #####  #      #    # #    #   #   #     # # #####  #    #  ####  
+ #       ######   #   #      #  ### #    # #####    #    #   #  # #      # ## #      # 
+ #     # #    #   #   #      #    # #    # #   #    #     # #   # #      ##  ## #    # 
+  #####  #    #   #   ######  ####   ####  #    #   #      #    # ###### #    #  ####  
+#########
 # Let's start by thinking about what to call the landing page that users will
 # see when they look at a list of forums.
 
@@ -33,10 +45,7 @@ from ..forms import ForumCreateForm, ForumUpdateForm
 # this class are going to involve using the landing template. Since the landing
 # template already includes the base template, we don't have to worry about it.
 @view_defaults(renderer='sins:templates/landing.mako')
-class CategoryViews:
-	def __init__(self, request):
-		self.request = request
-	
+class CategoryViews(ViewBase):
 	# We know that the home route will be directed to a top level landing page
 	# that will have a listing of all root forums.
 	@view_config(route_name='home')
@@ -66,6 +75,15 @@ class CategoryViews:
 	# are service classes the view classes should call upon those classes
 	# instead of querying the database themselves.
 
+#########
+  #####                                                       #                                        
+ #     #   ##   ##### ######  ####   ####  #####  #   #      # #    ####  ##### #  ####  #    #  ####  
+ #        #  #    #   #      #    # #    # #    #  # #      #   #  #    #   #   # #    # ##   # #      
+ #       #    #   #   #####  #      #    # #    #   #      #     # #        #   # #    # # #  #  ####  
+ #       ######   #   #      #  ### #    # #####    #      ####### #        #   # #    # #  # #      # 
+ #     # #    #   #   #      #    # #    # #   #    #      #     # #    #   #   # #    # #   ## #    # 
+  #####  #    #   #   ######  ####   ####  #    #   #      #     #  ####    #   #  ####  #    #  ####  
+#########
 # I have decided to put the actions in a seperate class so I don't have to
 # repeat myself several times.
 
@@ -78,10 +96,7 @@ class CategoryViews:
 # rather reworked so that an option can be used to view an edit forum on the
 # render page
 @view_defaults(route_name='forum_action')
-class CategoryActions:
-	def __init__(self, request):
-		self.request = request
-	
+class CategoryActions(ViewBase):
 	# Create.
 	# This is where WTForms start coming into play.
 	@view_config(
@@ -143,7 +158,13 @@ class CategoryActions:
 			# list as the choices for the parent id in the form.
 			form.parent_id.choices = choices
 			
-			return {'form': form, 'action': request.matchdict.get('action')}
+			# In case there is an error and the system has to be started again,
+			# make sure to pass the current_forum
+			return {
+				'form': form, 
+				'action': request.matchdict.get('action'),
+				'current_forum_id': current_forum.forum_id
+			}
 	
 	# Update.
 	@view_config(

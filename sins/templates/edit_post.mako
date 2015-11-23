@@ -22,7 +22,7 @@
 -->
 
 <form 
-	action="${request.rout_url('topic_action', action=action, topic_id=topic.topic_id)}" 
+	action="${request.route_url('post_action', action=action, topic_id=topic.topic_id)}" 
 	method="post" 
 	class="form"
 >

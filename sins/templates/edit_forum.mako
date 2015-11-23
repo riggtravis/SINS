@@ -10,7 +10,7 @@
 <h1>${action} forum</h1>
 
 <form 
-	action="${request.route_url('forum_action', action=action)}" 
+	action="${request.route_url('forum_action', action=action), current_forum_id}" 
 	method="post" 
 	class="form"
 >

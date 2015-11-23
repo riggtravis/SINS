@@ -100,7 +100,6 @@ class ForumUpdateForm(ForumCreateForm):
 	forum_id = HiddenField()
 
 ##################
-
   #####                                 #######                             
  #     # #####   ####  #    # #####     #        ####  #####  #    #  ####  
  #       #    # #    # #    # #    #    #       #    # #    # ##  ## #      
@@ -121,7 +120,6 @@ class GroupUpdateForm(GroupCreateForm):
 	group_id = HiddenField()
 
 ##################
-
  #     #                                                              #######                             
  ##   ## ###### #    # #####  ###### #####   ####  #    # # #####     #        ####  #####  #    #  ####  
  # # # # #      ##  ## #    # #      #    # #      #    # # #    #    #       #    # #    # ##  ## #      
@@ -149,7 +147,13 @@ class MembershipCreateForm(form):
 # membership attribute should be deleted.
 
 ##################
-Permission Forms
+ ######                                                          #######                             
+ #     # ###### #####  #    # #  ####   ####  #  ####  #    #    #        ####  #####  #    #  ####  
+ #     # #      #    # ##  ## # #      #      # #    # ##   #    #       #    # #    # ##  ## #      
+ ######  #####  #    # # ## # #  ####   ####  # #    # # #  #    #####   #    # #    # # ## #  ####  
+ #       #      #####  #    # #      #      # # #    # #  # #    #       #    # #####  #    #      # 
+ #       #      #   #  #    # # #    # #    # # #    # #   ##    #       #    # #   #  #    # #    # 
+ #       ###### #    # #    # #  ####   ####  #  ####  #    #    #        ####  #    # #    #  ####  
 ##################
 
 # This will work almost identically to the membership form. This time, the form
@@ -163,7 +167,13 @@ class PermissionCreateForm(Form):
 	)
 
 ##################
-# Post Forms
+ ######                         #######                             
+ #     #  ####   ####  #####    #        ####  #####  #    #  ####  
+ #     # #    # #        #      #       #    # #    # ##  ## #      
+ ######  #    #  ####    #      #####   #    # #    # # ## #  ####  
+ #       #    #      #   #      #       #    # #####  #    #      # 
+ #       #    # #    #   #      #       #    # #   #  #    # #    # 
+ #        ####   ####    #      #        ####  #    # #    #  ####  
 ##################
 
 class PostCreateForm(Form):
@@ -177,14 +187,26 @@ class PostUpdateForm(PostCreateForm):
 	post_id = HiddenField()
 
 ##################
-# Power Forms
+ ######                                 #######                             
+ #     #  ####  #    # ###### #####     #        ####  #####  #    #  ####  
+ #     # #    # #    # #      #    #    #       #    # #    # ##  ## #      
+ ######  #    # #    # #####  #    #    #####   #    # #    # # ## #  ####  
+ #       #    # # ## # #      #####     #       #    # #####  #    #      # 
+ #       #    # ##  ## #      #   #     #       #    # #   #  #    # #    # 
+ #        ####  #    # ###### #    #    #        ####  #    # #    #  ####  
 ##################
 
 # I'm not sure it actually makes sense to have power forms. I think instead this
 # will be implemented in the initialize DB scripts.
 
 ##################
-# Topic Forms
+ #######                           #######                             
+    #     ####  #####  #  ####     #        ####  #####  #    #  ####  
+    #    #    # #    # # #    #    #       #    # #    # ##  ## #      
+    #    #    # #    # # #         #####   #    # #    # # ## #  ####  
+    #    #    # #####  # #         #       #    # #####  #    #      # 
+    #    #    # #      # #    #    #       #    # #   #  #    # #    # 
+    #     ####  #      #  ####     #        ####  #    # #    #  ####  
 ##################
 
 class TopicCreateForm(Form):
@@ -212,7 +234,13 @@ class TopicUpdateForm(TopicCreateForm):
 	topic_id = HiddenField()
 
 ##################
-# User Forms
+ #     #                         #######                             
+ #     #  ####  ###### #####     #        ####  #####  #    #  ####  
+ #     # #      #      #    #    #       #    # #    # ##  ## #      
+ #     #  ####  #####  #    #    #####   #    # #    # # ## #  ####  
+ #     #      # #      #####     #       #    # #####  #    #      # 
+ #     # #    # #      #   #     #       #    # #   #  #    # #    # 
+  #####   ####  ###### #    #    #        ####  #    # #    #  ####  
 ##################
 
 # Think of this as registration.
@@ -261,7 +289,13 @@ class UserUpdateForm(UserCreateForm):
 			field.data = re.sub('[^a-z0-9_.-]', '_', field.data)
 
 ##################
-# Login Forms
+ #                                 #######                             
+ #        ####   ####  # #    #    #        ####  #####  #    #  ####  
+ #       #    # #    # # ##   #    #       #    # #    # ##  ## #      
+ #       #    # #      # # #  #    #####   #    # #    # # ## #  ####  
+ #       #    # #  ### # #  # #    #       #    # #####  #    #      # 
+ #       #    # #    # # #   ##    #       #    # #   #  #    # #    # 
+ #######  ####   ####  # #    #    #        ####  #    # #    #  ####  
 ##################
 
 # I will work on learning how to do this later. For right now I need to work on
