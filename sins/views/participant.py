@@ -6,6 +6,16 @@ from ..models.user import User
 from ..models.services.user import UserRecordService
 from ..models.services.post import PostRecordService
 
+##############################
+ #     #                                                                                                                                                                         
+ ##   ## #  ####   ####  ###### #        ##   #    # #  ####  #    #  ####     #####    ##   #####  ##### #  ####  # #####    ##   #    # #####    #    # # ###### #    #  ####  
+ # # # # # #      #    # #      #       #  #  ##   # # #    # #    # #         #    #  #  #  #    #   #   # #    # # #    #  #  #  ##   #   #      #    # # #      #    # #      
+ #  #  # #  ####  #      #####  #      #    # # #  # # #    # #    #  ####     #    # #    # #    #   #   # #      # #    # #    # # #  #   #      #    # # #####  #    #  ####  
+ #     # #      # #      #      #      ###### #  # # # #    # #    #      #    #####  ###### #####    #   # #      # #####  ###### #  # #   #      #    # # #      # ## #      # 
+ #     # # #    # #    # #      #      #    # #   ## # #    # #    # #    #    #      #    # #   #    #   # #    # # #      #    # #   ##   #       #  #  # #      ##  ## #    # 
+ #     # #  ####   ####  ###### ###### #    # #    # #  ####   ####   ####     #      #    # #    #   #   #  ####  # #      #    # #    #   #        ##   # ###### #    #  ####  
+##############################
+
 # I have chosen to include authentification/authorization views in the
 # participant file. The reason I have chosen to do this is that it relates
 # directly to users.
@@ -116,5 +126,61 @@ class ParticipantViews:
 				form.group_id.choices = choices
 				
 				return {'form': form, 'action': self.request.matchdict('action')}
+		else:
+			return HTTPNotFound()
+
+##############################
+ #     #                         #######                   #     #                        
+ #     #  ####  ###### #####     #       #####  # #####    #     # # ###### #    #  ####  
+ #     # #      #      #    #    #       #    # #   #      #     # # #      #    # #      
+ #     #  ####  #####  #    #    #####   #    # #   #      #     # # #####  #    #  ####  
+ #     #      # #      #####     #       #    # #   #       #   #  # #      # ## #      # 
+ #     # #    # #      #   #     #       #    # #   #        # #   # #      ##  ## #    # 
+  #####   ####  ###### #    #    ####### #####  #   #         #    # ###### #    #  ####  
+##############################
+
+@view_defaults(route_name='user_action', renderer='edit_user')
+class UserEditActions(ViewBase):
+	@view_config(match_param='action=create')
+	def create_user(self):
+		entry = User()
+		form = UserCreateForm(self.request.POST)
+		
+		if self.request.method = 'POST' and form.validate:
+			form_populate.populate_obj(entry)
+			DBSession.add(entry)
+			
+			# Send the user to their new profile.
+			return HTTPFound(location=self.request.route_url(
+					'user',
+					user_id=entry.user_id,
+					slug=entry.slug
+				)
+			)
+		else:
+			return {
+				'form': form,
+				'action': request.matchdict.get('action'),
+			}
+	
+	@view_config(match_param='action=edit')
+	def edit_user(self):
+		user_id = int(request.params.get('forum_id', -1))
+		entry = UserRecordService.by_id(user_id)
+		if entry:
+			form = UserUpdateForm(self.request.POST, entry)
+			if request.method == 'POST' and form.validate():
+				form.populate_obj(entry)
+				return HTTPFound(location=request.route_url(
+						'user',
+						user_id=entry.user_id,
+						slug=entry.slug
+					)
+				)
+			else:
+				return {
+					'form': form,
+					'action': self.request.matchdict('action')
+				}
 		else:
 			return HTTPNotFound()
