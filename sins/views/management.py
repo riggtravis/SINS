@@ -6,22 +6,55 @@ from ..models.meta import DBSession
 from ..models.group import Group
 from ..models.services.group import GroupRecordService
 
+""" Management 
+
+Classes:
+* ManagementViews
+** This class provides methods for viewing a management group.
+
+* ManagementEditActions
+** This class allows the creation and modification of management groups.
+
+* PermissionActions
+** This class allows powers to be given to to a management group.
+
+"""
+
+# I have not provided for a way to list all groups. Which is probably important.
+
+ #     #                                                                  #     #                        
+ ##   ##   ##   #    #   ##    ####  ###### #    # ###### #    # #####    #     # # ###### #    #  ####  
+ # # # #  #  #  ##   #  #  #  #    # #      ##  ## #      ##   #   #      #     # # #      #    # #      
+ #  #  # #    # # #  # #    # #      #####  # ## # #####  # #  #   #      #     # # #####  #    #  ####  
+ #     # ###### #  # # ###### #  ### #      #    # #      #  # #   #       #   #  # #      # ## #      # 
+ #     # #    # #   ## #    # #    # #      #    # #      #   ##   #        # #   # #      ##  ## #    # 
+ #     # #    # #    # #    #  ####  ###### #    # ###### #    #   #         #    # ###### #    #  ####  
 @view_defaults(renderer='sins:templates/group.mako', route_name='group')
-class ManagementViews:
-	def __init__(self, request):
-		self.request = request
-	
+class ManagementViews(ViewBase):
+	""" This class provides a way to see who manages the community. """
+
 	def view_management(self):
+		""" This view function provides a view of a group of users. """
 		group_id = int(self.request.matchdict.get('forum_id', -1))
 		group = GroupRecordService.by_id(group_id)
 		
 		if group:
 			return {'group': group}
 
-@view_defaults(route_name='group_action')
-class ManagementActions:
-	def __init__(self, request):
-		self.request = request
+ #     #                                                                  #######                      #                                        
+ ##   ##   ##   #    #   ##    ####  ###### #    # ###### #    # #####    #       #####  # #####      # #    ####  ##### #  ####  #    #  ####  
+ # # # #  #  #  ##   #  #  #  #    # #      ##  ## #      ##   #   #      #       #    # #   #       #   #  #    #   #   # #    # ##   # #      
+ #  #  # #    # # #  # #    # #      #####  # ## # #####  # #  #   #      #####   #    # #   #      #     # #        #   # #    # # #  #  ####  
+ #     # ###### #  # # ###### #  ### #      #    # #      #  # #   #      #       #    # #   #      ####### #        #   # #    # #  # #      # 
+ #     # #    # #   ## #    # #    # #      #    # #      #   ##   #      #       #    # #   #      #     # #    #   #   # #    # #   ## #    # 
+ #     # #    # #    # #    #  ####  ###### #    # ###### #    #   #      ####### #####  #   #      #     #  ####    #   #  ####  #    #  ####  
+
+@view_defaults(
+	route_name='group_action', 
+	renderer='sins:templates/edit_group.mako'
+)
+class ManagementEditActions(ViewBase):
+	""" This class allows groups to be created and edited. """
 	
 	# Create
 	@view_config(
@@ -29,6 +62,7 @@ class ManagementActions:
 		renderer='sins:templates/edit_group.mako'
 	)
 	def create_group(self):
+		""" This view provides a way to create a new group. """
 		entry = Group()
 		form = GroupCreateForm()
 		
@@ -45,33 +79,57 @@ class ManagementActions:
 		renderer='sins:templates/edit_group.mako'
 	)
 	def edit_group(self):
+		""" This view function allows us to change existing groups. """
 		group_id = int(request.params.get('forum_id', -1))
 		entry = GroupRecordService.by_id(group_id)
 		if entry:
-			group = GroupUpdateForm(request.POST, entry)
+			form = GroupUpdateForm(request.POST, entry)
+			
+			# I need to do that thing where I validate the form.
+			if request.method == 'POST' and form.validate():
+				form.populate_obj(entry)
+				return HTTPFound(location=request.route_url(
+						'group',
+						groupd_id=entry.groupd_id,
+						slug=entry.slug()
+					)
+				)
+			
+			# The return only runs if the form doesn't validate.
+			else:
+				return {'form': form, 'action': self.request.matchdict('action')}
 		else:
 			return HTTPNotFound()
-		return {'form': form, 'action': self.request.matchdict('action')}
 	
-	# Delete
+
+ ######                                                             #                                        
+ #     # ###### #####  #    # #  ####   ####  #  ####  #    #      # #    ####  ##### #  ####  #    #  ####  
+ #     # #      #    # ##  ## # #      #      # #    # ##   #     #   #  #    #   #   # #    # ##   # #      
+ ######  #####  #    # # ## # #  ####   ####  # #    # # #  #    #     # #        #   # #    # # #  #  ####  
+ #       #      #####  #    # #      #      # # #    # #  # #    ####### #        #   # #    # #  # #      # 
+ #       #      #   #  #    # # #    # #    # # #    # #   ##    #     # #    #   #   # #    # #   ## #    # 
+ #       ###### #    # #    # #  ####   ####  #  ####  #    #    #     #  ####    #   #  ####  #    #  ####  
 
 # Add the permission view to this to this file. I have chosen to include the
 # permission view with this class because it is something that is given to
 # groups. To me this made sense for the seperation of concerns.
-@view_defaults(route_name="permission_action")
-class PermissionActions:
-	def __init__(self, request):
-		self.request = request
+@view_defaults(
+	route_name="permission_action", 
+	match_param='action=create',
+	renderer='sins:templates/permission_slip.mako'
+)
+class PermissionActions(ViewBase):
+	""" This class allows us to give groups powers. """
 	
 	# Create
 	
 	# Create for permissions is context dependent upon the group that the view
 	# was reached from. This means that we need to get it from the URL
 	@view_config(
-		match_param='action=create'
-		renderer='sins:templates/permission_slip.mako'
+		
 	)
 	def create_permission(self):
+		""" This view gives us the ability to give a power to a group. """
 		entry = Permission()
 		form = PermissionCreateForm()
 		group_id = self.request.matchdict.get('group')

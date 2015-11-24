@@ -15,10 +15,19 @@ from sqlalchemy import (
 	orm
 )
 
+""" Power model 
+
+Classes:
+* Power
+** Used to describe things that a member of a group has an ability to do.
+
+"""
+
 # Create a human readable slug in the url
 from webhelpers2.text import urlify
 
 class Power(Base):
+	""" This class describes what powers can be granted to groups. """
 	# Metadata
 	__tablename__ = 'powers'
 	
@@ -30,7 +39,7 @@ class Power(Base):
 	# This member variable should probably have a norsk name.
 	adepts = orm.relationship("Permission", backref="powers")
 	
-	# Create a human readable slug that makes it easy to parse the page.
 	@property
 	def slug(self):
+		""" Create a human readable slug that makes it easy to read the URL. """
 		return urlify(self.title)

@@ -17,7 +17,16 @@ from sqlalchemy import (
 # The date should be human readable.
 from webhelpers2.date import distance_of_time_in_words
 
+""" Post model 
+
+Classes:
+* Post
+** Used to describe messages posted to the community by users.
+
+"""
+
 class Post(Base):
+	""" This class is used to describe messages posted to the community. """
 	# Metadata
 	__tablename__ = 'posts'
 	
@@ -32,9 +41,9 @@ class Post(Base):
 	posted_date = Column(DateTime, nullable=False)
 	message = Column(UnicodeText, nullable=False)
 	
-	# The date the topic was posted needs to be human readable.
 	@property 
 	def posted_in_words(self):
+		""" The date the topic was posted needs to be human readable. """
 		return distance_of_time_in_words(
 			self.posted_date,
 			datetime.datetime.utcnow()

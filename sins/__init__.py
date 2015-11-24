@@ -3,13 +3,11 @@ from sqlalchemy import engine_from_config
 
 from .models.meta import (
     DBSession,
-    Base,
+    Base
 )
 
-
 def main(global_config, **settings):
-    """ This function returns a Pyramid WSGI application.
-    """
+    """ This function returns a Pyramid WSGI application. """
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
@@ -110,6 +108,9 @@ def main(global_config, **settings):
  #     # ###### #    # #####  ###### #    #  ####  #    # # #          #####  #     #  #####  ######  
 	##############################
 	config.add_route('membership_action', 'membership/{action}')
+	
+	# I'm not convinced that the membership route makes sense or that it will be
+	# included in the final version of this.
 	config.add_route('membership', 'membership/{user_id:\d+}/{group_id:\d+}')
 	
  ######                                  #####  ######  #     # ######  
@@ -166,7 +167,7 @@ def main(global_config, **settings):
     #    #    # #      # #    #    #     # #    #  #     # #     # 
     #     ####  #      #  ####      #####  #     #  #####  ######  
 	##############################
-	config.add_route('topic_action', 'topic/{action}')
+	config.add_route('topic_action', 'topic/{action}/{forum_id:\d+}')
 	config.add_route('topic', 'topic/{topic_id:\d+}/{slug}')
 	
 	###################
@@ -175,9 +176,9 @@ def main(global_config, **settings):
  #     # #    # #    #    ##### #    # ######     ####  ###### #####  #    # ###### #####      
  #     # #    # ##   #      #   #    # #         #      #      #    # #    # #      #    #     
  ######  #    # # #  #      #   ###### #####      ####  #####  #    # #    # #####  #    #     
- #   #   #    # #  # #      #   #    # #              # #      #####  #    # #      #####  ### 
- #    #  #    # #   ##      #   #    # #         #    # #      #   #   #  #  #      #   #  ### 
- #     #  ####  #    #      #   #    # ######     ####  ###### #    #   ##   ###### #    # ### 
+ #   #   #    # #  # #      #   #    # #              # #      #####  #    # #      #####
+ #    #  #    # #   ##      #   #    # #         #    # #      #   #   #  #  #      #   #
+ #     #  ####  #    #      #   #    # ######     ####  ###### #    #   ##   ###### #    #
 	#
 	###################
 	

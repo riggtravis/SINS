@@ -16,6 +16,18 @@ from ..models.services.forum import ForumRecordService
 # We need our forms.
 from ..forms import ForumCreateForm, ForumUpdateForm
 
+""" Category 
+
+Classes:
+
+* CategoryViews
+** This class provides a way to list categories
+
+* CategoryEditActions
+** This class provides methods for creating and editing forums.
+
+"""
+
 # Views should be contained in classes instead of being handled by lose
 # functions. Such is the hobo way. I mean the Pyramid way. More than likely that
 # stems from it being the Python way.
@@ -25,13 +37,15 @@ from ..forms import ForumCreateForm, ForumUpdateForm
 # create what the user sees.
 
 ########
-  #####                                                 #     #                        
- #     #   ##   ##### ######  ####   ####  #####  #   # #     # # ###### #    #  ####  
- #        #  #    #   #      #    # #    # #    #  # #  #     # # #      #    # #      
- #       #    #   #   #####  #      #    # #    #   #   #     # # #####  #    #  ####  
- #       ######   #   #      #  ### #    # #####    #    #   #  # #      # ## #      # 
- #     # #    #   #   #      #    # #    # #   #    #     # #   # #      ##  ## #    # 
-  #####  #    #   #   ######  ####   ####  #    #   #      #    # ###### #    #  ####  
+
+ #                                               #     #                        
+ #         ##   #    # #####  # #    #  ####     #     # # ###### #    #  ####  
+ #        #  #  ##   # #    # # ##   # #    #    #     # # #      #    # #      
+ #       #    # # #  # #    # # # #  # #         #     # # #####  #    #  ####  
+ #       ###### #  # # #    # # #  # # #  ###     #   #  # #      # ## #      # 
+ #       #    # #   ## #    # # #   ## #    #      # #   # #      ##  ## #    # 
+ ####### #    # #    # #####  # #    #  ####        #    # ###### #    #  ####  
+
 #########
 # Let's start by thinking about what to call the landing page that users will
 # see when they look at a list of forums.
@@ -46,10 +60,13 @@ from ..forms import ForumCreateForm, ForumUpdateForm
 # template already includes the base template, we don't have to worry about it.
 @view_defaults(renderer='sins:templates/landing.mako')
 class CategoryViews(ViewBase):
+	""" This class provides landing pages for forums and SINS. """
+	
 	# We know that the home route will be directed to a top level landing page
 	# that will have a listing of all root forums.
 	@view_config(route_name='home')
 	def home(self):
+		""" This view is in essence the home page. """
 		# Get all of the forums from the database that do not have a parent id.
 		forums = ForumRecordService.by_parent(None)
 		
@@ -59,6 +76,7 @@ class CategoryViews(ViewBase):
 	# I need a function for viewing a forum instead of the forum index.
 	@view_config(rout_name='forum')
 	def view_category(self):
+		""" This function provides a landing for a specifc forum. """
 		forum_id = int(self.request.matchdict.get('forum_id', -1))
 		forum = ForumRecordService.by_id(forum_id)
 		
@@ -76,13 +94,15 @@ class CategoryViews(ViewBase):
 	# instead of querying the database themselves.
 
 #########
-  #####                                                    #######                      #                                        
- #     #   ##   ##### ######  ####   ####  #####  #   #    #       #####  # #####      # #    ####  ##### #  ####  #    #  ####  
- #        #  #    #   #      #    # #    # #    #  # #     #       #    # #   #       #   #  #    #   #   # #    # ##   # #      
- #       #    #   #   #####  #      #    # #    #   #      #####   #    # #   #      #     # #        #   # #    # # #  #  ####  
- #       ######   #   #      #  ### #    # #####    #      #       #    # #   #      ####### #        #   # #    # #  # #      # 
- #     # #    #   #   #      #    # #    # #   #    #      #       #    # #   #      #     # #    #   #   # #    # #   ## #    # 
-  #####  #    #   #   ######  ####   ####  #    #   #      ####### #####  #   #      #     #  ####    #   #  ####  #    #  ####  
+
+ #######                    #####                                                 
+ #       #####  # #####    #     #   ##   ##### ######  ####   ####  #####  #   # 
+ #       #    # #   #      #        #  #    #   #      #    # #    # #    #  # #  
+ #####   #    # #   #      #       #    #   #   #####  #      #    # #    #   #   
+ #       #    # #   #      #       ######   #   #      #  ### #    # #####    #   
+ #       #    # #   #      #     # #    #   #   #      #    # #    # #   #    #   
+ ####### #####  #   #       #####  #    #   #   ######  ####   ####  #    #   #   
+
 #########
 # I have decided to put the actions in a seperate class so I don't have to
 # repeat myself several times.
@@ -100,10 +120,13 @@ class CategoryViews(ViewBase):
 	renderer='sins:templates/edit_forum.mako'
 )
 class CategoryEditActions(ViewBase):
+	""" This class provides views for creating and editing forums. """
+	
 	# Create.
 	# This is where WTForms start coming into play.
 	@view_config(match_param='action=create')
 	def create_forum(self):
+		""" This view is for creating forums. """
 		# This function needs to create a dynamic list of potential parents.
 		# I'm not sure that calling this variable entry is the most sensible
 		entry = Forum()
@@ -169,6 +192,7 @@ class CategoryEditActions(ViewBase):
 	# Update.
 	@view_config(match_param='action=edit')
 	def edit_forum(self):
+		""" This function view is for editing existing forums. """
 		# I have forgotten to include the HTTPFound() call for this function.
 		
 		# I need to figure out how in the hell this works.
@@ -187,7 +211,7 @@ class CategoryEditActions(ViewBase):
 				return HTTPFound(location=request.route_url(
 						'forum',
 						forum_id=entry.forum_id,
-						slug=entry.slug
+						slug=entry.slug()
 					)
 				)
 			else:	# Do all the other stuff we were already doing.

@@ -21,7 +21,10 @@ from ..models import User
 # Import the CryptContext class for hashing
 from passlib.context import CryptContext
 
+""" initializedb usage docstring. """
+
 def usage(argv):
+	""" I am not entirely sure what this function does. """
     cmd = os.path.basename(argv[0])
     print('usage: %s <config_uri> [var=value]\n'
           '(example: "%s development.ini")' % (cmd, cmd))
@@ -33,6 +36,7 @@ pass_contxt = CryptContext(
 )
 
 def main(argv=sys.argv):
+	""" This function sets up the database for usage by SINS. """
     if len(argv) < 2:
         usage(argv)
     config_uri = argv[1]

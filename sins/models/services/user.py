@@ -3,7 +3,23 @@ from paginate_sqlalchemy import SqlalchemyOrmPage	# For pagination purposes
 from ..meta import DBSession
 from ..user import User
 
+""" User service
+
+Classes:
+* UserRecordService
+** This class provides methods for fof retreiving user records from the databases
+
+"""
+
 class UserRecordService(object):
+	""" This class retrieves users from the database. """
+	
+	@classmethod
+	def all(cls):
+		""" This function retreives all of the users in the database. """
+		return DBSession.query(User).order_by(sqlalchemy.desc(User.join_date))
+	
 	@classmethod
 	def by_id(cls, id):
-		return DBSession.query(Ban).filter(Ban.ban_id == id).first()
+		""" This function retreives a specific user from the database. """
+		return DBSession.query(User).filter(User.user_id == id).first()

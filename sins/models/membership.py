@@ -15,7 +15,16 @@ from sqlalchemy import (
 	orm
 )
 
+""" Membership model 
+
+Classes:
+* Membership
+** Used to describe what users are members of a group.
+
+"""
+
 class Membership(Base):
+	""" This class is used to describe what groups users are members of. """
 	# Metadata
 	__tablename__ = 'memberships'
 	

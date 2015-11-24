@@ -15,7 +15,16 @@ from sqlalchemy import (
 	orm
 )
 
+""" Permission model 
+
+Classes:
+* Permission
+** Used to describe what groups a power has been assigned to.
+
+"""
+
 class Permission(Base):
+	""" This class is used to describe what powers a group has. """
 	# Metadata
 	__tablename__ = 'permissions'
 	

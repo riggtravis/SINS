@@ -3,13 +3,28 @@ from paginate_sqlalchemy import SqlalchemyOrmPage	# For pagination purposes
 from ..meta import DBSession
 from ..ban import Ban
 
+# Get the url_maker function.
+from .url_maker import url_maker
+
+""" Ban service 
+
+Classes:
+* BanRecordService
+** This class provides functions that query the database for bans.
+
+"""
+
 class BanRecordService(object):
+	""" This class helps us get information about bans. """
+	
 	@classmethod
 	def all(cls):
+		""" Return all of the bans in the database. """
 		return DBSession.query(Ban).order_by(sqlalchemy.desc(Ban.start_date))
 	
 	@classmethod
 	def by_id(cls, id):
+		""" Get a specific ban. """
 		# The first method pulls the first item out of the list. Even though
 		# there is only one item in the list, this is still necessary because it
 		# is a list.
@@ -21,10 +36,15 @@ class BanRecordService(object):
 	# items appear on each page.
 	@classmethod
 	def get_paginator(cls, request, page=1):
+		""" Make bans appear only a few at a time with a link to see more. """
 		query = DBSession.query(Ban).order_by(sqlalchemy.desc(Ban.start_date))
 		query_params = request.GET.mixed()
 		
+		# url_maker functions are defined everytime there is a get_paginator
+		# function as a member of a class. There should be a way to create a
+		# general use url maker that all of the classes use.
 		def url_maker(link_page):
+			""" This function lets the user have a way to change pages. """
 			query_params['page'] = link_page
 			return request.current_route_url(_query=query_params)
 		return SqlalchemyOrmPage(
