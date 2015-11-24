@@ -6,7 +6,19 @@ from ..models.meta import DBSession
 from ..models.group import Group
 from ..models.services.group import GroupRecordService
 
-""" Management view docstring. """
+""" Management 
+
+Classes:
+* ManagementViews
+** This class provides methods for viewing a management group.
+
+* ManagementEditActions
+** This class allows the creation and modification of management groups.
+
+* PermissionActions
+** This class allows powers to be given to to a management group.
+
+"""
 
 # I have not provided for a way to list all groups. Which is probably important.
 
@@ -41,7 +53,7 @@ class ManagementViews(ViewBase):
 	route_name='group_action', 
 	renderer='sins:templates/edit_group.mako'
 )
-class ManagementActions(ViewBase):
+class ManagementEditActions(ViewBase):
 	""" This class allows groups to be created and edited. """
 	
 	# Create

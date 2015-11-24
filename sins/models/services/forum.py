@@ -3,7 +3,13 @@ from paginate_sqlalchemy import SqlalchemyOrmPage	# For pagination purposes
 from ..meta import DBSession
 from ..forum import forum
 
-""" Forum service docstring. """
+""" Forum service 
+
+Classes:
+* ForumRecordService
+** This class provides functions that can be used to query the database.
+
+"""
 
 # So I understand now why we need to have classmethods for each of the member
 # functions. It seems to be that it's allowing this class to operate as a

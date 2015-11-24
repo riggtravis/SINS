@@ -6,7 +6,13 @@ from ..ban import Ban
 # Get the url_maker function.
 from .url_maker import url_maker
 
-""" Ban service docstring. """
+""" Ban service 
+
+Classes:
+* BanRecordService
+** This class provides functions that query the database for bans.
+
+"""
 
 class BanRecordService(object):
 	""" This class helps us get information about bans. """

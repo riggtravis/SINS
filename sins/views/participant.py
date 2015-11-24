@@ -6,7 +6,19 @@ from ..models.user import User
 from ..models.services.user import UserRecordService
 from ..models.services.post import PostRecordService
 
-""" participant view docstring. """
+""" Participant 
+
+Classes:
+* ParticipantViews
+** This class provides various views related to users.
+
+* UserEditActions
+** This class allows users to register and edit their profiles
+
+* BanEditActions
+** This class lets management with the power to do so ban users and edit bans.
+
+"""
 
 ##############################
  #     #                                                                                                                                                                         
@@ -110,63 +122,6 @@ class ParticipantViews(ViewBase):
 			return HTTPNotFound()
 
 ##############################
- ######                      #                                        
- #     #   ##   #    #      # #    ####  ##### #  ####  #    #  ####  
- #     #  #  #  ##   #     #   #  #    #   #   # #    # ##   # #      
- ######  #    # # #  #    #     # #        #   # #    # # #  #  ####  
- #     # ###### #  # #    ####### #        #   # #    # #  # #      # 
- #     # #    # #   ##    #     # #    #   #   # #    # #   ## #    # 
- ######  #    # #    #    #     #  ####    #   #  ####  #    #  ####  
-##############################
-
-@view_defaults(
-	route_name='ban_action',
-	renderer='sins:templates/ban_hammer.mako'
-)
-class BanActions(ViewBase):
-	""" This class allows us to ban and edit the bans of a user. """
-	
-	@view_config(
-		route_name='ban_action',
-		match_param='action=create',
-		renderer='sins:templates/ban_hammer.mako'
-	)
-	def ban(self):
-		""" This restricts a user's access to the community. """
-		entry = Ban()
-		form = BanCreateForm()
-		
-		if self.request.method = 'POST' and form.validate:
-			forum_populate.populate_obj(entry)
-			user_id = self.request.matchdict.get('user_id')
-			entry.user_id = user_id
-			DBSession.add(entry)
-			return HTTPFound(location=self.request.route_url(
-					'user', 
-					user_id=user_id
-					slug=entry.user.slug()
-				)
-			)
-		else:
-			return {'form': form, 'action': request.matchdict,get('action')}
-	
-	def edit_ban(self):
-		""" If there has been a mistake a ban can be changed. """
-		ban_id = int(request.params.get('forum_id', -1))
-		entry = BanRecordService.by_id(ban_id)
-		if entry:
-			form = BanUpdateForm(request.POST, entry)
-			if request.method == 'POST' and form.validate():
-				form.populate_obj(entry)
-				return HTTPFound(location=request.route_url(
-						'user',
-						user_id=entry.user_id,
-						slug=entry.user.slug()
-					)
-				)
-	
-
-##############################
  #     #                         #######                   #     #                        
  #     #  ####  ###### #####     #       #####  # #####    #     # # ###### #    #  ####  
  #     # #      #      #    #    #       #    # #   #      #     # # #      #    # #      
@@ -225,3 +180,61 @@ class UserEditActions(ViewBase):
 				}
 		else:
 			return HTTPNotFound()
+
+##############################
+ ######                      #                                        
+ #     #   ##   #    #      # #    ####  ##### #  ####  #    #  ####  
+ #     #  #  #  ##   #     #   #  #    #   #   # #    # ##   # #      
+ ######  #    # # #  #    #     # #        #   # #    # # #  #  ####  
+ #     # ###### #  # #    ####### #        #   # #    # #  # #      # 
+ #     # #    # #   ##    #     # #    #   #   # #    # #   ## #    # 
+ ######  #    # #    #    #     #  ####    #   #  ####  #    #  ####  
+##############################
+
+@view_defaults(
+	route_name='ban_action',
+	renderer='sins:templates/ban_hammer.mako'
+)
+class BanEditActions(ViewBase):
+	""" This class allows us to ban and edit the bans of a user. """
+	
+	@view_config(
+		route_name='ban_action',
+		match_param='action=create',
+		renderer='sins:templates/ban_hammer.mako'
+	)
+	def ban(self):
+		""" This restricts a user's access to the community. """
+		entry = Ban()
+		form = BanCreateForm()
+		
+		if self.request.method = 'POST' and form.validate:
+			forum_populate.populate_obj(entry)
+			user_id = self.request.matchdict.get('user_id')
+			entry.user_id = user_id
+			DBSession.add(entry)
+			return HTTPFound(location=self.request.route_url(
+					'user', 
+					user_id=user_id
+					slug=entry.user.slug()
+				)
+			)
+		else:
+			return {'form': form, 'action': request.matchdict,get('action')}
+	
+	def edit_ban(self):
+		""" If there has been a mistake a ban can be changed. """
+		ban_id = int(request.params.get('forum_id', -1))
+		entry = BanRecordService.by_id(ban_id)
+		if entry:
+			form = BanUpdateForm(request.POST, entry)
+			if request.method == 'POST' and form.validate():
+				form.populate_obj(entry)
+				return HTTPFound(location=request.route_url(
+						'user',
+						user_id=entry.user_id,
+						slug=entry.user.slug()
+					)
+				)
+
+# EOF

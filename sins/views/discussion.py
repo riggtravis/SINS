@@ -8,7 +8,19 @@ from ..models.meta import DBSession
 from ..models.topic import Topic
 from ..models.services.topic import TopicRecordService
 
-""" Discussion view docstring. """
+""" Discussion
+
+Classes:
+* DiscussionViews
+** This class provides views to look at threads.
+
+* TopicEditActions
+** This class provides methods for editing and creating discussion topics.
+
+* PostActions
+** This class provides methods for posting and editing messages.
+
+"""
 
 ########
  ######                                                          #     #                        
@@ -132,13 +144,13 @@ class TopicEditActions(ViewBase):
 		else:
 			return HTTPNotFound()
 ########
- ######                            #                                        
- #     #  ####   ####  #####      # #    ####  ##### #  ####  #    #  ####  
- #     # #    # #        #       #   #  #    #   #   # #    # ##   # #      
- ######  #    #  ####    #      #     # #        #   # #    # # #  #  ####  
- #       #    #      #   #      ####### #        #   # #    # #  # #      # 
- #       #    # #    #   #      #     # #    #   #   # #    # #   ## #    # 
- #        ####   ####    #      #     #  ####    #   #  ####  #    #  ####  
+ ######                         #######                      #                                        
+ #     #  ####   ####  #####    #       #####  # #####      # #    ####  ##### #  ####  #    #  ####  
+ #     # #    # #        #      #       #    # #   #       #   #  #    #   #   # #    # ##   # #      
+ ######  #    #  ####    #      #####   #    # #   #      #     # #        #   # #    # # #  #  ####  
+ #       #    #      #   #      #       #    # #   #      ####### #        #   # #    # #  # #      # 
+ #       #    # #    #   #      #       #    # #   #      #     # #    #   #   # #    # #   ## #    # 
+ #        ####   ####    #      ####### #####  #   #      #     #  ####    #   #  ####  #    #  ####  
 ########
 # Because posts will mostly be seen in the discussion view, I think it makes
 # sense to have their actions included here with the other discussion views.
@@ -146,7 +158,7 @@ class TopicEditActions(ViewBase):
 	route_name='post_action',
 	renderer='sins:templates/edit_post.mako'
 )
-class PostActions(ViewBase):
+class PostEditActions(ViewBase):
 	""" This class allows us to create and edit posts. """
 	# Create.
 	@view_config(

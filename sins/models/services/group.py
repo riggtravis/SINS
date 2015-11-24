@@ -5,7 +5,13 @@ import sqlalchemy
 from ..meta import DBSession
 from ..group import Group
 
-""" Group service docstring. """
+""" Group service 
+
+Classes:
+* GroupRecordService
+** This class provides us with a way to query the database for group records.
+
+"""
 
 class GroupRecordService(object):
 	""" This class retreives groups from the database. """

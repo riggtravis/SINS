@@ -16,7 +16,17 @@ from ..models.services.forum import ForumRecordService
 # We need our forms.
 from ..forms import ForumCreateForm, ForumUpdateForm
 
-""" Category view docstring. """
+""" Category 
+
+Classes:
+
+* CategoryViews
+** This class provides a way to list categories
+
+* CategoryEditActions
+** This class provides methods for creating and editing forums.
+
+"""
 
 # Views should be contained in classes instead of being handled by lose
 # functions. Such is the hobo way. I mean the Pyramid way. More than likely that
@@ -51,6 +61,7 @@ from ..forms import ForumCreateForm, ForumUpdateForm
 @view_defaults(renderer='sins:templates/landing.mako')
 class CategoryViews(ViewBase):
 	""" This class provides landing pages for forums and SINS. """
+	
 	# We know that the home route will be directed to a top level landing page
 	# that will have a listing of all root forums.
 	@view_config(route_name='home')
@@ -110,6 +121,7 @@ class CategoryViews(ViewBase):
 )
 class CategoryEditActions(ViewBase):
 	""" This class provides views for creating and editing forums. """
+	
 	# Create.
 	# This is where WTForms start coming into play.
 	@view_config(match_param='action=create')

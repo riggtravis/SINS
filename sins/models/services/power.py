@@ -5,10 +5,17 @@ import sqlalchemy
 from ..meta import DBSession
 from ..power import Power
 
-""" Power service docstring. """
+""" Power service
+
+Classes:
+* PowerRecordService
+** This class provides methods for retrieving power records from the database.
+
+"""
 
 class PowerRecordService(object):
 	""" This class retreives powers from the database. """
+	
 	@classmethod
 	def all(cls):
 		""" This function retreives all of the powers from the database. """
