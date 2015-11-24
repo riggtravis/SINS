@@ -16,6 +16,7 @@ from sqlalchemy import (
 )
 
 class Permission(Base):
+	"""docstring"""
 	# Metadata
 	__tablename__ = 'permissions'
 	

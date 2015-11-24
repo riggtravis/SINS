@@ -46,10 +46,12 @@ from ..forms import ForumCreateForm, ForumUpdateForm
 # template already includes the base template, we don't have to worry about it.
 @view_defaults(renderer='sins:templates/landing.mako')
 class CategoryViews(ViewBase):
+	"""docstring"""
 	# We know that the home route will be directed to a top level landing page
 	# that will have a listing of all root forums.
 	@view_config(route_name='home')
 	def home(self):
+		"""docstring"""
 		# Get all of the forums from the database that do not have a parent id.
 		forums = ForumRecordService.by_parent(None)
 		
@@ -59,6 +61,7 @@ class CategoryViews(ViewBase):
 	# I need a function for viewing a forum instead of the forum index.
 	@view_config(rout_name='forum')
 	def view_category(self):
+		"""docstring"""
 		forum_id = int(self.request.matchdict.get('forum_id', -1))
 		forum = ForumRecordService.by_id(forum_id)
 		
@@ -100,10 +103,12 @@ class CategoryViews(ViewBase):
 	renderer='sins:templates/edit_forum.mako'
 )
 class CategoryEditActions(ViewBase):
+	"""docstring"""
 	# Create.
 	# This is where WTForms start coming into play.
 	@view_config(match_param='action=create')
 	def create_forum(self):
+		"""docstring"""
 		# This function needs to create a dynamic list of potential parents.
 		# I'm not sure that calling this variable entry is the most sensible
 		entry = Forum()

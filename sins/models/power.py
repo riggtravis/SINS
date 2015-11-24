@@ -19,6 +19,7 @@ from sqlalchemy import (
 from webhelpers2.text import urlify
 
 class Power(Base):
+	"""docstring"""
 	# Metadata
 	__tablename__ = 'powers'
 	
@@ -33,4 +34,5 @@ class Power(Base):
 	# Create a human readable slug that makes it easy to parse the page.
 	@property
 	def slug(self):
+		"""docstring"""
 		return urlify(self.title)

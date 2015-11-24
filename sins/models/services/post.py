@@ -4,12 +4,15 @@ from ..meta import DBSession
 from ..topic import Topic
 
 class PostRecordService(object):
+	"""docstring"""
 	@classmethod
 	def all(cls):
+		"""docstring"""
 		return DBSession.query(Post).order_by(sqlalchemy.desc(Post.start_date))
 	
 	@classmethod
 	def by_id(cls, post_id):
+		"""docstring"""
 		return DBSession.query(Post).filter(Post.post_id == post_id).first()
 	
 	# Posts should be paginated.
@@ -18,12 +21,14 @@ class PostRecordService(object):
 	# each page.
 	@classmethod
 	def get_paginator(cls, request, page=1):
+		"""docstring"""
 		# I think we can do this action by just calling all()
 		query = DBSession.query(Post).order_by(sqlalchemy.desc(Post.start_date))
 		
 		query_params = request.GET.mixed()
 		
 		def url_maker(link_page):
+			"""docstring"""
 			query_params['page'] = link_page
 			return request.current_route_url(_query=query_params)
 		return SqlalchemyOrmPage(
@@ -36,12 +41,14 @@ class PostRecordService(object):
 	# I need to figure out a way to get the paginaed posts from a single user.
 	@classmethod
 	def paginated_by_user(cls, request, user_id, page=1):
+		"""docstring"""
 		# Get all the posts made by a user.
 		query = DBSession.query(Post).filter(Post.user_id == user_id).order_py(sqlalchemy.desc(Post.start_date))
 		
 		query_params = request.GET.mixed()
 		
 		def url_maker(link_page):
+			"""docstring"""
 			query_params['page'] = link_page
 			return request.current_route_url(_query=query_params)
 		return SqlalchemyOrmPage(

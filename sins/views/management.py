@@ -7,11 +7,11 @@ from ..models.group import Group
 from ..models.services.group import GroupRecordService
 
 @view_defaults(renderer='sins:templates/group.mako', route_name='group')
-class ManagementViews:
-	def __init__(self, request):
-		self.request = request
-	
+class ManagementViews(ViewBase):
+	"""docstring"""
+
 	def view_management(self):
+		"""docstring"""
 		group_id = int(self.request.matchdict.get('forum_id', -1))
 		group = GroupRecordService.by_id(group_id)
 		
@@ -19,9 +19,8 @@ class ManagementViews:
 			return {'group': group}
 
 @view_defaults(route_name='group_action')
-class ManagementActions:
-	def __init__(self, request):
-		self.request = request
+class ManagementActions(ViewBase):
+	"""docstring"""
 	
 	# Create
 	@view_config(
@@ -29,6 +28,7 @@ class ManagementActions:
 		renderer='sins:templates/edit_group.mako'
 	)
 	def create_group(self):
+		"""docstring"""
 		entry = Group()
 		form = GroupCreateForm()
 		
@@ -45,6 +45,7 @@ class ManagementActions:
 		renderer='sins:templates/edit_group.mako'
 	)
 	def edit_group(self):
+		"""docstring"""
 		group_id = int(request.params.get('forum_id', -1))
 		entry = GroupRecordService.by_id(group_id)
 		if entry:
@@ -59,9 +60,8 @@ class ManagementActions:
 # permission view with this class because it is something that is given to
 # groups. To me this made sense for the seperation of concerns.
 @view_defaults(route_name="permission_action")
-class PermissionActions:
-	def __init__(self, request):
-		self.request = request
+class PermissionActions(ViewBase):
+	"""docstring"""
 	
 	# Create
 	
@@ -72,6 +72,7 @@ class PermissionActions:
 		renderer='sins:templates/permission_slip.mako'
 	)
 	def create_permission(self):
+		"""docstring"""
 		entry = Permission()
 		form = PermissionCreateForm()
 		group_id = self.request.matchdict.get('group')

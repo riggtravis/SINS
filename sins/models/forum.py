@@ -20,6 +20,7 @@ from sqlalchemy import (
 from webhelpers2.text import urlify
 
 class Forum(Base):
+	"""docstring"""
 	# Metadata
 	__tablename__ = 'forums'
 	
@@ -36,4 +37,5 @@ class Forum(Base):
 	# It'd be nice to have a readable slug.
 	@property
 	def slug(self):
+		"""docstring"""
 		return urlify(self.title)

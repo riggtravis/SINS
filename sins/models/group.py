@@ -19,6 +19,7 @@ from sqlalchemy import (
 from webhelpers2.text import urlify
 
 class Group(Base):
+	"""docstring"""
 	# Metadata
 	__tablename__ = 'groups'
 	
@@ -33,4 +34,5 @@ class Group(Base):
 	# Create a human readable slug for when a user visits.
 	@property
 	def slug(self):
+		"""docstring"""
 		return urlify(self.title)

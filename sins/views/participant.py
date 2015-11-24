@@ -19,13 +19,13 @@ from ..models.services.post import PostRecordService
 # I have chosen to include authentification/authorization views in the
 # participant file. The reason I have chosen to do this is that it relates
 # directly to users.
-class ParticipantViews:
-	def __init__(self, request):
-		self.request = request
+class ParticipantViews(ViewBase):
+	"""docstring"""
 	
 	# Show the participant's profile
 	@view_config(route_name='user', renderer='sins:templates/profile.mako')
 	def profile(self):
+		"""docstring"""
 		# Search the database for a user whose id matches the user_id passed
 		# through the URI.
 		user_id = int(sef.request.matchdict.get('user_id', -1))
@@ -52,6 +52,7 @@ class ParticipantViews:
 		renderer='sins:templates/log.mako'
 	)
 	def sign_in_out(self):
+		"""docstring"""
 		# Make sure to pass a sign out message if the user is logging out.
 		# The other thing to do is to pass what whether the user is logging in
 		# or out so that there can be a sensible title like "success" or
@@ -66,6 +67,7 @@ class ParticipantViews:
 		renderer='sins:templates/ban_hammer.mako'
 	)
 	def ban(self):
+		"""docstring"""
 		entry = Ban()
 		form = BanCreateForm()
 		
@@ -89,6 +91,7 @@ class ParticipantViews:
 		renderer='sins:templates/promotion.mako'
 	)
 	def promote(self):
+		"""docstring"""
 		entry = Membership()
 		form = MembershipCreateForm()
 		user_id = self.request.matchdict.get('parent_id')
@@ -141,8 +144,10 @@ class ParticipantViews:
 
 @view_defaults(route_name='user_action', renderer='edit_user')
 class UserEditActions(ViewBase):
+	"""docstring"""
 	@view_config(match_param='action=create')
 	def create_user(self):
+		"""docstring"""
 		entry = User()
 		form = UserCreateForm(self.request.POST)
 		
@@ -165,6 +170,7 @@ class UserEditActions(ViewBase):
 	
 	@view_config(match_param='action=edit')
 	def edit_user(self):
+		"""docstring"""
 		user_id = int(request.params.get('forum_id', -1))
 		entry = UserRecordService.by_id(user_id)
 		if entry:

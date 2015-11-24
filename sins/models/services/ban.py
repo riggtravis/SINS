@@ -4,12 +4,15 @@ from ..meta import DBSession
 from ..ban import Ban
 
 class BanRecordService(object):
+	"""docstring"""
 	@classmethod
 	def all(cls):
+		"""docstring"""
 		return DBSession.query(Ban).order_by(sqlalchemy.desc(Ban.start_date))
 	
 	@classmethod
 	def by_id(cls, id):
+		"""docstring"""
 		# The first method pulls the first item out of the list. Even though
 		# there is only one item in the list, this is still necessary because it
 		# is a list.
@@ -21,10 +24,12 @@ class BanRecordService(object):
 	# items appear on each page.
 	@classmethod
 	def get_paginator(cls, request, page=1):
+		"""docstring"""
 		query = DBSession.query(Ban).order_by(sqlalchemy.desc(Ban.start_date))
 		query_params = request.GET.mixed()
 		
 		def url_maker(link_page):
+			"""docstring"""
 			query_params['page'] = link_page
 			return request.current_route_url(_query=query_params)
 		return SqlalchemyOrmPage(

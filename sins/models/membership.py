@@ -16,6 +16,7 @@ from sqlalchemy import (
 )
 
 class Membership(Base):
+	"""docstring"""
 	# Metadata
 	__tablename__ = 'memberships'
 	

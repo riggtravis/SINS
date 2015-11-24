@@ -18,6 +18,7 @@ from sqlalchemy import (
 from webhelpers2.date import distance_of_time_in_words
 
 class Post(Base):
+	"""docstring"""
 	# Metadata
 	__tablename__ = 'posts'
 	
@@ -35,6 +36,7 @@ class Post(Base):
 	# The date the topic was posted needs to be human readable.
 	@property 
 	def posted_in_words(self):
+		"""docstring"""
 		return distance_of_time_in_words(
 			self.posted_date,
 			datetime.datetime.utcnow()

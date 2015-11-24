@@ -22,6 +22,7 @@ from webhelpers2.date import distance_of_time_in_words
 from webhelpers2.text import urlify
 
 class Topic(Base):
+	"""docstring"""
 	# Metadata
 	__tablename__ = 'topics'
 	
