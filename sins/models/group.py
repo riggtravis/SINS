@@ -18,6 +18,14 @@ from sqlalchemy import (
 # We should display a slug when the user visits.
 from webhelpers2.text import urlify
 
+""" Group model 
+
+Classes:
+* Group:
+** Used to describe a group of users and the powers they have from the group.
+
+"""
+
 class Group(Base):
 	""" This class describes groups of users who can be asssigned powers. """
 	# Metadata

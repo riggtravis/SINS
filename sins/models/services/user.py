@@ -3,6 +3,8 @@ from paginate_sqlalchemy import SqlalchemyOrmPage	# For pagination purposes
 from ..meta import DBSession
 from ..user import User
 
+""" User service docstring. """
+
 class UserRecordService(object):
 	""" This class retrieves users from the database. """
 	

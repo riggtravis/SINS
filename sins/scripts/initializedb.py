@@ -21,6 +21,8 @@ from ..models import User
 # Import the CryptContext class for hashing
 from passlib.context import CryptContext
 
+""" initializedb usage docstring. """
+
 def usage(argv):
 	""" I am not entirely sure what this function does. """
     cmd = os.path.basename(argv[0])

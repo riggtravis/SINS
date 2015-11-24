@@ -11,6 +11,61 @@ from wtforms import validators
 
 from wtforms import HiddenField
 
+""" Forms 
+
+Classes:
+********
+
+* BanCreateForm
+** Used to ban a user.
+
+* BanUpdateForm
+** Used to edit a ban.
+
+* ForumCreateForm
+** Used to create a discussion category.
+
+* ForumUpdateForm
+** Used to edit a discussion category.
+
+* GroupCreateForm
+** Used to create a group of users for power deligation.
+
+* GroupUpdateForm
+** Used to edit a group of users.
+
+* MembershipCreateForm
+** Used to add a user to a group.
+
+* PermissionCreateForm
+** Used to assign a power to a group.
+
+* PostCreateForm
+** Used to post a message to a discussion.
+
+* PostUpdateForm
+** Used to edit a posted message.
+
+* TopicCreateForm
+** Used to create a new topic of discussion.
+
+* TopicUpdateForm
+** Used to edit a discussion topic.
+
+* UserCreateForm
+** Used to allow a person to register for the community.
+
+* UserUpdateForm
+** Allows a user to update their profile.
+
+Functions:
+**********
+
+* strip_filter
+** strips white space of an entry field.
+
+"""
+
 # I think there is a more readable way to write this than as a lambda. This is
 # an extremely javascript way of doing things. Not that doing things in The
 # JavaScript Way is a bad thing, it's just that most Python programmers are

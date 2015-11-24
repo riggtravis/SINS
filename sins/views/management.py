@@ -6,6 +6,8 @@ from ..models.meta import DBSession
 from ..models.group import Group
 from ..models.services.group import GroupRecordService
 
+""" Management view docstring. """
+
 # I have not provided for a way to list all groups. Which is probably important.
 
  #     #                                                                  #     #                        

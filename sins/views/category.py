@@ -16,6 +16,8 @@ from ..models.services.forum import ForumRecordService
 # We need our forms.
 from ..forms import ForumCreateForm, ForumUpdateForm
 
+""" Category view docstring. """
+
 # Views should be contained in classes instead of being handled by lose
 # functions. Such is the hobo way. I mean the Pyramid way. More than likely that
 # stems from it being the Python way.

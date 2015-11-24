@@ -3,6 +3,8 @@ from paginate_sqlalchemy import SqlalchemyOrmPage	# For pagination purposes
 from ..meta import DBSession
 from ..topic import Topic
 
+""" Post service docstring. """
+
 class PostRecordService(object):
 	""" This class retrieves posts from the database. """
 	

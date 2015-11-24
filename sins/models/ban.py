@@ -19,6 +19,14 @@ from sqlalchemy.orm import relationship, backref
 # The date should be human readable.
 from webhelpers2.date import distance_of_time_in_words
 
+""" Ban model
+
+Classes:
+* Ban
+** Used to describe a user ban in which a user loses access to the community.
+
+"""
+
 class Ban(Base):
 	""" This class describes bans that have been put on users. """
 	# Metadata

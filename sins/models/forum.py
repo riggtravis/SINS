@@ -19,6 +19,14 @@ from sqlalchemy import (
 # We have a slug that needs to be created when visiting the page.
 from webhelpers2.text import urlify
 
+""" Forum model
+
+Classes:
+* Forum
+** Used to describe a discussion category.
+
+"""
+
 class Forum(Base):
 	""" This class describes forums to be used for discussion categories. """
 	# Metadata

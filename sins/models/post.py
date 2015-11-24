@@ -17,6 +17,14 @@ from sqlalchemy import (
 # The date should be human readable.
 from webhelpers2.date import distance_of_time_in_words
 
+""" Post model 
+
+Classes:
+* Post
+** Used to describe messages posted to the community by users.
+
+"""
+
 class Post(Base):
 	""" This class is used to describe messages posted to the community. """
 	# Metadata

@@ -5,6 +5,26 @@ from pyramid import testing
 
 from .models import DBSession
 
+""" Tests
+Classes:
+
+* SinsViewTests
+** Used to test the various views.
+
+* SinsScriptTests
+** Used to test the scripts.
+
+* SinsModelTests
+** Used to test the various models.
+
+* SinsServiceTests
+** Used to test the model services.
+
+* SinsFunctionalTests
+** Used to test the entire application.
+
+"""
+
 # I'm not clear on how this testing suite works. I'll have to either learn it or
 # convert this whole thing to nose tests
 

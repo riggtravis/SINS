@@ -15,6 +15,14 @@ from sqlalchemy import (
 	orm
 )
 
+""" User model 
+
+Classes:
+* User
+** Used to describe people who use the forum.
+
+"""
+
 # The date should be human readable.
 from webhelpers2.date import distance_of_time_in_words
 

@@ -15,6 +15,14 @@ from sqlalchemy import (
 	orm
 )
 
+""" Power model 
+
+Classes:
+* Power
+** Used to describe things that a member of a group has an ability to do.
+
+"""
+
 # Create a human readable slug in the url
 from webhelpers2.text import urlify
 

@@ -1,4 +1,5 @@
-# 
+""" view_base view docstring. """
+
 class ViewBase:
 	""" We need a view base for other view classes to inherit. """
 	def __init__(self, request):

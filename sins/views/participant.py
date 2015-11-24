@@ -6,6 +6,8 @@ from ..models.user import User
 from ..models.services.user import UserRecordService
 from ..models.services.post import PostRecordService
 
+""" participant view docstring. """
+
 ##############################
  #     #                                                                                                                                                                         
  ##   ## #  ####   ####  ###### #        ##   #    # #  ####  #    #  ####     #####    ##   #####  ##### #  ####  # #####    ##   #    # #####    #    # # ###### #    #  ####  

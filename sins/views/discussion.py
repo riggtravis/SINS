@@ -8,6 +8,8 @@ from ..models.meta import DBSession
 from ..models.topic import Topic
 from ..models.services.topic import TopicRecordService
 
+""" Discussion view docstring. """
+
 ########
  ######                                                          #     #                        
  #     # #  ####   ####  #    #  ####   ####  #  ####  #    #    #     # # ###### #    #  ####  

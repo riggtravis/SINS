@@ -5,6 +5,8 @@ import sqlalchemy
 from ..meta import DBSession
 from ..power import Power
 
+""" Power service docstring. """
+
 class PowerRecordService(object):
 	""" This class retreives powers from the database. """
 	@classmethod
