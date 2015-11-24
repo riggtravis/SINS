@@ -79,6 +79,15 @@ class SinsViewTests(unittest.TestCase):
 #	all
 #	by_id
 
+
+ #######                                                             #######                            
+ #       #    # #    #  ####  ##### #  ####  #    #   ##   #            #    ######  ####  #####  ####  
+ #       #    # ##   # #    #   #   # #    # ##   #  #  #  #            #    #      #        #   #      
+ #####   #    # # #  # #        #   # #    # # #  # #    # #            #    #####   ####    #    ####  
+ #       #    # #  # # #        #   # #    # #  # # ###### #            #    #           #   #        # 
+ #       #    # #   ## #    #   #   # #    # #   ## #    # #            #    #      #    #   #   #    # 
+ #        ####  #    #  ####    #   #  ####  #    # #    # ######       #    ######  ####    #    ####  
+
 # All of this will need to be reviewed.
 # I think it is safe to say that testing by route would be a safe way to go.
 # It might be worth it just to clear all of this out and start over.
