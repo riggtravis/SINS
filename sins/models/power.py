@@ -19,7 +19,7 @@ from sqlalchemy import (
 from webhelpers2.text import urlify
 
 class Power(Base):
-	"""docstring"""
+	""" This class describes what powers can be granted to groups. """
 	# Metadata
 	__tablename__ = 'powers'
 	
@@ -31,8 +31,7 @@ class Power(Base):
 	# This member variable should probably have a norsk name.
 	adepts = orm.relationship("Permission", backref="powers")
 	
-	# Create a human readable slug that makes it easy to parse the page.
 	@property
 	def slug(self):
-		"""docstring"""
+		""" Create a human readable slug that makes it easy to read the URL. """
 		return urlify(self.title)

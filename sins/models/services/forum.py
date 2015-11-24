@@ -8,22 +8,20 @@ from ..forum import forum
 # construtor of sorts for the forum class.
 
 class ForumRecordService(object):
-	"""docstring"""
-	# Every class needs a minimum two functions. Those functions are:
-	#	retrieve all records.
+	""" This class retrieves forums from the database. """
+
 	@classmethod
 	def all(cls):
-		"""docstring"""
+		""" This function retreives all of the forums. """
 		return DBSession.query(Forum).order_by(sqlalchemy.desc(Forum.forum_id))
 	
-	#	retrieve record by id.
 	@classmethod
 	def by_id(cls, id):
-		"""docstring"""
+		""" This function retrieves a specific forum. """
 		return DBSession.query(Forum).filter(Forum.forum_id == id).first()
 	
 	# We need to retrieve the forums that have particular parents or no parents
 	@classmethod
 	def by_parent(cls, id):
-		"""docstring"""
+		""" This function retreives all of the forums with the same parent. """
 		return DBSession.query(Forum).filter(Forum.parent_id == id).order_by(Forum.forum_id)

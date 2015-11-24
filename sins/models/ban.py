@@ -20,7 +20,7 @@ from sqlalchemy.orm import relationship, backref
 from webhelpers2.date import distance_of_time_in_words
 
 class Ban(Base):
-	"""docstring"""
+	""" This class describes bans that have been put on users. """
 	# Metadata
 	__tablename__ = 'bans'
 	
@@ -38,7 +38,7 @@ class Ban(Base):
 	# Display dates in a human readable format.
 	@property
 	def start_in_words(self):
-		"""docstring"""
+		""" This function is to display when the user got banned. """
 		return distance_of_time_in_words(
 			self.start_date,
 			datetime.datetime.utcnow()
@@ -46,7 +46,7 @@ class Ban(Base):
 	
 	@property
 	def end_in_words(self):
-		"""docstring"""
+		""" This function is to display when the user will be reinstated. """
 		return distance_of_time_in_words(
 			self.end_date,
 			datetime.datetime.utcnow()

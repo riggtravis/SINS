@@ -6,6 +6,7 @@ from ..models.meta import DBSession
 from ..models.group import Group
 from ..models.services.group import GroupRecordService
 
+# I have not provided for a way to list all groups. Which is probably important.
 
  #     #                                                                  #     #                        
  ##   ##   ##   #    #   ##    ####  ###### #    # ###### #    # #####    #     # # ###### #    #  ####  
@@ -16,17 +17,15 @@ from ..models.services.group import GroupRecordService
  #     # #    # #    # #    #  ####  ###### #    # ###### #    #   #         #    # ###### #    #  ####  
 @view_defaults(renderer='sins:templates/group.mako', route_name='group')
 class ManagementViews(ViewBase):
-	"""docstring"""
+	""" This class provides a way to see who manages the community. """
 
 	def view_management(self):
-		"""docstring"""
+		""" This view function provides a view of a group of users. """
 		group_id = int(self.request.matchdict.get('forum_id', -1))
 		group = GroupRecordService.by_id(group_id)
 		
 		if group:
 			return {'group': group}
-
-
 
  #     #                                                                  #######                      #                                        
  ##   ##   ##   #    #   ##    ####  ###### #    # ###### #    # #####    #       #####  # #####      # #    ####  ##### #  ####  #    #  ####  
@@ -41,7 +40,7 @@ class ManagementViews(ViewBase):
 	renderer='sins:templates/edit_group.mako'
 )
 class ManagementActions(ViewBase):
-	"""docstring"""
+	""" This class allows groups to be created and edited. """
 	
 	# Create
 	@view_config(
@@ -49,7 +48,7 @@ class ManagementActions(ViewBase):
 		renderer='sins:templates/edit_group.mako'
 	)
 	def create_group(self):
-		"""docstring"""
+		""" This view provides a way to create a new group. """
 		entry = Group()
 		form = GroupCreateForm()
 		
@@ -66,7 +65,7 @@ class ManagementActions(ViewBase):
 		renderer='sins:templates/edit_group.mako'
 	)
 	def edit_group(self):
-		"""docstring"""
+		""" This view function allows us to change existing groups. """
 		group_id = int(request.params.get('forum_id', -1))
 		entry = GroupRecordService.by_id(group_id)
 		if entry:
@@ -100,20 +99,23 @@ class ManagementActions(ViewBase):
 # Add the permission view to this to this file. I have chosen to include the
 # permission view with this class because it is something that is given to
 # groups. To me this made sense for the seperation of concerns.
-@view_defaults(route_name="permission_action")
+@view_defaults(
+	route_name="permission_action", 
+	match_param='action=create',
+	renderer='sins:templates/permission_slip.mako'
+)
 class PermissionActions(ViewBase):
-	"""docstring"""
+	""" This class allows us to give groups powers. """
 	
 	# Create
 	
 	# Create for permissions is context dependent upon the group that the view
 	# was reached from. This means that we need to get it from the URL
 	@view_config(
-		match_param='action=create'
-		renderer='sins:templates/permission_slip.mako'
+		
 	)
 	def create_permission(self):
-		"""docstring"""
+		""" This view gives us the ability to give a power to a group. """
 		entry = Permission()
 		form = PermissionCreateForm()
 		group_id = self.request.matchdict.get('group')

@@ -20,6 +20,7 @@ from wtforms import HiddenField
 # strip_filter = lambda x: x.strip() if x else None
 def strip_filter(x):
 	""" This function is used to strip whitespace from forms. """
+	
 	# This can be written without an else block as
 	#
 	#	if x:
@@ -48,6 +49,7 @@ def strip_filter(x):
 # ban is.
 class BanCreateForm(Form):
 	""" This form is used when a user gets banned. """
+	
 	end_date = DateTimeField(
 		'End Date',
 		# We need to validate that the end date is some time after now.
@@ -57,6 +59,7 @@ class BanCreateForm(Form):
 
 class BanUpdateForm(BanCreateForm):
 	""" This form is used if a user's ban contains a mistake. """
+	
 	ban_id = HiddenField()
 
 ##################
@@ -73,6 +76,7 @@ class BanUpdateForm(BanCreateForm):
 # by administators. It will need to be described by a power.
 class ForumCreateForm(Form):
 	""" This form is used when a new discussion category is started. """
+	
 	title = StringField(
 		'Title',
 		[validators.Length(min=1, max=30), validators.required()],
@@ -102,6 +106,7 @@ class ForumCreateForm(Form):
 
 class ForumUpdateForm(ForumCreateForm):
 	""" This form is used when a discussion category is changed. """
+	
 	forum_id = HiddenField()
 
 ##################
@@ -116,6 +121,7 @@ class ForumUpdateForm(ForumCreateForm):
 
 class GroupCreateForm(Form):
 	""" This form is used when a new group is created. """
+	
 	title = StringField(
 		'Group Name',
 		[validators.Length(min=1, max=30), validators.required()],
@@ -124,6 +130,7 @@ class GroupCreateForm(Form):
 
 class GroupUpdateForm(GroupCreateForm):
 	""" This form is used when a group changes. """
+	
 	group_id = HiddenField()
 
 ##################
@@ -143,6 +150,7 @@ class GroupUpdateForm(GroupCreateForm):
 
 class MembershipCreateForm(form):
 	""" This form is used when someone is added to a group. """
+	
 	# Rember that the SelectField must be populated dynamically later.
 	group_id = SelectField(
 		'Group',
@@ -169,6 +177,7 @@ class MembershipCreateForm(form):
 # the only field should be which power is being given to a group.
 class PermissionCreateForm(Form):
 	""" This form is used when a group gains a power. """
+	
 	power_id = SelectField(
 		'Group',
 		[validators.required()],
@@ -187,6 +196,7 @@ class PermissionCreateForm(Form):
 
 class PostCreateForm(Form):
 	""" This form is used when a post is made. """
+	
 	message = TextAreaField(
 		'Message',
 		[validators.Length(min=1), validators.required()],
@@ -195,6 +205,7 @@ class PostCreateForm(Form):
 
 class PostUpdateForm(PostCreateForm):
 	""" This form is used when a post is edited. """
+	
 	post_id = HiddenField()
 
 ##################
@@ -222,6 +233,7 @@ class PostUpdateForm(PostCreateForm):
 
 class TopicCreateForm(Form):
 	""" This form is used when a new topic is made. """
+	
 	# The forum_id should be implicit based on where the user entered the create
 	# topic command. This might mean that I will need to pass the forum_id in
 	# the URI in order for this to work. It's just something I'm going to have
@@ -241,6 +253,7 @@ class TopicCreateForm(Form):
 
 class TopicUpdateForm(TopicCreateForm):
 	""" This form is used when a topic is changed. """
+	
 	# I'm not sure why this line has to be here. I have a guess that if you do
 	# not include this line, then the update form will give the user access to
 	# change the primary key. Which is bad.
@@ -265,6 +278,7 @@ class TopicUpdateForm(TopicCreateForm):
 # Think of this as registration.
 class UserCreateForm(Form):
 	""" This form is used when a user registers. """
+	
 	username = StringField(
 		'Username',
 		[validators.Length(min=1, max=30), validators.required()],
@@ -296,6 +310,7 @@ class UserCreateForm(Form):
 # This of updates as customizing a user's profile.
 class UserUpdateForm(UserCreateForm):
 	""" This for is used when a user updates their profile. """
+	
 	user_id = HiddenField()
 	username = HiddenField()
 	

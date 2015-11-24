@@ -16,7 +16,7 @@ from sqlalchemy import (
 )
 
 class Membership(Base):
-	"""docstring"""
+	""" This class is used to describe what groups users are members of. """
 	# Metadata
 	__tablename__ = 'memberships'
 	

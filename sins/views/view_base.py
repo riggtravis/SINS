@@ -1,6 +1,6 @@
-# We need a view base for other view classes to inherit.
+# 
 class ViewBase:
-	"""docstring"""
+	""" We need a view base for other view classes to inherit. """
 	def __init__(self, request):
-		"""docstring"""
+		""" We need the request made to be available to be manipulated. """
 		self.request = request

@@ -22,7 +22,7 @@ from webhelpers2.date import distance_of_time_in_words
 from webhelpers2.text import urlify
 
 class Topic(Base):
-	"""docstring"""
+	""" This class describes a topic that posts can be made to. """
 	# Metadata
 	__tablename__ = 'topics'
 	
@@ -40,14 +40,16 @@ class Topic(Base):
 	# Relationships
 	posts = orm.relationship("Post", backref='topics')
 	
-	# When the topic was posted should be human readable
+	# Functions
+	@property
 	def start_in_words(self):
+		""" When the topic was posted should be human readable """
 		return distance_of_time_in_words(
 			self.start_date,
 			datetime.datetime.utcnow()
 		)
 	
-	# Create a slug that the user should be able to read.
 	@property
 	def slug(self):
+		""" Create a slug for the URL that the user should be able to read. """
 		return urlify(self.subject)

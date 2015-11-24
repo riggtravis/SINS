@@ -16,7 +16,7 @@ from sqlalchemy import (
 )
 
 class Permission(Base):
-	"""docstring"""
+	""" This class is used to describe what powers a group has. """
 	# Metadata
 	__tablename__ = 'permissions'
 	

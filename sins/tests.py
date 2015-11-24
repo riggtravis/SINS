@@ -73,12 +73,137 @@ class SinsViewTests(unittest.TestCase):
 	#	ViewBase
 	#		__init__
 
-# We have service classes with functions that need to be tested.
-# There is one service class for every model. All service models have the
-# the following two methods:
-#	all
-#	by_id
 
+  #####                                  #######                            
+ #     #  ####  #####  # #####  #####       #    ######  ####  #####  ####  
+ #       #    # #    # # #    #   #         #    #      #        #   #      
+  #####  #      #    # # #    #   #         #    #####   ####    #    ####  
+       # #      #####  # #####    #         #    #           #   #        # 
+ #     # #    # #   #  # #        #         #    #      #    #   #   #    # 
+  #####   ####  #    # # #        #         #    ######  ####    #    ####  
+class SinsScriptTests(unittest.TestCase):
+	""" This class tests the scripts that help prepare SINS. """
+	
+	def setUp(self):
+		""" This function prepares the class to perform tests. """
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		""" This function cleans up anything that can interfere with tests. """
+		testing.tearDown()
+	
+	# There are two scripts that need to be tested in initializedb:
+	#	usage
+	#	main
+
+
+ #     #                                #######                            
+ ##   ##  ####  #####  ###### #            #    ######  ####  #####  ####  
+ # # # # #    # #    # #      #            #    #      #        #   #      
+ #  #  # #    # #    # #####  #            #    #####   ####    #    ####  
+ #     # #    # #    # #      #            #    #           #   #        # 
+ #     # #    # #    # #      #            #    #      #    #   #   #    # 
+ #     #  ####  #####  ###### ######       #    ######  ####    #    ####  
+class SinsModelTests(unittest.TestCase):
+	""" This class tests the models SINS depends on. """
+	
+	def setUp(self):
+		""" This function prepares the class for testing. """
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		""" This function cleans up anything that can interfere with tests. """
+		testing.tearDown()
+	
+	# There are several models but not all of them have functions. This may
+	# change so it is worth listing all of the models.
+	
+	#	ban
+	#		start_in_words
+	#		end_in_words
+	
+	#	forum
+	#		slug
+	
+	#	group
+	#		slug
+	
+	#	membership
+	
+	#	permission
+	
+	#	post
+	#		posted_in_words
+	
+	#	power
+	#		slug
+	
+	#	topic
+	#		start_in_words
+	#		slug
+	
+	#	user
+	#		joined_in_words
+	#		slug
+
+
+  #####                                          #######                            
+ #     # ###### #####  #    # #  ####  ######       #    ######  ####  #####  ####  
+ #       #      #    # #    # # #    # #            #    #      #        #   #      
+  #####  #####  #    # #    # # #      #####        #    #####   ####    #    ####  
+       # #      #####  #    # # #      #            #    #           #   #        # 
+ #     # #      #   #   #  #  # #    # #            #    #      #    #   #   #    # 
+  #####  ###### #    #   ##   #  ####  ######       #    ######  ####    #    ####  
+
+# We have service classes with functions that need to be tested. There is one
+# service class for every model. Not all of these service classes are fully
+# fleched out yet, but they should still be listed for when they grow.
+class SinsServiceTests(unittest.TestCase):
+	""" This class tests our model services. """
+	
+	def setUp(self):
+		""" This function prepares the class for testing. """
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		""" This test cleans up for future testing. """
+		testing.tearDown()
+	
+	# ban
+	#	all
+	#	by_id
+	#	get_paginator
+	#		get_paginator has a sub-function. I'm not sure this can be tested.
+	
+	# forum
+	#	all
+	#	by_id
+	#	by_parent
+	
+	# group
+	#	all
+	#	by_id
+	
+	# membership
+	
+	# permission
+	
+	# post
+	#	all
+	#	by_id
+	#	get_paginator
+	
+	# power
+	#	all
+	#	by_id
+	
+	# topic
+	#	all
+	#	by_id
+	#	get_paginator
+	
+	# user
+	#	by_id
 
  #######                                                             #######                            
  #       #    # #    #  ####  ##### #  ####  #    #   ##   #            #    ######  ####  #####  ####  
@@ -92,6 +217,8 @@ class SinsViewTests(unittest.TestCase):
 # I think it is safe to say that testing by route would be a safe way to go.
 # It might be worth it just to clear all of this out and start over.
 class SinsFunctionalTests(unittest.TestCase):
+	""" This class creates a test app and then performs tests on it. """
+	
 	# home
 	
 	# user_action
@@ -170,3 +297,7 @@ class SinsFunctionalTests(unittest.TestCase):
 	#	edit
 	#		valid topic
 	#		invalid topic
+
+# This if conditional allows the tests to be ran from the command line.
+if __name__ = "__main__":
+	unittest.main()

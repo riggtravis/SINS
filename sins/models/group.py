@@ -19,7 +19,7 @@ from sqlalchemy import (
 from webhelpers2.text import urlify
 
 class Group(Base):
-	"""docstring"""
+	""" This class describes groups of users who can be asssigned powers. """
 	# Metadata
 	__tablename__ = 'groups'
 	
@@ -31,8 +31,7 @@ class Group(Base):
 	members = orm.relationship("Membership", backref="groups")
 	permissions = orm.relationship("Permission", backref="groups")
 	
-	# Create a human readable slug for when a user visits.
 	@property
 	def slug(self):
-		"""docstring"""
+		""" Create a human readable URL for when a user visits. """
 		return urlify(self.title)

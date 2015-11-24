@@ -22,7 +22,7 @@ from webhelpers2.date import distance_of_time_in_words
 from webhelpers2.text import urlify
 
 class User(Base):
-	"""docstring"""
+	""" This class is used to describe users of the forum. """
 	# Metadata
 	__tablename__ = 'people'
 	
@@ -43,15 +43,18 @@ class User(Base):
 	memberships = orm.relationship("Membership", backref="people")
 	posts = orm.relationship("Post", backref="people")
 	
-	# The date the user joined should be human readable
+	# Functions
 	@property
 	def joined_in_words(self):
+		""" The date the user joined should be human readable. """
 		return distance_of_time_in_words(
 			self.join_date,
 			datetime.datetime.utcnow()
 		)
 	
-	# There should be a nice readable slug when the user visitss.
 	@property
 	def slug(self):
+		""" There should be a nice readable URL slug when the user visits. """ 
 		return urlify(self.username)
+
+# EOF

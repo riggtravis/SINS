@@ -27,11 +27,10 @@ from ..models.services.topic import TopicRecordService
 # yourself mentality.
 @view_defaults(route_name='topic', renderer='sins:templates/thread.mako')
 class DiscussionViews(ViewBase):
-	"""docstring"""
+	""" This class provides the ability to view threads of conversation. """
 	
-	# Show the conversation
 	def view_discussion(self):
-		"""docstring"""
+		""" This function shows a conversation. """
 		# Get the information from the URI about which topic we are looking for.
 		# I am not clear on what the -1 in this function does.
 		topic_id = int(self.request.matchdict.get('topic_id', -1))
@@ -56,10 +55,10 @@ class DiscussionViews(ViewBase):
 #########
 @view_defaults(route_name='topic_action', renderer='sins:templates/edit_topic')
 class TopicEditActions(ViewBase):
-	"""docstring"""
+	""" This class allows us to create and edit topics. """
 	@view_config(match_param='action=create')
 	def create_topic(self):
-		"""docstring"""
+		""" This view function provides a way to create a new topic. """
 		entry = Topic()
 		form = TopicCreateForm(request.POST)
 		
@@ -71,9 +70,12 @@ class TopicEditActions(ViewBase):
 			if self.request.method = 'POST' and form.validate:
 				form_populate.populate_obj(entry)
 				DBSession.add(entry)
+				
+				# A new topic needs a post.
 				return HTTPFound(location=self.request.route_url(
-						'forum',
-						forum_id=forum_id
+						'post_action',
+						action='create'
+						topic_id=entry.topic_id
 					)
 				)
 			else:
@@ -90,7 +92,7 @@ class TopicEditActions(ViewBase):
 	
 	@view_config(match_param='action=edit')
 	def edit_topic(self):
-		"""docstring"""
+		""" This view function allows us to edit existing topics. """
 		topic_id = int(request.params.get('forum_id', -1))
 		entry = TopicRecordService.by_id(forum_id)
 		if entry:
@@ -143,13 +145,13 @@ class TopicEditActions(ViewBase):
 	renderer='sins:templates/edit_post.mako'
 )
 class PostActions(ViewBase):
-	"""docstring"""
+	""" This class allows us to create and edit posts. """
 	# Create.
 	@view_config(
 		match_param='action=create'
 	)
 	def create_post(self):
-		"""docstring"""
+		""" This view function allows for messages to be posted. """
 		entry = Post()
 		form = PostCreateForm(request.POST)
 		
@@ -182,7 +184,7 @@ class PostActions(ViewBase):
 		match_param='action=edit'
 	)
 	def edit_post(self):
-		"""docstring"""
+		""" This function allows for posted messages to be edited. """
 		post_id = int(request.params.get('forum_id', -1))
 		entry = PostRecordService.by_id(post_id)
 		if entry:

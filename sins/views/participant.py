@@ -20,12 +20,12 @@ from ..models.services.post import PostRecordService
 # participant file. The reason I have chosen to do this is that it relates
 # directly to users.
 class ParticipantViews(ViewBase):
-	"""docstring"""
+	""" This view class provides various user related views. """
 	
 	# Show the participant's profile
 	@view_config(route_name='user', renderer='sins:templates/profile.mako')
 	def profile(self):
-		"""docstring"""
+		""" This view function allows us to see user profiles. """
 		# Search the database for a user whose id matches the user_id passed
 		# through the URI.
 		user_id = int(sef.request.matchdict.get('user_id', -1))
@@ -52,7 +52,7 @@ class ParticipantViews(ViewBase):
 		renderer='sins:templates/log.mako'
 	)
 	def sign_in_out(self):
-		"""docstring"""
+		""" This function is used for the user to sign in and out. """
 		# Make sure to pass a sign out message if the user is logging out.
 		# The other thing to do is to pass what whether the user is logging in
 		# or out so that there can be a sensible title like "success" or
@@ -66,7 +66,7 @@ class ParticipantViews(ViewBase):
 		renderer='sins:templates/promotion.mako'
 	)
 	def promote(self):
-		"""docstring"""
+		""" This function is used to add the user to a group. """
 		entry = Membership()
 		form = MembershipCreateForm()
 		user_id = self.request.matchdict.get('parent_id')
@@ -107,7 +107,7 @@ class ParticipantViews(ViewBase):
 		else:
 			return HTTPNotFound()
 
-
+##############################
  ######                      #                                        
  #     #   ##   #    #      # #    ####  ##### #  ####  #    #  ####  
  #     #  #  #  ##   #     #   #  #    #   #   # #    # ##   # #      
@@ -115,18 +115,22 @@ class ParticipantViews(ViewBase):
  #     # ###### #  # #    ####### #        #   # #    # #  # #      # 
  #     # #    # #   ##    #     # #    #   #   # #    # #   ## #    # 
  ######  #    # #    #    #     #  ####    #   #  ####  #    #  ####  
+##############################
+
 @view_defaults(
 	route_name='ban_action',
 	renderer='sins:templates/ban_hammer.mako'
 )
 class BanActions(ViewBase):
+	""" This class allows us to ban and edit the bans of a user. """
+	
 	@view_config(
 		route_name='ban_action',
 		match_param='action=create',
 		renderer='sins:templates/ban_hammer.mako'
 	)
 	def ban(self):
-		"""docstring"""
+		""" This restricts a user's access to the community. """
 		entry = Ban()
 		form = BanCreateForm()
 		
@@ -145,7 +149,7 @@ class BanActions(ViewBase):
 			return {'form': form, 'action': request.matchdict,get('action')}
 	
 	def edit_ban(self):
-		"""docstring"""
+		""" If there has been a mistake a ban can be changed. """
 		ban_id = int(request.params.get('forum_id', -1))
 		entry = BanRecordService.by_id(ban_id)
 		if entry:
@@ -170,12 +174,13 @@ class BanActions(ViewBase):
   #####   ####  ###### #    #    ####### #####  #   #         #    # ###### #    #  ####  
 ##############################
 
-@view_defaults(route_name='user_action', renderer='edit_user')
+@view_defaults(route_name='user_action', renderer='edit_user.mako')
 class UserEditActions(ViewBase):
-	"""docstring"""
+	""" This class provides a way to create and edit users. """
+	
 	@view_config(match_param='action=create')
 	def create_user(self):
-		"""docstring"""
+		""" This view function allows users to register. """
 		entry = User()
 		form = UserCreateForm(self.request.POST)
 		
@@ -198,7 +203,7 @@ class UserEditActions(ViewBase):
 	
 	@view_config(match_param='action=edit')
 	def edit_user(self):
-		"""docstring"""
+		""" This function allows users to update their profiles. """
 		user_id = int(request.params.get('forum_id', -1))
 		entry = UserRecordService.by_id(user_id)
 		if entry:
