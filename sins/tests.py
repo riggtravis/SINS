@@ -46,13 +46,32 @@ class SinsViewTests(unittest.TestCase):
 	#		edit_topic
 	#	PostActions
 	#		create_post
+	#		edit_post
 	
 	# management
+	#	ManagementViews
+	#		view_management
+	#	ManagementActions
+	#		create_group
+	#		edit_group
+	#	PermissionActions
+	#		create_permission
 	
 	# participant
+	#	ParticipantViews
+	#		profile
+	#		sign_in_out
+	#		promote
+	#	BanActions
+	#		ban
+	#		edit_ban
+	#	UserEditActions
+	#		create_user
+	#		edit_user
 	
 	# view_base
-	
+	#	ViewBase
+	#		__init__
 
 # We have service classes with functions that need to be tested.
 # There is one service class for every model. All service models have the
@@ -60,42 +79,85 @@ class SinsViewTests(unittest.TestCase):
 #	all
 #	by_id
 
+# All of this will need to be reviewed.
+# I think it is safe to say that testing by route would be a safe way to go.
+# It might be worth it just to clear all of this out and start over.
 class SinsFunctionalTests(unittest.TestCase):
-	"""docstring"""
-	def setUp(self):
-		"""docstring"""
-		from sins import main
-		from webtest import TestApp
-		
-		app = main({})
-		self.testapp = TestApp(app)
+	# home
 	
-	# Just like the unit tests, functional tests will need to test different
-	# functionalities. These functionalities include:
-	#	category
-	def test_home(self):
-		"""docstring"""
-		page = self.testapp.get('/', status=200)
-		self.assertIn(b'<title>Welcome!', page.head)
-
-	# Test all of the forum actions.
-	def test_create(self):
-		"""docstring"""
-		
+	# user_action
+	#	create_user
+	#	edit_user
+	#		valid user
+	#		invalid user
 	
-	def test_edit(self):
-		"""docstring"""
-		
+	# user
+	#	valid user
+	#	invalid user
 	
-	#	discussion
-	#	participant
-	# Test to see if the authentification messages are being displayed correctly
-	def test_login(self):
-		"""docstring"""
-		page = self.testapp.get('/sign/in', status=200)
-		self.assertIn(b'<title>Sign In', page.head)
+	# auth
+	#	in
+	#	out
 	
-	def test_logout(self):
-		"""docstring"""
-		page = self.testapp.get('/sighn/out', status=200)
-		self.assertIn(b'Successfully logged out', page.body)
+	# ban_action
+	#	create ban
+	#		valid user
+	#		invalid user
+	#	edit_ban
+	#		valid user
+	#		invalid user
+	
+	# ban
+	#	valid ban
+	#	invalid ban
+	
+	# forum_action
+	#	create forum
+	#	edit forum
+	#		valid forum
+	#		invalid forum
+	
+	# forum
+	#	valid forum
+	#	invalid forum
+	
+	# group_action
+	#	create group
+	#	edit group
+	#		valid group
+	#		invalid group
+	
+	# membership_action
+	#	create
+	# membership
+	#	valid user/group combo
+	#	invalid user/group combo
+	
+	# For the test list I am assuming that I am not creating power actions
+	# within the app.
+	
+	# power
+	#	valid power
+	#	invalid power
+	
+	# permission action
+	#	create
+	# permission
+	#	valid user/group combo
+	#	invalid user/group combo
+	
+	# post action
+	#	create
+	#		valid topic
+	#		invalid topic
+	#	edit
+	#		valid post
+	#		invalid post
+	
+	# topic action
+	#	create
+	#		valid forum
+	#		invalid forum
+	#	edit
+	#		valid topic
+	#		invalid topic

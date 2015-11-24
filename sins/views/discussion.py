@@ -100,7 +100,7 @@ class TopicEditActions(ViewBase):
 				return HTTPFound(location=self.request.route_url(
 					'topic',
 					topic_id=entry.topic_id,
-					slug=entry.slug
+					slug=entry.slug()
 				))
 			else:
 				# Users who are members of groups with the power to do so should be
@@ -195,7 +195,7 @@ class PostActions(ViewBase):
 				return HTTPFound(location=self.request.route_url(
 						'topic',
 						topic_id=topic.topic_id,
-						slug=topic.slug
+						slug=topic.slug()
 					)
 				)
 			else:

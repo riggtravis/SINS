@@ -109,6 +109,9 @@ def main(global_config, **settings):
  #     # ###### #    # #####  ###### #    #  ####  #    # # #          #####  #     #  #####  ######  
 	##############################
 	config.add_route('membership_action', 'membership/{action}')
+	
+	# I'm not convinced that the membership route makes sense or that it will be
+	# included in the final version of this.
 	config.add_route('membership', 'membership/{user_id:\d+}/{group_id:\d+}')
 	
  ######                                  #####  ######  #     # ######  
@@ -165,7 +168,7 @@ def main(global_config, **settings):
     #    #    # #      # #    #    #     # #    #  #     # #     # 
     #     ####  #      #  ####      #####  #     #  #####  ######  
 	##############################
-	config.add_route('topic_action', 'topic/{action}')
+	config.add_route('topic_action', 'topic/{action}/{forum_id:\d+}')
 	config.add_route('topic', 'topic/{topic_id:\d+}/{slug}')
 	
 	###################

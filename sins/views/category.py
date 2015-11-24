@@ -192,7 +192,7 @@ class CategoryEditActions(ViewBase):
 				return HTTPFound(location=request.route_url(
 						'forum',
 						forum_id=entry.forum_id,
-						slug=entry.slug
+						slug=entry.slug()
 					)
 				)
 			else:	# Do all the other stuff we were already doing.

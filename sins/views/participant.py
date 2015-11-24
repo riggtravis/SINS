@@ -59,31 +59,6 @@ class ParticipantViews(ViewBase):
 		# "log in"
 		return {}
 	
-	# I am including the ban view in the participant class because it relates to
-	# participants. A ban is not something that affects forums or posts.
-	@view_config(
-		route_name='ban_action',
-		match_param='action=create',
-		renderer='sins:templates/ban_hammer.mako'
-	)
-	def ban(self):
-		"""docstring"""
-		entry = Ban()
-		form = BanCreateForm()
-		
-		if self.request.method = 'POST' and form.validate:
-			forum_populate.populate_obj(entry)
-			user_id = self.request.matchdict.get('user_id')
-			entry.user_id = user_id
-			DBSession.add(entry)
-			return HTTPFound(location=self.request.route_url(
-					'user', 
-					user_id=user_id
-				)
-			)
-		else:
-			return {'form': form, 'action': request.matchdict,get('action')}
-	
 	# This view is for when a user becomes a member of a group.
 	@view_config(
 		route_name='membership_action',
@@ -132,6 +107,59 @@ class ParticipantViews(ViewBase):
 		else:
 			return HTTPNotFound()
 
+
+ ######                      #                                        
+ #     #   ##   #    #      # #    ####  ##### #  ####  #    #  ####  
+ #     #  #  #  ##   #     #   #  #    #   #   # #    # ##   # #      
+ ######  #    # # #  #    #     # #        #   # #    # # #  #  ####  
+ #     # ###### #  # #    ####### #        #   # #    # #  # #      # 
+ #     # #    # #   ##    #     # #    #   #   # #    # #   ## #    # 
+ ######  #    # #    #    #     #  ####    #   #  ####  #    #  ####  
+@view_defaults(
+	route_name='ban_action',
+	renderer='sins:templates/ban_hammer.mako'
+)
+class BanActions(ViewBase):
+	@view_config(
+		route_name='ban_action',
+		match_param='action=create',
+		renderer='sins:templates/ban_hammer.mako'
+	)
+	def ban(self):
+		"""docstring"""
+		entry = Ban()
+		form = BanCreateForm()
+		
+		if self.request.method = 'POST' and form.validate:
+			forum_populate.populate_obj(entry)
+			user_id = self.request.matchdict.get('user_id')
+			entry.user_id = user_id
+			DBSession.add(entry)
+			return HTTPFound(location=self.request.route_url(
+					'user', 
+					user_id=user_id
+					slug=entry.user.slug()
+				)
+			)
+		else:
+			return {'form': form, 'action': request.matchdict,get('action')}
+	
+	def edit_ban(self):
+		"""docstring"""
+		ban_id = int(request.params.get('forum_id', -1))
+		entry = BanRecordService.by_id(ban_id)
+		if entry:
+			form = BanUpdateForm(request.POST, entry)
+			if request.method == 'POST' and form.validate():
+				form.populate_obj(entry)
+				return HTTPFound(location=request.route_url(
+						'user',
+						user_id=entry.user_id,
+						slug=entry.user.slug()
+					)
+				)
+	
+
 ##############################
  #     #                         #######                   #     #                        
  #     #  ####  ###### #####     #       #####  # #####    #     # # ###### #    #  ####  
@@ -159,7 +187,7 @@ class UserEditActions(ViewBase):
 			return HTTPFound(location=self.request.route_url(
 					'user',
 					user_id=entry.user_id,
-					slug=entry.slug
+					slug=entry.slug()
 				)
 			)
 		else:
@@ -180,7 +208,7 @@ class UserEditActions(ViewBase):
 				return HTTPFound(location=request.route_url(
 						'user',
 						user_id=entry.user_id,
-						slug=entry.slug
+						slug=entry.slug()
 					)
 				)
 			else:

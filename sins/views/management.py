@@ -6,6 +6,14 @@ from ..models.meta import DBSession
 from ..models.group import Group
 from ..models.services.group import GroupRecordService
 
+
+ #     #                                                                  #     #                        
+ ##   ##   ##   #    #   ##    ####  ###### #    # ###### #    # #####    #     # # ###### #    #  ####  
+ # # # #  #  #  ##   #  #  #  #    # #      ##  ## #      ##   #   #      #     # # #      #    # #      
+ #  #  # #    # # #  # #    # #      #####  # ## # #####  # #  #   #      #     # # #####  #    #  ####  
+ #     # ###### #  # # ###### #  ### #      #    # #      #  # #   #       #   #  # #      # ## #      # 
+ #     # #    # #   ## #    # #    # #      #    # #      #   ##   #        # #   # #      ##  ## #    # 
+ #     # #    # #    # #    #  ####  ###### #    # ###### #    #   #         #    # ###### #    #  ####  
 @view_defaults(renderer='sins:templates/group.mako', route_name='group')
 class ManagementViews(ViewBase):
 	"""docstring"""
@@ -18,7 +26,20 @@ class ManagementViews(ViewBase):
 		if group:
 			return {'group': group}
 
-@view_defaults(route_name='group_action')
+
+
+ #     #                                                                  #######                      #                                        
+ ##   ##   ##   #    #   ##    ####  ###### #    # ###### #    # #####    #       #####  # #####      # #    ####  ##### #  ####  #    #  ####  
+ # # # #  #  #  ##   #  #  #  #    # #      ##  ## #      ##   #   #      #       #    # #   #       #   #  #    #   #   # #    # ##   # #      
+ #  #  # #    # # #  # #    # #      #####  # ## # #####  # #  #   #      #####   #    # #   #      #     # #        #   # #    # # #  #  ####  
+ #     # ###### #  # # ###### #  ### #      #    # #      #  # #   #      #       #    # #   #      ####### #        #   # #    # #  # #      # 
+ #     # #    # #   ## #    # #    # #      #    # #      #   ##   #      #       #    # #   #      #     # #    #   #   # #    # #   ## #    # 
+ #     # #    # #    # #    #  ####  ###### #    # ###### #    #   #      ####### #####  #   #      #     #  ####    #   #  ####  #    #  ####  
+
+@view_defaults(
+	route_name='group_action', 
+	renderer='sins:templates/edit_group.mako'
+)
 class ManagementActions(ViewBase):
 	"""docstring"""
 	
@@ -49,12 +70,32 @@ class ManagementActions(ViewBase):
 		group_id = int(request.params.get('forum_id', -1))
 		entry = GroupRecordService.by_id(group_id)
 		if entry:
-			group = GroupUpdateForm(request.POST, entry)
+			form = GroupUpdateForm(request.POST, entry)
+			
+			# I need to do that thing where I validate the form.
+			if request.method == 'POST' and form.validate():
+				form.populate_obj(entry)
+				return HTTPFound(location=request.route_url(
+						'group',
+						groupd_id=entry.groupd_id,
+						slug=entry.slug()
+					)
+				)
+			
+			# The return only runs if the form doesn't validate.
+			else:
+				return {'form': form, 'action': self.request.matchdict('action')}
 		else:
 			return HTTPNotFound()
-		return {'form': form, 'action': self.request.matchdict('action')}
 	
-	# Delete
+
+ ######                                                             #                                        
+ #     # ###### #####  #    # #  ####   ####  #  ####  #    #      # #    ####  ##### #  ####  #    #  ####  
+ #     # #      #    # ##  ## # #      #      # #    # ##   #     #   #  #    #   #   # #    # ##   # #      
+ ######  #####  #    # # ## # #  ####   ####  # #    # # #  #    #     # #        #   # #    # # #  #  ####  
+ #       #      #####  #    # #      #      # # #    # #  # #    ####### #        #   # #    # #  # #      # 
+ #       #      #   #  #    # # #    # #    # # #    # #   ##    #     # #    #   #   # #    # #   ## #    # 
+ #       ###### #    # #    # #  ####   ####  #  ####  #    #    #     #  ####    #   #  ####  #    #  ####  
 
 # Add the permission view to this to this file. I have chosen to include the
 # permission view with this class because it is something that is given to
