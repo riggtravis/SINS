@@ -8,18 +8,6 @@ from .models import DBSession
 """ Tests
 Classes:
 
-* SinsViewTests
-** Used to test the various views.
-
-* SinsScriptTests
-** Used to test the scripts.
-
-* SinsModelTests
-** Used to test the various models.
-
-* SinsServiceTests
-** Used to test the model services.
-
 * SinsFunctionalTests
 ** Used to test the entire application.
 
@@ -31,217 +19,385 @@ Classes:
 # this file that can stay is headings for the packages and the functional
 # testing class frame that is already here.
 
- #     #                                                     
- #     # # ###### #    #    ##### ######  ####  #####  ####  
- #     # # #      #    #      #   #      #        #   #      
- #     # # #####  #    #      #   #####   ####    #    ####  
-  #   #  # #      # ## #      #   #           #   #        # 
-   # #   # #      ##  ##      #   #      #    #   #   #    # 
-    #    # ###### #    #      #   ######  ####    #    ####  
-class SinsViewTests(unittest.TestCase):
-	""" These tests are used to test the functions contained in views. """
-	def setUp(self):
-		""" This function gets the test suite ready.
-		
-		Parameters:
-		* self -- The object that is having this method called from.
-		
-		Side effects:
-		A unit is ready to be tested.
-		
-		"""
-		self.config = testing.setUp()
-		
-	def tearDown(self):
-		""" This cleans all of the things that were done for testing.
-		
-		Parameters:
-		* self -- The object that is having this method called from.
-		
-		Side effects:
-		Any side effects created or left by the last unit test that was
-		performed are cleaned up so that the next unit test can be performed in
-		the same sterile environment the last one was.
-		
-		"""
-		testing.tearDown()
-		
-	# Here is the list of view files:
-	
-	# category
-	#	CategoryViews
-	#		home
-	#		view_category
-	#	CategoryEditActions
-	#		create_forum
-	#		edit_forum
-	
-	# discussion
-	#	DiscussionViews
-	#		view_discussion
-	#	TopicEditActions
-	#		create_topic
-	#		edit_topic
-	#	PostActions
-	#		create_post
-	#		edit_post
-	
-	# management
-	#	ManagementViews
-	#		view_management
-	#	ManagementActions
-	#		create_group
-	#		edit_group
-	#	PermissionActions
-	#		create_permission
-	
-	# participant
-	#	ParticipantViews
-	#		profile
-	#		sign_in_out
-	#		promote
-	#	BanActions
-	#		ban
-	#		edit_ban
-	#	UserEditActions
-	#		create_user
-	#		edit_user
-	
-	# view_base
-	#	ViewBase
-	#		__init__
 
+  #####                     #     #                   #######                            
+ #     # # #    #  ####     #     # #    # # #####       #    ######  ####  #####  ####  
+ #       # ##   # #         #     # ##   # #   #         #    #      #        #   #      
+  #####  # # #  #  ####     #     # # #  # #   #         #    #####   ####    #    ####  
+       # # #  # #      #    #     # #  # # #   #         #    #           #   #        # 
+ #     # # #   ## #    #    #     # #   ## #   #         #    #      #    #   #   #    # 
+  #####  # #    #  ####      #####  #    # #   #         #    ######  ####    #    ####  
 
-  #####                                  #######                            
- #     #  ####  #####  # #####  #####       #    ######  ####  #####  ####  
- #       #    # #    # # #    #   #         #    #      #        #   #      
-  #####  #      #    # # #    #   #         #    #####   ####    #    ####  
-       # #      #####  # #####    #         #    #           #   #        # 
- #     # #    # #   #  # #        #         #    #      #    #   #   #    # 
-  #####   ####  #    # # #        #         #    ######  ####    #    ####  
-class SinsScriptTests(unittest.TestCase):
-	""" This class tests the scripts that help prepare SINS. """
-	
+ #######                         #     #                   #######                            
+ #        ####  #####  #    #    #     # #    # # #####       #    ######  ####  #####  ####  
+ #       #    # #    # ##  ##    #     # ##   # #   #         #    #      #        #   #      
+ #####   #    # #    # # ## #    #     # # #  # #   #         #    #####   ####    #    ####  
+ #       #    # #####  #    #    #     # #  # # #   #         #    #           #   #        # 
+ #       #    # #   #  #    #    #     # #   ## #   #         #    #      #    #   #   #    # 
+ #        ####  #    # #    #     #####  #    # #   #         #    ######  ####    #    ####  
+class FormsTests(unittest.TestCase):
+	# Normally I wouldn't write the same function over and over again for
+	# different classes. Instead I would usually have subclasses. However,
+	# because I want my unit tests to be fully self contained, I want to make
+	# sure that none of it interferes. So each class will have their own setUp()
+	# and tearDown() functions.
 	def setUp(self):
-		""" This function prepares the class to perform tests. """
 		self.config = testing.setUp()
 	
 	def tearDown(self):
-		""" This function cleans up anything that can interfere with tests. """
 		testing.tearDown()
-	
-	# There are two scripts that need to be tested in initializedb:
-	#	usage
-	#	main
 
-
- #     #                                #######                            
- ##   ##  ####  #####  ###### #            #    ######  ####  #####  ####  
- # # # # #    # #    # #      #            #    #      #        #   #      
- #  #  # #    # #    # #####  #            #    #####   ####    #    ####  
- #     # #    # #    # #      #            #    #           #   #        # 
- #     # #    # #    # #      #            #    #      #    #   #   #    # 
- #     #  ####  #####  ###### ######       #    ######  ####    #    ####  
-class SinsModelTests(unittest.TestCase):
-	""" This class tests the models SINS depends on. """
-	
+class BanCreateTests(unittest.TestCase):
 	def setUp(self):
-		""" This function prepares the class for testing. """
 		self.config = testing.setUp()
 	
 	def tearDown(self):
-		""" This function cleans up anything that can interfere with tests. """
 		testing.tearDown()
-	
-	# There are several models but not all of them have functions. This may
-	# change so it is worth listing all of the models.
-	
-	#	ban
-	#		start_in_words
-	#		end_in_words
-	
-	#	forum
-	#		slug
-	
-	#	group
-	#		slug
-	
-	#	membership
-	
-	#	permission
-	
-	#	post
-	#		posted_in_words
-	
-	#	power
-	#		slug
-	
-	#	topic
-	#		start_in_words
-	#		slug
-	
-	#	user
-	#		joined_in_words
-	#		slug
 
-
-  #####                                          #######                            
- #     # ###### #####  #    # #  ####  ######       #    ######  ####  #####  ####  
- #       #      #    # #    # # #    # #            #    #      #        #   #      
-  #####  #####  #    # #    # # #      #####        #    #####   ####    #    ####  
-       # #      #####  #    # # #      #            #    #           #   #        # 
- #     # #      #   #   #  #  # #    # #            #    #      #    #   #   #    # 
-  #####  ###### #    #   ##   #  ####  ######       #    ######  ####    #    ####  
-
-# We have service classes with functions that need to be tested. There is one
-# service class for every model. Not all of these service classes are fully
-# fleched out yet, but they should still be listed for when they grow.
-class SinsServiceTests(unittest.TestCase):
-	""" This class tests our model services. """
-	
+class BanUpdateTests(unittest.TestCase):
 	def setUp(self):
-		""" This function prepares the class for testing. """
 		self.config = testing.setUp()
 	
 	def tearDown(self):
-		""" This test cleans up for future testing. """
 		testing.tearDown()
+
+class ForumCreateTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
 	
-	# ban
-	#	all
-	#	by_id
-	#	get_paginator
-	#		get_paginator has a sub-function. I'm not sure this can be tested.
+	def tearDown(self):
+		testing.tearDown()
+
+class ForumUpdateTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
 	
-	# forum
-	#	all
-	#	by_id
-	#	by_parent
+	def tearDown(self):
+		testing.tearDown()
+
+class GroupCreateTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
 	
-	# group
-	#	all
-	#	by_id
+	def tearDown(self):
+		testing.tearDown()
+
+class GroupUpdateTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
 	
-	# membership
+	def tearDown(self):
+		testing.tearDown()
+
+class MembershipCreateTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
 	
-	# permission
+	def tearDown(self):
+		testing.tearDown()
+
+class PermissionCreateTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
 	
-	# post
-	#	all
-	#	by_id
-	#	get_paginator
+	def tearDown(self):
+		testing.tearDown()
+
+class PostCreateTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
 	
-	# power
-	#	all
-	#	by_id
+	def tearDown(self):
+		testing.tearDown()
+
+class PostUpdateTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
 	
-	# topic
-	#	all
-	#	by_id
-	#	get_paginator
+	def tearDown(self):
+		testing.tearDown()
+
+class TopicCreateTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
 	
-	# user
-	#	by_id
+	def tearDown(self):
+		testing.tearDown()
+
+class TopicUpdateTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class UserCreateTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class UserUpdateTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+ #     #                                #     #                   #######                            
+ ##   ##  ####  #####  ###### #         #     # #    # # #####       #    ######  ####  #####  ####  
+ # # # # #    # #    # #      #         #     # ##   # #   #         #    #      #        #   #      
+ #  #  # #    # #    # #####  #         #     # # #  # #   #         #    #####   ####    #    ####  
+ #     # #    # #    # #      #         #     # #  # # #   #         #    #           #   #        # 
+ #     # #    # #    # #      #         #     # #   ## #   #         #    #      #    #   #   #    # 
+ #     #  ####  #####  ###### ######     #####  #    # #   #         #    ######  ####    #    ####  
+
+class BanModelTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class ForumModelTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class GroupModelTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class MembershipModelTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class MetaTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class PermissionModelTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class PostModelTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class PowerModelTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class TopicModelTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class UserModelTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+  #####                                                 #     #                   #######                            
+ #     # ###### #####  #    # #  ####  ######  ####     #     # #    # # #####       #    ######  ####  #####  ####  
+ #       #      #    # #    # # #    # #      #         #     # ##   # #   #         #    #      #        #   #      
+  #####  #####  #    # #    # # #      #####   ####     #     # # #  # #   #         #    #####   ####    #    ####  
+       # #      #####  #    # # #      #           #    #     # #  # # #   #         #    #           #   #        # 
+ #     # #      #   #   #  #  # #    # #      #    #    #     # #   ## #   #         #    #      #    #   #   #    # 
+  #####  ###### #    #   ##   #  ####  ######  ####      #####  #    # #   #         #    ######  ####    #    ####  
+class BanServiceTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class ForumServiceTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class GroupServiceTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class MembershipServiceTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class PermissionServiceTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class PostServiceTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class PowerServiceTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class TopicServiceTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class UserServiceTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+  #####                                         #     #                   #######                            
+ #     #  ####  #####  # #####  #####  ####     #     # #    # # #####       #    ######  ####  #####  ####  
+ #       #    # #    # # #    #   #   #         #     # ##   # #   #         #    #      #        #   #      
+  #####  #      #    # # #    #   #    ####     #     # # #  # #   #         #    #####   ####    #    ####  
+       # #      #####  # #####    #        #    #     # #  # # #   #         #    #           #   #        # 
+ #     # #    # #   #  # #        #   #    #    #     # #   ## #   #         #    #      #    #   #   #    # 
+  #####   ####  #    # # #        #    ####      #####  #    # #   #         #    ######  ####    #    ####  
+class InitializedbTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+
+ #     #                           #     #                   #######                            
+ #     # # ###### #    #  ####     #     # #    # # #####       #    ######  ####  #####  ####  
+ #     # # #      #    # #         #     # ##   # #   #         #    #      #        #   #      
+ #     # # #####  #    #  ####     #     # # #  # #   #         #    #####   ####    #    ####  
+  #   #  # #      # ## #      #    #     # #  # # #   #         #    #           #   #        # 
+   # #   # #      ##  ## #    #    #     # #   ## #   #         #    #      #    #   #   #    # 
+    #    # ###### #    #  ####      #####  #    # #   #         #    ######  ####    #    ####  
+class CategoryViewsTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class CategoryEditActions(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class DiscussionViewsTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class TopicEditActionsTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class PostEditActionsTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class ManagementViewsTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class ManagementEditActionsTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class PermissionEditActionsTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class ParticipantViewsTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class UserEditActionsTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class BanEditActionsTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
+
+class ViewBaseTests(unittest.TestCase):
+	def setUp(self):
+		self.config = testing.setUp()
+	
+	def tearDown(self):
+		testing.tearDown()
 
  #######                                                             #######                            
  #       #    # #    #  ####  ##### #  ####  #    #   ##   #            #    ######  ####  #####  ####  
@@ -336,6 +492,6 @@ class SinsFunctionalTests(unittest.TestCase):
 	#		valid topic
 	#		invalid topic
 
-# This if conditional allows the tests to be ran from the command line.
+# This if conditional allows the tests to be run from the command line.
 if __name__ = "__main__":
 	unittest.main()
