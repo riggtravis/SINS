@@ -25,11 +25,11 @@ Classes:
 
 """
 
-# I'm not clear on how this testing suite works. I'll have to either learn it or
-# convert this whole thing to nose tests
-
-# I think this class is no longer needed.
-
+# Apparently every test class for unit testing should only test one class that
+# needs to have unit tests performed on it. This is going to a semi major
+# rearrangment of code. In fact it would be fair to say that the only portion of
+# this file that can stay is headings for the packages and the functional
+# testing class frame that is already here.
 
  #     #                                                     
  #     # # ###### #    #    ##### ######  ####  #####  ####  
@@ -41,11 +41,29 @@ Classes:
 class SinsViewTests(unittest.TestCase):
 	""" These tests are used to test the functions contained in views. """
 	def setUp(self):
-		""" This function gets the test suite ready. """
+		""" This function gets the test suite ready.
+		
+		Parameters:
+		* self -- The object that is having this method called from.
+		
+		Side effects:
+		A unit is ready to be tested.
+		
+		"""
 		self.config = testing.setUp()
 		
 	def tearDown(self):
-		""" This cleans all of the things that were done for testing. """
+		""" This cleans all of the things that were done for testing.
+		
+		Parameters:
+		* self -- The object that is having this method called from.
+		
+		Side effects:
+		Any side effects created or left by the last unit test that was
+		performed are cleaned up so that the next unit test can be performed in
+		the same sterile environment the last one was.
+		
+		"""
 		testing.tearDown()
 		
 	# Here is the list of view files:

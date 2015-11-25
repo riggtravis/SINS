@@ -165,6 +165,17 @@ class UserEditActions(ViewBase):
 		entry = UserRecordService.by_id(user_id)
 		if entry:
 			form = UserUpdateForm(self.request.POST, entry)
+			if form.avatar.data:
+				image_data = request.FILES[form.avatar.name].read()
+				
+				# This is where the user's avatar gets saved to the filesystem.
+				# I need to find a way to save the image to a randomly generated
+				# seven character filename and then to save it to the user's
+				# entry in the database.
+				open(os.path.join(UPLOAD_PATH, form.avatar.data), 'w').write(
+					image_data
+				)
+			
 			if request.method == 'POST' and form.validate():
 				form.populate_obj(entry)
 				return HTTPFound(location=request.route_url(

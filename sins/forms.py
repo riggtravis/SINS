@@ -74,7 +74,16 @@ Functions:
 
 # strip_filter = lambda x: x.strip() if x else None
 def strip_filter(x):
-	""" This function is used to strip whitespace from forms. """
+	""" This function is used to strip whitespace from forms.
+	
+	Arguments:
+	x -- A string that will be stripped
+	
+	Returns:
+	If x contains anything, a stripped version of that something.
+	Otherwise it returns the None value.
+	
+	"""
 	
 	# This can be written without an else block as
 	#
@@ -366,8 +375,8 @@ class UserCreateForm(Form):
 class UserUpdateForm(UserCreateForm):
 	""" This for is used when a user updates their profile. """
 	
-	user_id = HiddenField()
-	username = HiddenField()
+	user_id		= HiddenField()
+	username	= HiddenField()
 	
 	# Instead of a text form for the avatar, I need a way to upload a file.
 	avatar = FileField('Avatar', [validators.regexp('^[^/\\]\.png$')])
@@ -377,6 +386,9 @@ class UserUpdateForm(UserCreateForm):
 	# wearing a disquise.
 	def validate_image(form, field):
 		""" This function ensures that images are okay. """
+		# I need to document this function better, but the clarity of what it
+		# does is not at a level where I can comfortably do so.
+		
 		if field.data:
 			field.data = re.sub('[^a-z0-9_.-]', '_', field.data)
 
