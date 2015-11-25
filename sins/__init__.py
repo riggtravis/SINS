@@ -6,8 +6,29 @@ from .models.meta import (
     Base
 )
 
+""" SINS package 
+
+Subpackages:
+* models
+* scripts
+* views
+
+Modules:
+* forms
+* tests
+
+"""
 def main(global_config, **settings):
-    """ This function returns a Pyramid WSGI application. """
+    """ This function returns a Pyramid WSGI application.
+	
+	Parameters:
+	* global_config	-- Learn more about what global_config does.
+	* settings		-- Settings for setting up the application.
+	
+	Returns:
+	A Pyramid WSGI application
+	
+	"""
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine

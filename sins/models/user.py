@@ -41,7 +41,7 @@ class User(Base):
 	
 	# Attributes
 	password = Column(CHAR(256), nullable=False)
-	avatar = Column(CHAR(5))
+	avatar = Column(CHAR(7))
 	signature = Column(UnicodeText)
 	bio = Column(UnicodeText)
 	join_date = Column(DateTime, nullable=False)

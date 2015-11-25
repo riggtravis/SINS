@@ -7,3 +7,22 @@ from .post import Post
 from .power import Power
 from .topic import Topic
 from .user import User
+
+""" Models package 
+
+Subpackages:
+* services
+
+Modules:
+* ban
+* forum
+* group
+* membership
+* meta
+* permission
+* post
+* power
+* topic
+* user
+
+"""
