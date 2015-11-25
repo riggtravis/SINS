@@ -71,7 +71,7 @@ class CategoryViews(ViewBase):
 		forums = ForumRecordService.by_parent(None)
 		
 		# return the landing page populated with those forums.
-		return {'forums': forums, 'title_message': "Welcome!", 'topics': None}
+		return {'forums': forums, 'title_message': 'Welcome!', 'topics': None}
 	
 	# I need a function for viewing a forum instead of the forum index.
 	@view_config(rout_name='forum')

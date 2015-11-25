@@ -80,7 +80,7 @@ def strip_filter(x):
 	x -- A string that will be stripped
 	
 	Returns:
-	If x contains anything, a stripped version of that something.
+	If x is a string, x without trailing or leading whitespace
 	Otherwise it returns the None value.
 	
 	"""
@@ -374,6 +374,8 @@ class UserCreateForm(Form):
 # This of updates as customizing a user's profile.
 class UserUpdateForm(UserCreateForm):
 	""" This for is used when a user updates their profile. """
+	
+	# I need to validate that the username doesn't contain any whitespace at all
 	
 	user_id		= HiddenField()
 	username	= HiddenField()

@@ -17,7 +17,7 @@ Classes:
 * TopicEditActions
 ** This class provides methods for editing and creating discussion topics.
 
-* PostActions
+* PostEditActions
 ** This class provides methods for posting and editing messages.
 
 """

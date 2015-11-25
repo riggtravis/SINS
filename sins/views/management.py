@@ -15,7 +15,7 @@ Classes:
 * ManagementEditActions
 ** This class allows the creation and modification of management groups.
 
-* PermissionActions
+* PermissionEditActions
 ** This class allows powers to be given to to a management group.
 
 """
@@ -102,13 +102,14 @@ class ManagementEditActions(ViewBase):
 			return HTTPNotFound()
 	
 
- ######                                                             #                                        
- #     # ###### #####  #    # #  ####   ####  #  ####  #    #      # #    ####  ##### #  ####  #    #  ####  
- #     # #      #    # ##  ## # #      #      # #    # ##   #     #   #  #    #   #   # #    # ##   # #      
- ######  #####  #    # # ## # #  ####   ####  # #    # # #  #    #     # #        #   # #    # # #  #  ####  
- #       #      #####  #    # #      #      # # #    # #  # #    ####### #        #   # #    # #  # #      # 
- #       #      #   #  #    # # #    # #    # # #    # #   ##    #     # #    #   #   # #    # #   ## #    # 
- #       ###### #    # #    # #  ####   ####  #  ####  #    #    #     #  ####    #   #  ####  #    #  ####  
+
+ ######                                                          #######                      #                                        
+ #     # ###### #####  #    # #  ####   ####  #  ####  #    #    #       #####  # #####      # #    ####  ##### #  ####  #    #  ####  
+ #     # #      #    # ##  ## # #      #      # #    # ##   #    #       #    # #   #       #   #  #    #   #   # #    # ##   # #      
+ ######  #####  #    # # ## # #  ####   ####  # #    # # #  #    #####   #    # #   #      #     # #        #   # #    # # #  #  ####  
+ #       #      #####  #    # #      #      # # #    # #  # #    #       #    # #   #      ####### #        #   # #    # #  # #      # 
+ #       #      #   #  #    # # #    # #    # # #    # #   ##    #       #    # #   #      #     # #    #   #   # #    # #   ## #    # 
+ #       ###### #    # #    # #  ####   ####  #  ####  #    #    ####### #####  #   #      #     #  ####    #   #  ####  #    #  ####  
 
 # Add the permission view to this to this file. I have chosen to include the
 # permission view with this class because it is something that is given to
@@ -118,7 +119,7 @@ class ManagementEditActions(ViewBase):
 	match_param='action=create',
 	renderer='sins:templates/permission_slip.mako'
 )
-class PermissionActions(ViewBase):
+class PermissionEditActions(ViewBase):
 	""" This class allows us to give groups powers. """
 	
 	# Create
