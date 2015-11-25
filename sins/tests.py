@@ -28,6 +28,10 @@ Classes:
  #     # # #   ## #    #    #     # #   ## #   #         #    #      #    #   #   #    # 
   #####  # #    #  ####      #####  #    # #   #         #    ######  ####    #    ####  
 
+# It might be necessary to set up a unit test for the main function of the
+# sins package. However, I don't think this will be necessary, as this is
+# covered by the functional tests.
+
  #######                         #     #                   #######                            
  #        ####  #####  #    #    #     # #    # # #####       #    ######  ####  #####  ####  
  #       #    # #    # ##  ##    #     # ##   # #   #         #    #      #        #   #      
@@ -46,50 +50,87 @@ class FormsTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
+	def test_strip_filter_with_whitespace_string(self):
+		from .forms import strip_filter
+		
+		self.assertEqual(strip_filter(" whitespace "), "whitespace")
+	
+	def test_strip_filter_with_no_whitespace_string(self):
+		from .forms import strip_filter
+		
+		self.assertEqual(strip_filter(string), "no whitespace")
+	
+	def test_strip_filter_with_nothing(self):
+		from .forms import strip_filter
+		
+		self.assertEqual(strip_filter(None), None)
+		self.assertEqual(strip_filter(""), None)
+		self.assertEqual(strip_filter(False), None)
+		self.assertEqual(strip_filter(0), None)
+		self.assertEqual(strip_filter([]), None)
+		self.assertEqual(strip_filter({}), None)
+	
 
 class BanCreateTests(unittest.TestCase):
+	# I don't know a ton about WTForms' types. This test class will need to be
+	# expanded later. It should be fine though because there is no function
+	# associated with this class. I will come back to this after looking over
+	# how the BanCreateForm is used in real life.
 	def setUp(self):
 		self.config = testing.setUp()
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class BanUpdateTests(unittest.TestCase):
+	# See BanCreateTests
 	def setUp(self):
 		self.config = testing.setUp()
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class ForumCreateTests(unittest.TestCase):
+	# See BanCreateTests
 	def setUp(self):
 		self.config = testing.setUp()
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class ForumUpdateTests(unittest.TestCase):
+	# See BanCreateTests
 	def setUp(self):
 		self.config = testing.setUp()
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class GroupCreateTests(unittest.TestCase):
+	# See BanCreateTests
 	def setUp(self):
 		self.config = testing.setUp()
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class GroupUpdateTests(unittest.TestCase):
+	# See BanCreateTests
 	def setUp(self):
 		self.config = testing.setUp()
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class MembershipCreateTests(unittest.TestCase):
+	# See BanCreateTests
 	def setUp(self):
 		self.config = testing.setUp()
 	
@@ -97,34 +138,43 @@ class MembershipCreateTests(unittest.TestCase):
 		testing.tearDown()
 
 class PermissionCreateTests(unittest.TestCase):
+	# See BanCreateTests
 	def setUp(self):
 		self.config = testing.setUp()
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class PostCreateTests(unittest.TestCase):
+	# See BanCreateTests
 	def setUp(self):
 		self.config = testing.setUp()
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class PostUpdateTests(unittest.TestCase):
+	# See BanCreateTests
 	def setUp(self):
 		self.config = testing.setUp()
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class TopicCreateTests(unittest.TestCase):
+	# See BanCreateTests
 	def setUp(self):
 		self.config = testing.setUp()
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class TopicUpdateTests(unittest.TestCase):
+	# See BanCreateTests
 	def setUp(self):
 		self.config = testing.setUp()
 	
@@ -132,11 +182,13 @@ class TopicUpdateTests(unittest.TestCase):
 		testing.tearDown()
 
 class UserCreateTests(unittest.TestCase):
+	# See BanCreateTests
 	def setUp(self):
 		self.config = testing.setUp()
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class UserUpdateTests(unittest.TestCase):
 	def setUp(self):
@@ -144,6 +196,11 @@ class UserUpdateTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
+	def test_validate_image(self):
+		# I am not sure what the .data attribute of the field parameter
+		# represents. re.sub() appears to do something with regular expressions.
+	
 
  #     #                                #     #                   #######                            
  ##   ##  ####  #####  ###### #         #     # #    # # #####       #    ######  ####  #####  ####  
@@ -159,6 +216,27 @@ class BanModelTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
+	def test_start_in_words(self):
+		from .models.ban import Ban
+		
+		test_ban = Ban()
+		
+		# We need to set the start_date attribute.
+		test_ban.start_date = datetime.utcnow()
+		
+		# I'm working too hard. Just check to see if it works by year.
+		test_ban.start_date.year = test_ban.start_date.year - 1
+		self.assertEqual(test_ban.start_in_words, "about 1 year")
+	
+	def test_end_in_words(self):
+		from .models.ban import Ban
+		
+		test_ban = Ban()
+		test_ban.end_date = datetime.utcnow()
+		test_ban.end_date.year = test_ban.end_date.year + 1
+		self.assertEqual(test_ban.end_in_words, "about 1 year")
+	
 
 class ForumModelTests(unittest.TestCase):
 	def setUp(self):
@@ -166,6 +244,14 @@ class ForumModelTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
+	def test_slug(self):
+		from .models.forum import Forum
+		
+		test_forum = Forum()
+		test_forum.title = "Test Title"
+		self.assertEqual(test_forum.slug, "Test Title")
+	
 
 class GroupModelTests(unittest.TestCase):
 	def setUp(self):
@@ -173,27 +259,46 @@ class GroupModelTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
+	def test_slug(self):
+		from .models.group import Group
+		
+		test_group = Group()
+		test_group.title = "Test Title"
+		self.assertEqual(test_group.slug, "Test Title")
+	
 
 class MembershipModelTests(unittest.TestCase):
+	# This class will test to see if certain attributes are behaving as
+	# anticipated. For right now I'm not sure of how to do this, so it will be
+	# left for later.
 	def setUp(self):
 		self.config = testing.setUp()
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class MetaTests(unittest.TestCase):
+	# There are two objects that need to be tested. The DBSession and the Base.
+	# I'm not sure how to test this though. I'm not even sure if it's necessary
+	# because other peopel will have already tested anything we would need to
+	# test with these objects and types.
 	def setUp(self):
 		self.config = testing.setUp()
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class PermissionModelTests(unittest.TestCase):
+	# See MembershipModelTests
 	def setUp(self):
 		self.config = testing.setUp()
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class PostModelTests(unittest.TestCase):
 	def setUp(self):
@@ -201,6 +306,15 @@ class PostModelTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
+	def test_posted_in_words(self):
+		from .models.post import Post
+		
+		test_post = Post()
+		test_post.posted_date = datetime.utcnow()
+		test_post.posted_date.year = test_post.posted_date.year + 1
+		self.assertEqual(test_post.posted_in_words, "about 1 year")
+	
 
 class PowerModelTests(unittest.TestCase):
 	def setUp(self):
@@ -208,6 +322,14 @@ class PowerModelTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
+	def test_slug(self):
+		from .models.power import Power
+		
+		test_power = Power()
+		test_power.title = "Test Title"
+		self.assertEqual(test_power.slug, "Test Title")
+	
 
 class TopicModelTests(unittest.TestCase):
 	def setUp(self):
@@ -215,6 +337,14 @@ class TopicModelTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
+	def test_slug(self):
+		from .models.topic import Topic
+		
+		test_topic = Topic()
+		test_topic.subject = "Test Subject"
+		self.assertEqual(test_topic.slug, "Test Subject")	
+	
 
 class UserModelTests(unittest.TestCase):
 	def setUp(self):
@@ -222,6 +352,22 @@ class UserModelTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
+	def test_joined_in_words(self):
+		from .models.user import User
+		
+		test_user = User()
+		test_user.join_date = datetime.utcnow()
+		test_user.join_date.year = test_user.join_date.year - 1
+		self.assertEqual(test_user.joined_in_words, "about 1 year")
+	
+	def test_slug(self):
+		from .models.user import User
+		
+		test_user = User()
+		test_user.username = "TestUser"
+		self.assertEqual(test_user.slug, "TestUser")
+	
 
   #####                                                 #     #                   #######                            
  #     # ###### #####  #    # #  ####  ######  ####     #     # #    # # #####       #    ######  ####  #####  ####  
@@ -231,11 +377,27 @@ class UserModelTests(unittest.TestCase):
  #     # #      #   #   #  #  # #    # #      #    #    #     # #   ## #   #         #    #      #    #   #   #    # 
   #####  ###### #    #   ##   #  ####  ######  ####      #####  #    # #   #         #    ######  ####    #    ####  
 class BanServiceTests(unittest.TestCase):
+	# In order to test all services I need to have access to the database. I'm
+	# not sure for certain how to do this, but I do know that it is covered in
+	# at least one of the tutorials that I'm following. For right now I'm Just
+	# going to set up a few tests that I will flesh out later.
 	def setUp(self):
 		self.config = testing.setUp()
 	
 	def tearDown(self):
 		testing.tearDown()
+	
+	def test_all(self):
+		from .models.services.ban import BanRecordService
+	
+	def test_by_id(self):
+		from .models.services.ban import BanRecordService
+	
+	def test_get_paginator(self):
+		from .models.services.ban import BanRecordService
+		
+		# I'm not sure how to test url_maker or even if I can.
+	
 
 class ForumServiceTests(unittest.TestCase):
 	def setUp(self):
@@ -243,6 +405,17 @@ class ForumServiceTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
+	def test_all(self):
+		from .models.services.forum import ForumRecordService
+	
+	def test_by_id(self):
+		from .models.services.forum import ForumRecordService
+	
+	def test_by_parent(self):
+		from .models.services.forum import ForumRecordService
+		
+	
 
 class GroupServiceTests(unittest.TestCase):
 	def setUp(self):
@@ -250,20 +423,32 @@ class GroupServiceTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
+	def test_all(self):
+		from .models.services.group import GroupRecordService
+	
+	def test_by_id(self):
+		from .models.services.group import GroupRecordService
+	
 
 class MembershipServiceTests(unittest.TestCase):
+	# Currently the membership service is empty. This is because all membership
+	# access is done through other models.
 	def setUp(self):
 		self.config = testing.setUp()
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class PermissionServiceTests(unittest.TestCase):
+	# See MembershipServiceTests
 	def setUp(self):
 		self.config = testing.setUp()
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class PostServiceTests(unittest.TestCase):
 	def setUp(self):
@@ -271,6 +456,18 @@ class PostServiceTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
+	def test_all(self):
+		from .models.services.post import PostRecordService
+	
+	def test_by_id(self):
+		from .models.services.post import PostRecordService
+	
+	def test_get_paginator(self):
+		from .models.services.post import PostRecordService
+		
+		# I'm not sure how to test url_maker or even if I can.
+	
 
 class PowerServiceTests(unittest.TestCase):
 	def setUp(self):
@@ -278,6 +475,7 @@ class PowerServiceTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class TopicServiceTests(unittest.TestCase):
 	def setUp(self):
@@ -285,6 +483,13 @@ class TopicServiceTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
+	def test_all(self):
+		from .models.services.topic import TopicRecordService
+	
+	def test_by_id(self):
+		from .models.services.topic import TopicRecordService
+	
 
 class UserServiceTests(unittest.TestCase):
 	def setUp(self):
@@ -292,6 +497,13 @@ class UserServiceTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
+	def test_all(self):
+		from .models.services.user import UserRecordService
+	
+	def test_by_id(self):
+		from .models.services.user import UserRecordService
+	
 
   #####                                         #     #                   #######                            
  #     #  ####  #####  # #####  #####  ####     #     # #    # # #####       #    ######  ####  #####  ####  
@@ -306,7 +518,14 @@ class InitializedbTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
-
+	
+	# I'm not sure how to test the two functions of this module.
+	def test_usage(self):
+		from .scripts.initializedb import usage
+	
+	def test_main(self):
+		from .scripts.initializedb import main
+	
 
  #     #                           #     #                   #######                            
  #     # # ###### #    #  ####     #     # #    # # #####       #    ######  ####  #####  ####  
@@ -321,6 +540,22 @@ class CategoryViewsTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
+	def test_home(self):
+		from .views.category import CategoryViews
+		
+		request		= testing.DummyRequest()
+		inst		= CategoryViews(request)
+		response	= inst.home()
+		self.assertEqual('Welcome!', response['title_message'])
+	
+	def test_view_category(self):
+		# The view category has two different branches. In one branch there is
+		# not a valid forum_id so the software returns an HTTPNotFound call. In
+		# the other the landing page for a valid forum is returned. Because I
+		# need to access the database in order to do this, I don't know
+		# *exactly* how to do this.
+	
 
 class CategoryEditActions(unittest.TestCase):
 	def setUp(self):
@@ -328,6 +563,7 @@ class CategoryEditActions(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class DiscussionViewsTests(unittest.TestCase):
 	def setUp(self):
@@ -335,6 +571,7 @@ class DiscussionViewsTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class TopicEditActionsTests(unittest.TestCase):
 	def setUp(self):
@@ -342,6 +579,7 @@ class TopicEditActionsTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class PostEditActionsTests(unittest.TestCase):
 	def setUp(self):
@@ -349,6 +587,7 @@ class PostEditActionsTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class ManagementViewsTests(unittest.TestCase):
 	def setUp(self):
@@ -356,6 +595,7 @@ class ManagementViewsTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class ManagementEditActionsTests(unittest.TestCase):
 	def setUp(self):
@@ -363,6 +603,7 @@ class ManagementEditActionsTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class PermissionEditActionsTests(unittest.TestCase):
 	def setUp(self):
@@ -370,6 +611,7 @@ class PermissionEditActionsTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class ParticipantViewsTests(unittest.TestCase):
 	def setUp(self):
@@ -384,6 +626,7 @@ class UserEditActionsTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class BanEditActionsTests(unittest.TestCase):
 	def setUp(self):
@@ -391,6 +634,7 @@ class BanEditActionsTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
 class ViewBaseTests(unittest.TestCase):
 	def setUp(self):
@@ -398,6 +642,7 @@ class ViewBaseTests(unittest.TestCase):
 	
 	def tearDown(self):
 		testing.tearDown()
+	
 
  #######                                                             #######                            
  #       #    # #    #  ####  ##### #  ####  #    #   ##   #            #    ######  ####  #####  ####  

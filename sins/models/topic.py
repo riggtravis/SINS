@@ -41,22 +41,14 @@ class Topic(Base):
 	forum_id = Column(Integer, ForeignKey('forums.forum_id'), nullable=False)
 	
 	# Attributes
-	start_date = Column(DateTime, nullable=False)
+	# Do I really need the start_date? Shouldn't this be be stored in the posts.
 	subject = Column(Unicode(140), nullable=False)
 	sticky_status = Column(Boolean)
 	
 	# Relationships
 	posts = orm.relationship("Post", backref='topics')
 	
-	# Functions
-	@property
-	def start_in_words(self):
-		""" When the topic was posted should be human readable """
-		return distance_of_time_in_words(
-			self.start_date,
-			datetime.datetime.utcnow()
-		)
-	
+	# Functions	
 	@property
 	def slug(self):
 		""" Create a slug for the URL that the user should be able to read. """
