@@ -12,35 +12,27 @@ Classes:
 
 """
 
+
+  #####                                         #####                                                        
+ #     # #       ####  #####    ##   #         #     #  ####  #    #  ####  #####   ##   #    # #####  ####  
+ #       #      #    # #    #  #  #  #         #       #    # ##   # #        #    #  #  ##   #   #   #      
+ #  #### #      #    # #####  #    # #         #       #    # # #  #  ####    #   #    # # #  #   #    ####  
+ #     # #      #    # #    # ###### #         #       #    # #  # #      #   #   ###### #  # #   #        # 
+ #     # #      #    # #    # #    # #         #     # #    # #   ## #    #   #   #    # #   ##   #   #    # 
+  #####  ######  ####  #####  #    # ######     #####   ####  #    #  ####    #   #    # #    #   #    ####  
+
+# Because the tests could be started near midnight December 31st, we should get
+# the date and time of when the tests were started.
+INIT_DATE = datetime.utcnow()
+
 # Because we do database testing, lets have a function that prepares our
 # database for testing.
 def _initTestingDB():
 	from sqlalchemy import create_engine
-	from .models import (
-		ban,
-		forum,
-		group,
-		membership,
-		meta,
-		permission,
-		post,
-		power,
-		topic,
-		user
-	)
+	import .models
 	
 	# We will also need to query the database from time to time.
-	from .models.services import (
-		ban,
-		forum,
-		group,
-		membership,
-		permission,
-		post,
-		power,
-		topic,
-		user
-	)
+	from .models import services
 	
 	engine = create_engine('sqlite://')
 	meta.Base.metadata.create_all(engine)
@@ -61,26 +53,79 @@ def _initTestingDB():
 		# The user model class doesn't have a constructor. So instead of doing
 		# it under the assumption that using the class as a function will work I
 		# will instead set each attribute one at a time.
-		dbuser = user.User()
+		dbuser = models.user.User()
 		dbuser.username = "TestUser"
 		email = "test@test.tst"
-		join_date = datetime.utcnow()
+		join_date = INIT_DATE
 		DBSession.add(dbuser)
 		
+		# Before the test suite will be ready, the user will need a password.
+		# The reason for this is that the password attribute is non-nullable. In
+		# order to do this I will have to brush up on authentification.
+		
 		# Now add a ban.
-		dbban = ban.Ban()
+		dbban = models.ban.Ban()
 		
 		# I don't know for sure that dbuser will have a primary key until it is
 		# committed to the database. To be sure, retreive the dbuser entry from
 		# the database and then get its primary key.
-		dbuser = UserRecordService.by_username(dbuser.username)
+		dbuser = services.user.UserRecordService.by_username(dbuser.username)
 		
 		dbban.user_id		= dbuser.user_id
-		dbban.start_date	= datetime.utcnow()
+		dbban.start_date	= INIT_DATE
 		dbban.end_date		= dbban.start_date
 		dbban.end_date.year	= dbban.end_date.year + 1
 		dbban.reason		= "Test reason"
 		DBSession.add(dbban)
+		
+		# In order to properly test forums we need to have a parent forum.
+		parent_forum		= models.forum()
+		parent_forum.title	= "Parent Forum"
+		DBSession.add(parent_forum)
+		
+		# The forum service tests unsurprisingly need a forum in the database.
+		dbforum			= models.forum()
+		dbforum.title	= "Test Forum"
+		
+		# Retrieve the parent forum from the database so that it will have a
+		# forum id
+		parent_forum = services.forum.ForumRecordService.by_title(
+			"Parent Forum"
+		)
+		
+		dbforum.parent_id = parent_forum.forum_id
+		DBSession.add(dbforum)
+		
+		# The group record service tests will need a group to be in the database
+		dbgroup			= models.group.Group()
+		dbgroup.title	= "Test Group"
+		DBSession.add(dbgroup)
+		
+		# For the post to be added to the database, it will need a topic.
+		
+		# Retrieve the test forum from the database so that it will have a forum
+		# id primary key.
+		dbforum = services.forum.ForumRecordService.by_title("Test Forum")
+		
+		dbtopic					= models.topic.Topic()
+		dbtopic.forum_id		= dbforum.forum_id
+		dbtopic.subject			= "Test Topic"
+		dbtopic.sticky_status	= False
+		
+		# The post record service tests need a test post.
+		
+		# Retrieve the topic from the database so that it will have a post_id.
+		dbtopic = services.topic.TopicRecordService.by_id(1)
+		
+		dbpost				= models.post.Post()
+		dbpost.topic_id		= dbtopic.topic_id
+		dbpost.user_id		= dbuser.user_id
+		dbpost.posted_date	= INIT_DATE
+		dbpost.message		= "Test Post"
+		
+		# We will have to have the actual powers in the test database eventually
+		# so for right now just leave them be so that we can don't have to undo
+		# a whole bunch of work.
 	
 
 # Apparently every test class for unit testing should only test one class that
@@ -463,15 +508,27 @@ class BanServiceTests(unittest.TestCase):
 		bans = BanRecordService.all()
 		
 		# We're getting a list. Use list operations.
-		
+		self.assertEqual(len(bans), 1)
 	
 	def test_by_id(self):
 		from .models.services.ban import BanRecordService
+		
+		# I'm not sure if ban_id starts at 0 or 1.
+		# According to the SQLite documentation it starts with 1.
+		ban = UserRecordService.by_id(1)
+		
+		# The return value is the ban we created earlier. Check against all of
+		# the values that should be in the record.
+		self.assertEqual(ban.start_date, INIT_DATE)
+		self.assertEqual(ban.user.user_id, 1)
 	
 	def test_get_paginator(self):
 		from .models.services.ban import BanRecordService
 		
 		# I'm not sure how to test url_maker or even if I can.
+		
+		# I'm not sure what to expect from the get paginator. I'm pretty sure it
+		# returns a list.
 	
 
 class ForumServiceTests(unittest.TestCase):
@@ -483,13 +540,32 @@ class ForumServiceTests(unittest.TestCase):
 	
 	def test_all(self):
 		from .models.services.forum import ForumRecordService
+		
+		forums = ForumRecordService.all()
+		self.assertEqual(len(forums), 2)
 	
 	def test_by_id(self):
 		from .models.services.forum import ForumRecordService
+		
+		# For this test get the second forum in the database since it has more
+		# interesting attributes.
+		forum = ForumRecordService.by_id(2)
+		
+		self.assertEqual(forum.title, "Test Forum")
+		self.assertEqual(forum.parent_id, 1)
 	
 	def test_by_parent(self):
 		from .models.services.forum import ForumRecordService
 		
+		forums = ForumRecordService.by_parent(1)
+		self.assertEqual(len(forums), 1)
+	
+	def test_by_title(self):
+		from .models.services.forum import ForumRecordService
+		
+		forum = ForumRecordService.by_title("Test Forum")
+		self.assertEqual(forum.forum_id, 2)
+		self.assertEqual(forum.parent_id, 1)
 	
 
 class GroupServiceTests(unittest.TestCase):
@@ -501,9 +577,21 @@ class GroupServiceTests(unittest.TestCase):
 	
 	def test_all(self):
 		from .models.services.group import GroupRecordService
+		
+		groups = GroupRecordService.all()
+		self.assertEqual(len(groups), 1)
 	
 	def test_by_id(self):
 		from .models.services.group import GroupRecordService
+		
+		group = GroupRecordService.by_id(1)
+		self.assertEqual(group.title, "Test Group")
+	
+	def test_by_title(self):
+		from .models.services.group import GroupRecordService
+		
+		group = GroupRecordService.by_title("Test Group")
+		self.assertEqual(group.group_id, 1)
 	
 
 class MembershipServiceTests(unittest.TestCase):
@@ -534,14 +622,26 @@ class PostServiceTests(unittest.TestCase):
 	
 	def test_all(self):
 		from .models.services.post import PostRecordService
+		
+		posts = PostRecordService.all()
+		self.assertEqual(len(posts), 1)
 	
 	def test_by_id(self):
 		from .models.services.post import PostRecordService
+		
+		post = PostRecordService.by_id(1)
+		self.assertEqual(post.topic_id, 1)
+		self.assertEqual(post.user_id, 1)
+		self.assertEqual(post.posted_date, INIT_DATE)
+		self.assertEqual(post.message, "Test Post")
 	
 	def test_get_paginator(self):
 		from .models.services.post import PostRecordService
 		
 		# I'm not sure how to test url_maker or even if I can.
+		
+		# I'm not really sure what the paginator functions will return. I'm
+		# pretty sure it will be a list.
 	
 
 class PowerServiceTests(unittest.TestCase):
@@ -561,9 +661,22 @@ class TopicServiceTests(unittest.TestCase):
 	
 	def test_all(self):
 		from .models.services.topic import TopicRecordService
+		
+		topics = TopicRecordService.all()
+		self.assertEqual(len(topics), 1)
 	
 	def test_by_id(self):
 		from .models.services.topic import TopicRecordService
+		
+		topic = TopicRecordService.by_id(1)
+		self.assertEqual(topic.forum_id, 2)
+		self.assertEqual(topic.subject, "Test Topic")
+		self.assertEqual(topic.sticky_status, False)
+		self.assertEqual(topic.forum_id, 2)
+	
+	# TopicRecordService has a myriad of paginator functions that I am not sure
+	# exactly how to test. I'm pretty sure they return lists. But since I am not
+	# confident of how to do this for the time being I will leave it for later.
 	
 
 class UserServiceTests(unittest.TestCase):
@@ -575,9 +688,20 @@ class UserServiceTests(unittest.TestCase):
 	
 	def test_all(self):
 		from .models.services.user import UserRecordService
+		
+		users = UserRecordService.all()
+		self.assertEqual(len(users), 1)
 	
 	def test_by_id(self):
 		from .models.services.user import UserRecordService
+		
+		user = UserRecordService.by_id(1)
+		self.assertEqual(user.username, "TestUser")
+		self.assertEqual(user.email_address, "test@test.tst")
+		
+		# We will want to test the password at some point.
+		
+		self.assertEqual(user.join_date, INIT_DATE)
 	
 
   #####                                         #     #                   #######                            

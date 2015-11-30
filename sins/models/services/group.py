@@ -24,4 +24,9 @@ class GroupRecordService(object):
 	@classmethod
 	def by_id(cls, id):
 		""" Get a specific group. """
-		return DBSession.query(Ban).filter(Ban.ban_id == id).first()
+		return DBSession.query(Group).filter(Group.group_id == id).first()
+	
+	@classmethod
+	def by_title(cls, title):
+		return DBSession.query(Group).filter(Group.title == title).first()
+	
