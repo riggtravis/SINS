@@ -1,9 +1,8 @@
 import unittest
 import transaction
+import datetime
 
 from pyramid import testing
-
-from .models import DBSession
 
 """ Tests
 Classes:
@@ -12,6 +11,77 @@ Classes:
 ** Used to test the entire application.
 
 """
+
+# Because we do database testing, lets have a function that prepares our
+# database for testing.
+def _initTestingDB():
+	from sqlalchemy import create_engine
+	from .models import (
+		ban,
+		forum,
+		group,
+		membership,
+		meta,
+		permission,
+		post,
+		power,
+		topic,
+		user
+	)
+	
+	# We will also need to query the database from time to time.
+	from .models.services import (
+		ban,
+		forum,
+		group,
+		membership,
+		permission,
+		post,
+		power,
+		topic,
+		user
+	)
+	
+	engine = create_engine('sqlite://')
+	meta.Base.metadata.create_all(engine)
+	meta.DBSession.configure(bind=engine)
+	
+	# I don't know what with does. I should find out.
+	# So with makes sure that nothing ends up being out of scope in a harmful
+	# way. The only changes that should remain after a with block has run are
+	# the changes we actually wanted.
+	with transaction.manager:
+		# Add a chunk of dummy data for every situation we will need. Which will
+		# be many. Instead of trying to add every single piece of data possible,
+		# instead just create the things we need until our test database has
+		# everything it needs.
+		
+		# Ban service tests need a ban.
+		# In order to have a ban we first need a user.
+		# The user model class doesn't have a constructor. So instead of doing
+		# it under the assumption that using the class as a function will work I
+		# will instead set each attribute one at a time.
+		dbuser = user.User()
+		dbuser.username = "TestUser"
+		email = "test@test.tst"
+		join_date = datetime.utcnow()
+		DBSession.add(dbuser)
+		
+		# Now add a ban.
+		dbban = ban.Ban()
+		
+		# I don't know for sure that dbuser will have a primary key until it is
+		# committed to the database. To be sure, retreive the dbuser entry from
+		# the database and then get its primary key.
+		dbuser = UserRecordService.by_username(dbuser.username)
+		
+		dbban.user_id		= dbuser.user_id
+		dbban.start_date	= datetime.utcnow()
+		dbban.end_date		= dbban.start_date
+		dbban.end_date.year	= dbban.end_date.year + 1
+		dbban.reason		= "Test reason"
+		DBSession.add(dbban)
+	
 
 # Apparently every test class for unit testing should only test one class that
 # needs to have unit tests performed on it. This is going to a semi major
@@ -389,6 +459,11 @@ class BanServiceTests(unittest.TestCase):
 	
 	def test_all(self):
 		from .models.services.ban import BanRecordService
+		
+		bans = BanRecordService.all()
+		
+		# We're getting a list. Use list operations.
+		
 	
 	def test_by_id(self):
 		from .models.services.ban import BanRecordService
@@ -555,6 +630,13 @@ class CategoryViewsTests(unittest.TestCase):
 		# the other the landing page for a valid forum is returned. Because I
 		# need to access the database in order to do this, I don't know
 		# *exactly* how to do this.
+		
+		# So for the branching calls there should definitely be more than one
+		# test function. Each one should test a specific branch. As for the
+		# database work, I still have to find a solution to that.
+	
+	def test_category_not_found(self):
+		# This is also dependant upon querying the database.
 	
 
 class CategoryEditActions(unittest.TestCase):

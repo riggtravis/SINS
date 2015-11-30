@@ -74,7 +74,7 @@ class CategoryViews(ViewBase):
 		return {'forums': forums, 'title_message': 'Welcome!', 'topics': None}
 	
 	# I need a function for viewing a forum instead of the forum index.
-	@view_config(rout_name='forum')
+	@view_config(route_name='forum')
 	def view_category(self):
 		""" This function provides a landing for a specifc forum. """
 		forum_id = int(self.request.matchdict.get('forum_id', -1))

@@ -23,3 +23,10 @@ class UserRecordService(object):
 	def by_id(cls, id):
 		""" This function retreives a specific user from the database. """
 		return DBSession.query(User).filter(User.user_id == id).first()
+	
+	# Usernames are easier to remember than primary keys, and it will be useful
+	# to get users by their username sometimes.
+	@classmethod
+	def by_username(cls, username):
+		return DBSession.query(User).filter(User.username == username).first()
+	
