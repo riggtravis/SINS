@@ -33,3 +33,9 @@ class ForumRecordService(object):
 	def by_parent(cls, id):
 		""" This function retreives all of the forums with the same parent. """
 		return DBSession.query(Forum).filter(Forum.parent_id == id).order_by(Forum.forum_id)
+	
+	# It will be useful to be able to retrieve records by their title.
+	@classmethod
+	def by_title(cls, title):
+		return DBSession.query(Forum).filter(Forum.title == title).first()
+	

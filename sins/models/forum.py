@@ -33,8 +33,8 @@ class Forum(Base):
 	__tablename__ = 'forums'
 	
 	# Keys
-	forum_id = Column(Integer, primary_key=True)
-	title = Column(Unicode(30), unique=True, nullable=False)
+	forum_id	= Column(Integer, primary_key=True)
+	title		= Column(Unicode(30), unique=True, nullable=False)
 	
 	# Foreign Keys
 	parent_id = Column(Integer, ForeignKey('forums.forum_id'))
