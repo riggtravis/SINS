@@ -765,7 +765,7 @@ class CategoryViewsTests(unittest.TestCase):
 		
 		# We need to create a good request. To do this a route has to be matched
 		# while the request is being made.
-		request		= testing.DummyRequest()	# Change this to a good request.
+		request		= testing.DummyRequest(params={'target': 2})
 		inst		= CategoryViews(request)
 		response	= inst.view_category()
 		
@@ -779,7 +779,7 @@ class CategoryViewsTests(unittest.TestCase):
 		# This is also dependant upon querying the database. We will need to
 		# create a request that has a URL that will cause view_category to throw
 		# and HTTPNotFound
-		request		= testing.DummyRequest()	# Change this to a bad request.
+		request		= testing.DummyRequest(params={'target': 3})
 		inst		= CategoryViews(request)
 		response	= inst.view_category()
 		

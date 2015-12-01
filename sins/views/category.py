@@ -17,6 +17,7 @@ from ..models.services.forum import ForumRecordService
 from ..forms import ForumCreateForm, ForumUpdateForm
 
 # We need to be able to throw an HTTPNotFound call.
+from pyramid.httpexceptions import HTTPNotFound
 
 """ Category 
 
