@@ -16,6 +16,9 @@ from ..models.services.forum import ForumRecordService
 # We need our forms.
 from ..forms import ForumCreateForm, ForumUpdateForm
 
+# We need to be able to throw an HTTPNotFound call.
+from pyramid.httpexceptions import HTTPNotFound
+
 """ Category 
 
 Classes:
@@ -26,7 +29,7 @@ Classes:
 * CategoryEditActions
 ** This class provides methods for creating and editing forums.
 
-"""
+"""https://www.python.org/dev/peps/pep-0333/#environ-variables
 
 # Views should be contained in classes instead of being handled by lose
 # functions. Such is the hobo way. I mean the Pyramid way. More than likely that

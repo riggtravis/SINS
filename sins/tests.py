@@ -126,7 +126,7 @@ def _initTestingDB():
 		# We will have to have the actual powers in the test database eventually
 		# so for right now just leave them be so that we can don't have to undo
 		# a whole bunch of work.
-	
+	return DBSession
 
 # Apparently every test class for unit testing should only test one class that
 # needs to have unit tests performed on it. This is going to a semi major
@@ -712,6 +712,8 @@ class UserServiceTests(unittest.TestCase):
  #     # #    # #   #  # #        #   #    #    #     # #   ## #   #         #    #      #    #   #   #    # 
   #####   ####  #    # # #        #    ####      #####  #    # #   #         #    ######  ####    #    ####  
 class InitializedbTests(unittest.TestCase):
+	# I'm not sure how to do any of this testing.
+	
 	def setUp(self):
 		self.config = testing.setUp()
 	
@@ -749,6 +751,8 @@ class CategoryViewsTests(unittest.TestCase):
 		self.assertEqual('Welcome!', response['title_message'])
 	
 	def test_view_category(self):
+		from .views.category import CategoryViews
+		
 		# The view category has two different branches. In one branch there is
 		# not a valid forum_id so the software returns an HTTPNotFound call. In
 		# the other the landing page for a valid forum is returned. Because I
@@ -758,9 +762,29 @@ class CategoryViewsTests(unittest.TestCase):
 		# So for the branching calls there should definitely be more than one
 		# test function. Each one should test a specific branch. As for the
 		# database work, I still have to find a solution to that.
+		
+		# We need to create a good request. To do this a route has to be matched
+		# while the request is being made.
+		request		= testing.DummyRequest(params={'target': 2})
+		inst		= CategoryViews(request)
+		response	= inst.view_category()
+		
+		# We know that a good request will have a dictionary response.
+		self.assertEqual(response, {'title_message': "Test Forum"})
 	
 	def test_category_not_found(self):
-		# This is also dependant upon querying the database.
+		from .views.category import CategoryViews
+		from pyramid.httpexceptions import HTTPNotFound
+		
+		# This is also dependant upon querying the database. We will need to
+		# create a request that has a URL that will cause view_category to throw
+		# and HTTPNotFound
+		request		= testing.DummyRequest(params={'target': 3})
+		inst		= CategoryViews(request)
+		response	= inst.view_category()
+		
+		# We know that a bad request will have an HTTPNotFound response.
+		self.assertEqual(response, HTTPNotFound())
 	
 
 class CategoryEditActions(unittest.TestCase):
