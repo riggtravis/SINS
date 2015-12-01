@@ -765,7 +765,7 @@ class CategoryViewsTests(unittest.TestCase):
 		
 		# We need to create a good request. To do this a route has to be matched
 		# while the request is being made.
-		request		= testing.DummyRequest(params={'target': 2})
+		request		= testing.DummyRequest(params={'forum_id': 2})
 		inst		= CategoryViews(request)
 		response	= inst.view_category()
 		
@@ -779,7 +779,7 @@ class CategoryViewsTests(unittest.TestCase):
 		# This is also dependant upon querying the database. We will need to
 		# create a request that has a URL that will cause view_category to throw
 		# and HTTPNotFound
-		request		= testing.DummyRequest(params={'target': 3})
+		request		= testing.DummyRequest(params={'forum_id': 3})
 		inst		= CategoryViews(request)
 		response	= inst.view_category()
 		
@@ -788,11 +788,25 @@ class CategoryViewsTests(unittest.TestCase):
 	
 
 class CategoryEditActions(unittest.TestCase):
+	# The tearDown in this case will have to remove any changes made to the
+	# database. It should probably also have its own entry that it is allowed to
+	# edit and then have it be torn down as well.
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
+	
+	def test_create_forum_valid_parent_id(self):
+		from .view.category import CategoryEditActions
+		
+		# I need to make sure that the request method is a post. Then I also
+		# need to make sure that form is valid somehow. This looks hard.
 	
 
 class DiscussionViewsTests(unittest.TestCase):
