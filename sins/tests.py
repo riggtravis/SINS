@@ -509,9 +509,14 @@ class BanServiceTests(unittest.TestCase):
 	# at least one of the tutorials that I'm following. For right now I'm Just
 	# going to set up a few tests that I will flesh out later.
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 	def test_all(self):
@@ -545,9 +550,14 @@ class BanServiceTests(unittest.TestCase):
 
 class ForumServiceTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 	def test_all(self):
@@ -582,9 +592,14 @@ class ForumServiceTests(unittest.TestCase):
 
 class GroupServiceTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 	def test_all(self):
@@ -610,26 +625,41 @@ class MembershipServiceTests(unittest.TestCase):
 	# Currently the membership service is empty. This is because all membership
 	# access is done through other models.
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 
 class PermissionServiceTests(unittest.TestCase):
 	# See MembershipServiceTests
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 
 class PostServiceTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 	def test_all(self):
@@ -658,17 +688,27 @@ class PostServiceTests(unittest.TestCase):
 
 class PowerServiceTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 
 class TopicServiceTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 	def test_all(self):
@@ -693,9 +733,14 @@ class TopicServiceTests(unittest.TestCase):
 
 class UserServiceTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 	def test_all(self):
@@ -749,9 +794,14 @@ class InitializedbTests(unittest.TestCase):
     #    # ###### #    #  ####      #####  #    # #   #         #    ######  ####    #    ####  
 class CategoryViewsTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 	def test_home(self):
@@ -972,10 +1022,34 @@ class CategoryEditActions(unittest.TestCase):
 
 class DiscussionViewsTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
+	
+	def test_discussion_view_valid_topic(self):
+		from .views.discussion import DiscussionViews
+		
+		request		= testing.DummyRequest(params={'topic_id': 1})
+		inst		= DiscussionViews(request)
+		response	= inst.view_discussion()
+		
+		self.assertEqual(response['topic'].subject, "Test Topic")
+	
+	def test_discussion_view_invalid_topic(self):
+		from .views.discussion import DiscussionViews
+		from pyramid.httpexceptions import HTTPNotFound
+		
+		request		= testing.DummyRequest(params={'topic_id': 2})
+		inst		= DiscussionViews(request)
+		response	= inst.view_discussion()
+		
+		self.assertEqual(response, HTTPNotFound())
 	
 
 class TopicEditActionsTests(unittest.TestCase):
