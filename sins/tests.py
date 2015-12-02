@@ -79,7 +79,7 @@ def _initTestingDB():
 		DBSession.add(dbban)
 		
 		# In order to properly test forums we need to have a parent forum.
-		parent_forum		= models.forum()
+		parent_forum		= models.forum.Forum()
 		parent_forum.title	= "Parent Forum"
 		DBSession.add(parent_forum)
 		
@@ -96,6 +96,18 @@ def _initTestingDB():
 		dbforum.parent_id = parent_forum.forum_id
 		DBSession.add(dbforum)
 		
+		# The CategoryEditActions tests need there to be a child forum with a
+		# grandparent. So this forum will be a child of the main test forum.
+		child_forum			= models.forum.Forum()
+		child_forum.title	= "Child Forum"
+		
+		# Retrieve the test forum from the database so that it will have a
+		# forum_id primary key.
+		dbforum = services.forum.ForumRecordService.by_title("Test Forum")
+		
+		child_forum.parent_id = dbforum.forum_id
+		DBSession.add(child_forum)
+		
 		# The group record service tests will need a group to be in the database
 		dbgroup			= models.group.Group()
 		dbgroup.title	= "Test Group"
@@ -105,7 +117,7 @@ def _initTestingDB():
 		
 		# Retrieve the test forum from the database so that it will have a forum
 		# id primary key.
-		dbforum = services.forum.ForumRecordService.by_title("Test Forum")
+		# This has already been done now.
 		
 		dbtopic					= models.topic.Topic()
 		dbtopic.forum_id		= dbforum.forum_id
@@ -765,7 +777,7 @@ class CategoryViewsTests(unittest.TestCase):
 		
 		# We need to create a good request. To do this a route has to be matched
 		# while the request is being made.
-		request		= testing.DummyRequest(params={'target': 2})
+		request		= testing.DummyRequest(params={'forum_id': 2})
 		inst		= CategoryViews(request)
 		response	= inst.view_category()
 		
@@ -779,7 +791,7 @@ class CategoryViewsTests(unittest.TestCase):
 		# This is also dependant upon querying the database. We will need to
 		# create a request that has a URL that will cause view_category to throw
 		# and HTTPNotFound
-		request		= testing.DummyRequest(params={'target': 3})
+		request		= testing.DummyRequest(params={'forum_id': 4})
 		inst		= CategoryViews(request)
 		response	= inst.view_category()
 		
@@ -788,11 +800,174 @@ class CategoryViewsTests(unittest.TestCase):
 	
 
 class CategoryEditActions(unittest.TestCase):
+	# The tearDown in this case will have to remove any changes made to the
+	# database. It should probably also have its own entry that it is allowed to
+	# edit and then have it be torn down as well.
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
+	
+	def test_create_forum_valid_parent_id(self):
+		from .view.category import CategoryEditActions
+		from pyramid.httpexceptions import HTTPFound
+		
+		# I need to make sure that the request method is a post. Then I also
+		# need to make sure that form is valid somehow. This looks hard.
+		
+		# This is not as hard as it looked at first. I just need to figure out
+		# how to create POST data in my DummyRequest
+		request = testing.DummyRequest(
+			params={'parent_id': 1, 'action': 'create'}, 
+			post={'title': "New Forum", 'parent_id': 1}
+		)
+		
+		inst		= CategoryEditActions(request)
+		response	= inst.create_forum()
+		
+		# response should be an HTTPFound call.
+		self.assertEqual(response, HTTPFound(location=request.route_url(
+					'forum', 
+					forum_id=1,
+					slug="New Forum"
+				)
+			)
+		)
+	
+	def test_create_forum_valid_jotun(self):
+		from .view.category import CategoryEditActions
+		from pyramid.httpexceptions import HTTPFound
+		
+		request = testing.DummyRequest(
+			params={'parent_id': None, 'action': 'create'},
+			post={'title': "New Forum", 'parent_id': None}
+		)
+		
+		inst		= CategoryEditActions(request)
+		response	= inst.create_forum()
+		
+		# response should be an HTTPFound call. Which will need to request url.
+		self.assertEqual(response, HTTPFound(location=request.route_url(
+					'home'
+				)
+			)
+		)
+	
+	def test_crate_forum_with_parent_id(self):
+		from .view.category import CategoryEditActions
+		
+		request		= testing.DummyRequest(params={
+				'parent_id': 1, 
+				'action': 'create'
+			}
+		)
+		
+		inst		= CategoryEditActions(request)
+		response	= inst.create_forum()
+		
+		# Realistically I could probably test all of this with one assert, but
+		# this was easier.
+		
+		# What I really need to test is what the values in the form attribute of
+		# the returned dictionary should be.
+		self.assertEqual(response['form'].parent_id.choices, [
+				(1, "Parent Forum"), 
+				(2, "Test Forum")
+			]
+		)
+		
+		# The action should be create, otherwise the wrong function call this is
+		self.assertEqual(response['action'], 'create')
+		
+		# The current forum id was set to one, and it should be returned as one.
+		self.assertEqual(response['current_forum_id'], 1)
+	
+	def test_crate_forum_without_parent_id(self):
+		from .view.category import CategoryEditActions
+		
+		request		= testing.DummyRequest(params={
+				'parent_id': None,
+				'action': 'create'
+			}
+		)
+		
+		inst		= CategoryEditActions(request)
+		response	= inst.create_forum()
+		
+		self.assertEqual(response['form'].parent_id.choices, [
+				(1, "Parent Forum")
+			]
+		)
+		
+		self.assertEqual(response['action'], 'create')
+		self.assertEqual(response['current_forum_id'], None)
+	
+	def test_edit_forum_valid_id_valid_form(self):
+		from .view.category import CategoryEditActions
+		from pyramid.httpexceptions import HTTPFound
+		
+		request	= testing.DummyRequest(
+			params={'forum_id': 1, 'action': 'edit'},
+			post={'title': "Edited Forum", 'parent_id': None, 'forum_id': 2}
+		)
+		
+		inst		= CategoryEditActions(request)
+		response	= inst.edit_forum()
+		
+		self.assertEqual(response, HTTPFound(location=request.route_url(
+					'forum',
+					forum_id=2
+					slug="Edited Forum"
+				)
+			)
+		)
+	
+	def test_edit_forum_with_grandparent(self):
+		from .view.category import CategoryEditActions
+		
+		request = testing.DummyRequest(params={'forum_id': 3, 'action': 'edit'})
+		
+		inst		= CategoryEditActions(request)
+		response	= inst.edit_forum()
+		
+		# Check the choices for the parent id of the form. These should be the
+		# children of the grandparent
+		self.assertEqual(response['form'].parent_id.choices, ['Test Forum'])
+		
+		# Also check the action, which should be edit since this is an edit test
+		self.assertEqual(response['action'], 'edit')
+	
+	def test_edit_forum_no_grandparent(self):
+		from .view.category import CategoryEditActions
+		
+		request = testing.DummyRequest(params={'forum_id': 2, 'action': 'edit'})
+		
+		inst		= CategoryEditActions(request)
+		response	= inst.edit_forum()
+		
+		# Check the choices of the parent id of the form. These should be the
+		# forums without parents.
+		self.assertEqual(response['form'].parent_id.choices, ['Parent Forum'])
+		
+		# Also check the action, which should be edit since this is an edit test
+		self.assertEqual(response['action'], 'edit')
+	
+	def test_edit_invalid_forum(self):
+		from .view.category import CategoryEditActions
+		from pyramid.httpexceptions import HTTPNotFound
+		
+		request = testing.DummyRequest(params={'forum_id': 4, 'action': 'edit'})
+		
+		inst		= CategoryEditActions(request)
+		response	= inst.edit_forum()
+		
+		self.assertEqual(response, HTTPNotFound())
 	
 
 class DiscussionViewsTests(unittest.TestCase):

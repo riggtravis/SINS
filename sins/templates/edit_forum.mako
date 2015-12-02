@@ -26,18 +26,19 @@
 	
 	<!-- I couldn't figure out how to use a button addon. -->
 	<div class="form-group">
-		<label for="title">${form.title.label}</label>
+		<!-- The label attribute has tags -->
+		${form.title.label}
 		${form.title(class_='form-control')}
 	</div>
 	
 	<!-- There needs to be a dropdown to use to select the parent forum -->
 	<div class="form-group">
-		<label for="parent_id">${form.parent_id.label}</label>
+		${form.parent_id.label}
 		${form.parent_id(class_='form-control')}
 	</div>
 	
 	<div class="form-group">
-		<label>submit</label>
+		<label for="submit">submit</label>
 		<button type="submit" class="btn btn-default">submit</button>
 	</div>
 </form>
