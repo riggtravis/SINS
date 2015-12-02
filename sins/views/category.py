@@ -147,13 +147,20 @@ class CategoryEditActions(ViewBase):
 			form_populate.populate_obj(entry)
 			DBSession.add(entry)
 			
-			# Change this so it returns to its original context.
-			if parent_id:
+			# This isn't good. The forum should return somewhere it is visible,
+			# and one of the possibilities is that the forum will be a child of
+			# the context forum. What should instead happen is that the user
+			# should be sent to the parent of the new forum if it exists.
+			if entry.parent_id:
 				return HTTPFound(location=self.request.route_url(
 						'forum', 
-						forum_id=current_forum.forum_id
+						forum_id=entry.parent_id,
+						# I think we need a slug attribute. We do.
+						slug=entry.slug
 					)
 				)
+			# Otherwise the forum is a jotun and should be returned to the home
+			# view page.
 			else:
 				return HTTPFound(location=self.request.route_url('home'))
 		else:
@@ -188,7 +195,7 @@ class CategoryEditActions(ViewBase):
 			# make sure to pass the current_forum
 			return {
 				'form': form, 
-				'action': request.matchdict.get('action'),
+				'action': request.matchdict.get('action'), # What does this do?
 				'current_forum_id': current_forum.forum_id
 			}
 	
@@ -206,9 +213,12 @@ class CategoryEditActions(ViewBase):
 		
 		entry = ForumRecordService.by_id(forum_id)
 		if entry:
+			# Wait, why is this taking entry as a parameter?
 			form = ForumUpdateForm(self.request.POST, entry)
 			
 			# First check to see if the form has already been filled out.
+			# I need to figure out a way to change this to a put for the sake of
+			# standards compliance.
 			if request.method == 'POST' and form.validate():
 				form.populate_obj(entry)
 				return HTTPFound(location=request.route_url(
@@ -218,8 +228,8 @@ class CategoryEditActions(ViewBase):
 					)
 				)
 			else:	# Do all the other stuff we were already doing.
-				# If I could do all of this using a switch statement somehow, that
-				# would be great.
+				# If I could do all of this using a switch statement somehow,
+				# that would be great.
 				
 				# Before checking to see if the forum has been set up, populate the
 				# parent option. This should be possible by asking for the parent of
@@ -259,19 +269,19 @@ class CategoryEditActions(ViewBase):
 						# ]
 						#
 						
-						# Reset the choices list so that it isn't populated with the
-						# jotun choices.
+						# Reset the choices list so that it isn't populated with
+						# the jotun choices.
 						choices = list()
 
 						for child in grandparent.children:
-							# It will be more readable to have tuples set up before
-							# adding tuples to the list. This way we won't have
-							# difficult to parse nested parentheses.
+							# It will be more readable to have tuples set up 
+							# before adding tuples to the list. This way we
+							# won't have difficult to parse nested parentheses.
 							choice = (child.forum_id, child.title)
 							choices.append(choice)
-							
-				# We have form.parent_id.choices = choices repeated three times here
-				# and there has to be a better way to do this.			
+						
+				# We have form.parent_id.choices = choices repeated three times
+				# here and there has to be a better way to do this.			
 				form.parent_id.choices = choices
 		else:
 			return HTTPNotFound()
