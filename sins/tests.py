@@ -515,6 +515,7 @@ class BanServiceTests(unittest.TestCase):
 	def tearDown(self):
 		import transaction
 		from .models.meta import DBSession
+		
 		transaction.abort()
 		DBSession.remove()
 		testing.tearDown()
@@ -556,6 +557,7 @@ class ForumServiceTests(unittest.TestCase):
 	def tearDown(self):
 		import transaction
 		from .models.meta import DBSession
+		
 		transaction.abort()
 		DBSession.remove()
 		testing.tearDown()
@@ -598,6 +600,7 @@ class GroupServiceTests(unittest.TestCase):
 	def tearDown(self):
 		import transaction
 		from .models.meta import DBSession
+		
 		transaction.abort()
 		DBSession.remove()
 		testing.tearDown()
@@ -631,6 +634,7 @@ class MembershipServiceTests(unittest.TestCase):
 	def tearDown(self):
 		import transaction
 		from .models.meta import DBSession
+		
 		transaction.abort()
 		DBSession.remove()
 		testing.tearDown()
@@ -645,6 +649,7 @@ class PermissionServiceTests(unittest.TestCase):
 	def tearDown(self):
 		import transaction
 		from .models.meta import DBSession
+		
 		transaction.abort()
 		DBSession.remove()
 		testing.tearDown()
@@ -658,6 +663,7 @@ class PostServiceTests(unittest.TestCase):
 	def tearDown(self):
 		import transaction
 		from .models.meta import DBSession
+		
 		transaction.abort()
 		DBSession.remove()
 		testing.tearDown()
@@ -739,6 +745,7 @@ class UserServiceTests(unittest.TestCase):
 	def tearDown(self):
 		import transaction
 		from .models.meta import DBSession
+		
 		transaction.abort()
 		DBSession.remove()
 		testing.tearDown()
@@ -860,6 +867,7 @@ class CategoryEditActions(unittest.TestCase):
 	def tearDown(self):
 		import transaction
 		from .models.meta import DBSession
+		
 		transaction.abort()
 		DBSession.remove()
 		testing.tearDown()
@@ -1054,10 +1062,36 @@ class DiscussionViewsTests(unittest.TestCase):
 
 class TopicEditActionsTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
+	
+	def test_create_topic_valid(self):
+		from .views.discussion import TopicEditActions
+		from pyramid.httpexceptions import HTTPFound
+		
+		request = testing.DummyRequest(params={'forum_id': 2}, post={
+				'subject': "New Topic"
+			}
+		)
+		
+		inst		= TopicEditActions(request)
+		response	= inst.create_topic()
+		
+		self.assertEqual(response, HTTPFound(location=request.route_url(
+					'post_action',
+					action='create',
+					topic_id=2
+				)
+			)
+		)
 	
 
 class PostEditActionsTests(unittest.TestCase):
