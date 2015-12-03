@@ -137,7 +137,7 @@ class CategoryEditActions(ViewBase):
 		
 		# Get the context the create action was initiated from.
 		current_forum = ForumRecordService.by_id(
-			request.matchdict.get('forum_id')
+			request.matchdict.get('current_forum_id')
 		)
 		
 		# This works by checking what the server received from the client. The

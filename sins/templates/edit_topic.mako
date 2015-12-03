@@ -14,7 +14,7 @@
 	action="${request.route_url('topic_action')}, action=action, forum_id=forum.forum_id" 
 	method="post" 
 	class="form"
->
+>	
 	% if action == 'edit'
 			${form.topic_id()}
 	% endif
@@ -25,9 +25,20 @@
 			</div>
 	% endfor
 	
+	% for error in form.forum_id.errors:
+			<div class="error">
+				${error}
+			</div>
+	% endfor
+	
 	<div class="form-group">
-		<label for="subject">${form.subject.label}</label>
+		${form.subject.label}
 		${form.subject(class_='form-control')}
+	</div>
+	
+	<div class="form-group">
+		${form.forum_id.label}
+		${form.forum_id(class_='form-control')}
 	</div>
 	
 	<div class="form-group">
