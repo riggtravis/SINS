@@ -314,7 +314,11 @@ class TopicCreateForm(Form):
 	
 	# Find a way to include the post form when the topic form is presented. This
 	# is probably going to be done in a view controller.
-
+	forum_id = SelectField(
+		'Forum',
+		[validators.optional()],
+		filters=[strip_filter]
+	)
 class TopicUpdateForm(TopicCreateForm):
 	""" This form is used when a topic is changed. """
 	
@@ -322,12 +326,6 @@ class TopicUpdateForm(TopicCreateForm):
 	# not include this line, then the update form will give the user access to
 	# change the primary key. Which is bad.
 	topic_id = HiddenField()
-	
-	forum_id = SelectField(
-		'Forum',
-		[validators.optional()],
-		filters=[strip_filter]
-	)
 
 ##################
  #     #                         #######                             

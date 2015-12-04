@@ -509,9 +509,15 @@ class BanServiceTests(unittest.TestCase):
 	# at least one of the tutorials that I'm following. For right now I'm Just
 	# going to set up a few tests that I will flesh out later.
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 	def test_all(self):
@@ -545,9 +551,15 @@ class BanServiceTests(unittest.TestCase):
 
 class ForumServiceTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 	def test_all(self):
@@ -582,9 +594,15 @@ class ForumServiceTests(unittest.TestCase):
 
 class GroupServiceTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 	def test_all(self):
@@ -610,26 +628,44 @@ class MembershipServiceTests(unittest.TestCase):
 	# Currently the membership service is empty. This is because all membership
 	# access is done through other models.
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 
 class PermissionServiceTests(unittest.TestCase):
 	# See MembershipServiceTests
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 
 class PostServiceTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 	def test_all(self):
@@ -658,17 +694,27 @@ class PostServiceTests(unittest.TestCase):
 
 class PowerServiceTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 
 class TopicServiceTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 	def test_all(self):
@@ -693,9 +739,15 @@ class TopicServiceTests(unittest.TestCase):
 
 class UserServiceTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 	def test_all(self):
@@ -749,9 +801,14 @@ class InitializedbTests(unittest.TestCase):
     #    # ###### #    #  ####      #####  #    # #   #         #    ######  ####    #    ####  
 class CategoryViewsTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 	def test_home(self):
@@ -810,6 +867,7 @@ class CategoryEditActions(unittest.TestCase):
 	def tearDown(self):
 		import transaction
 		from .models.meta import DBSession
+		
 		transaction.abort()
 		DBSession.remove()
 		testing.tearDown()
@@ -824,7 +882,7 @@ class CategoryEditActions(unittest.TestCase):
 		# This is not as hard as it looked at first. I just need to figure out
 		# how to create POST data in my DummyRequest
 		request = testing.DummyRequest(
-			params={'parent_id': 1, 'action': 'create'}, 
+			params={'current_forum_id': 1, 'action': 'create'}, 
 			post={'title': "New Forum", 'parent_id': 1}
 		)
 		
@@ -845,7 +903,7 @@ class CategoryEditActions(unittest.TestCase):
 		from pyramid.httpexceptions import HTTPFound
 		
 		request = testing.DummyRequest(
-			params={'parent_id': None, 'action': 'create'},
+			params={'current_forum_id': None, 'action': 'create'},
 			post={'title': "New Forum", 'parent_id': None}
 		)
 		
@@ -863,7 +921,7 @@ class CategoryEditActions(unittest.TestCase):
 		from .view.category import CategoryEditActions
 		
 		request		= testing.DummyRequest(params={
-				'parent_id': 1, 
+				'current_forum_id': 1, 
 				'action': 'create'
 			}
 		)
@@ -892,7 +950,7 @@ class CategoryEditActions(unittest.TestCase):
 		from .view.category import CategoryEditActions
 		
 		request		= testing.DummyRequest(params={
-				'parent_id': None,
+				'current_forum_id': None,
 				'action': 'create'
 			}
 		)
@@ -972,49 +1030,339 @@ class CategoryEditActions(unittest.TestCase):
 
 class DiscussionViewsTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
+	
+	def test_discussion_view_valid_topic(self):
+		from .views.discussion import DiscussionViews
+		
+		request		= testing.DummyRequest(params={'topic_id': 1})
+		inst		= DiscussionViews(request)
+		response	= inst.view_discussion()
+		
+		self.assertEqual(response['topic'].subject, "Test Topic")
+	
+	def test_discussion_view_invalid_topic(self):
+		from .views.discussion import DiscussionViews
+		from pyramid.httpexceptions import HTTPNotFound
+		
+		request		= testing.DummyRequest(params={'topic_id': 2})
+		inst		= DiscussionViews(request)
+		response	= inst.view_discussion()
+		
+		self.assertEqual(response, HTTPNotFound())
 	
 
 class TopicEditActionsTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
+	
+	def test_create_topic_valid_forum_valid_form(self):
+		from .views.discussion import TopicEditActions
+		from pyramid.httpexceptions import HTTPFound
+		
+		request = testing.DummyRequest(
+			params={'forum_id': 2, 'action': 'create'},
+			post={'subject': "New Topic", 'forum_id': 2}
+		)
+		
+		inst		= TopicEditActions(request)
+		response	= inst.create_topic()
+		
+		self.assertEqual(response, HTTPFound(request.route_url(
+					request.route_url('post_action', action='create', topic_id=2)
+				)
+			)
+		)
+	
+	def test_create_topic_valid_forum_invalid_form(self):
+		from .views.discussion import TopicEditActions
+		
+		request = testing.DummyRequest(params={
+				'forum_id': 2, 
+				'action': 'create'
+			}
+		)
+		
+		inst		= TopicEditActions(request)
+		response	= inst.create_topic()
+		
+		# Check to see that the choices of the forum id are correct.
+		self.assertEqual(response['form'].forum_id.choices, [(2, "Test Forum")])
+		
+		# Check that the action is still equal to 'create'
+		self.assertEqual(response['action'], 'create')
+		
+		# Check that the sent forum is correct.
+		self.assertEqual(response['forum'].forum_id, 2)
+		self.assertEqual(response['forum'].title, "Test Forum")
+	
+	def test_create_topic_invalid_forum(self):
+		from .views.discussion import TopicEditActions
+		from pyramid.httpexceptions import HTTPNotFound
+		
+		request = testing.DummyRequest(params={
+				'forum_id': 4,
+				'action': 'create'
+			}
+		)
+		
+		inst		= TopicEditActions(request)
+		response	= inst.create_topic()
+		
+		self.assertEqual(response, HTTPNotFound)
+	
+	def test_edit_topic_valid_topic_valid_form(self):
+		from .views.discussion import TopicEditActions
+		from pyramid.httpexceptions import HTTPFound
+		
+		request = testing.DummyRequest(
+			params={'topic_id': 1, 'action': 'edit'}
+			post={'subject': "Edited Topic", 'forum_id': 3, 'topic_id': 1}
+		)
+		
+		inst		= TopicEditActions(request)
+		response	= inst.edit_topic()
+		
+		self.assertEqual(response, HTTPFound(location=request.route_url(
+					'topic', 
+					topic_id=1, 
+					slug="Edited Topic"
+				)
+			)
+		)
+	
+	def test_edit_topic_valid_topic_invalid_form(self):
+		from .views.discussion import TopicEditActions
+		from pyramid.httpexceptions import HTTPNotFound
+		
+		request = testing.DummyRequest(params={
+				'topic_id': 1, 
+				'action': 'edit'
+			}
+		)
+		
+		inst		= TopicEditActions(request)
+		response	= inst.edit_topic()
+		
+		# Check to make sure the form has enough forum choices.
+		self.assertEqual(len(response['form'].forum_id.choices), 3)
+		
+		# Make sure the action is passed along correctly.
+		self.assertEqual(response['action'], 'edit')
+		
+		# Make sure that the forum is the correct forum.
+		self.assertEqual(response['forum'].forum_id, 2)
+		self.assertEqual(response['forum'].title, "Test Forum")
+	
+	def test_edit_topic_invaid_topic(self):
+		from .views.discussion import TopicEditActions
+		
+		request = testing.DummyRequest(params={
+				'topic_id': 2,
+				'action': 'edit'
+			}
+		)
+		
+		inst		= TopicEditActions(request)
+		response	= inst.edit_topic()
+		
+		self.assertEqual(response, HTTPNotFound)
 	
 
 class PostEditActionsTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
+	
+	def test_create_post_valid_topic_valid_form(self):
+		from .views.discussion import PostEditActions
+		from pyramid.httpexceptions import HTTPFound
+		
+		request = testing.DummyRequest(
+			params={'topic_id': 1},
+			post={'message': "This is a new message"}
+		)
+		
+		inst		= PostEditActions(request)
+		response	= inst.create_post()
+		
+		self.assertEqual(response, HTTPFound(location=request.route_url(
+					'topic',
+					topic_id=1
+				)
+			)
+		)
+	
+	def test_create_post_valid_topic_invalid_form(self):
+		from .views.discussion import PostEditActions
+		
+		request = testing.DummyRequest(params={
+				'topic_id': 1,
+				'action': 'create'
+			}
+		)
+		
+		inst		= PostEditActions(request)
+		response	= inst.create_post()
+		
+		# I'm not sure how to test that a form is returned, so I will leave that
+		# for later testing when I can better understand how to do that.
+		self.assertEqual(response['action'], 'action')
+		self.assertEqual(response['topic'].subject, "Test Topic")
+		self.assertEqual(response['topic'].topic_id, 1)
+	
+	def test_create_post_invalid_topic(self):
+		from .view.discussion import PostEditActions
+		from pyramid.httpexceptions import HTTPNotFound
+		
+		request = testing.DummyRequest(params={
+				'topic_id': 2,
+				'action': 'create'
+			}
+		)
+		
+		inst		= PostEditActions(request)
+		response	= inst.create_post()
+		
+		self.assertEqual(response, HTTPNotFound())
+	
+	def test_edit_post_valid_post_valid_form(self):
+		from .view.discussion import PostEditActions
+		from pyramid.httpexceptions import HTTPFound
+		
+		request = testing.DummyRequest(
+			params={'post_id': 1, 'action': 'edit'},
+			post={'message': "This post has been edited", 'post_id': 1}
+		)
+		
+		inst		= PostEditActions(request)
+		response	= inst.edit_post()
+		
+		self.assertEqual(response, HTTPFound(location=request.route_url(
+				'topic',
+				topic_id=1,
+				slug="Test Topic"
+			)
+		)
+	
+	def test_edit_post_valid_post_invalid_form(self):
+		from .view.discussion import PostEditActions
+		
+		request = testing.DummyRequest(params={
+				'post_id': 1,
+				'action': 'edit'
+			}
+		)
+		
+		inst		= PostEditActions(request)
+		response	= inst.edit_post()
+		
+		# I'm still not sure how to validate that the form that's returned is
+		# correct, so instead I will validate that everyhing else is correct.
+		self.assertEqual(response['action'], 'edit')
+		self.assertEqual(response['topic'].subject, "Test Topic")
+		self.assertEqual(response['topic'].topic_id, 1)
+	
+	def test_edit_post_invalid_post(self):
+		from .view.discussion import PostEditActions
+		from pyramid.httpexceptions import HTTPNotFound
+		
+		request = testing.DummyRequest(params={
+				'post_id': 2,
+				'action': 'edit'
+			}
+		)
+		
+		inst		= PostEditActions(request)
+		response	= inst.edit_post()
+		
+		self.assertEqual(response, HTTPNotFound())
 	
 
 class ManagementViewsTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
+	def test_view_management_valid_group(self):
+		from .views.management import ManagementViews
+		
+		request		= testing.DummyRequest(params={'group_id': 1})
+		inst		= ManagementViews(request)
+		response	= inst.view_management()
+		
+		self.assertEqual(response['group'].group_id, 1)
+		self.assertEqual(response['group'].title, "Test Group")
+	
+	def test_view_management_invalid_group(self):
+		from .views.management import ManagementViews
+		from pyramid.httpexceptions import HTTPNotFound
+		
+		request		= testing.DummyRequest(params={'group_id': 2})
+		inst		= ManagementViews(request)
+		response	= inst.view_management()
+		
+		self.assertEqual(response, HTTPNotFound())
 
 class ManagementEditActionsTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
+	
 	
 
 class PermissionEditActionsTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 
@@ -1027,17 +1375,29 @@ class ParticipantViewsTests(unittest.TestCase):
 
 class UserEditActionsTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 
 class BanEditActionsTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
 	
 

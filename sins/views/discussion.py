@@ -79,8 +79,22 @@ class TopicEditActions(ViewBase):
 		# Get the forum where the topic was to be created.
 		forum_id = request.matchdict.get('forum_id')
 		
-		# If there is a forum_id we can continue
-		if forum_id:
+		# If there is a forum_id we can continue. It might actually be possible
+		# that we don't need to do this and can instead just assume that if the
+		# service cannot find a forum, then whatever was in the url was bad.
+		# Let's do exactly that actually.
+		
+		# We need to think about what to do if the forum_id is not valid.
+		# It shouldn't be hard. Just pull the forum fetch out to this level
+		# and then check to see if it is valid. If it is, do all the things
+		# that we are already doing. Otherwise, throw an HTTPNotFound call.
+		
+		# Get the forum itself from the database.
+		forum = ForumRecordService.by_id(forum_id)
+		
+		if forum:
+			# We should create a custom validator that ensures that the post
+			# data and the URL data are the same.
 			if self.request.method = 'POST' and form.validate:
 				form_populate.populate_obj(entry)
 				DBSession.add(entry)
@@ -88,14 +102,13 @@ class TopicEditActions(ViewBase):
 				# A new topic needs a post.
 				return HTTPFound(location=self.request.route_url(
 						'post_action',
-						action='create'
+						action='create',
 						topic_id=entry.topic_id
 					)
 				)
 			else:
-				# Get the forum itself from the database.
-				forum = ForumRecordService.by_id(forum_id)
-				
+				# Set the only choice for the select field to the forum_id
+				form.forum_id.choices = [(forum_id, forum.title)]
 				return {
 					'form': form,
 					'action': request.matchdict.get('action'),
@@ -107,17 +120,18 @@ class TopicEditActions(ViewBase):
 	@view_config(match_param='action=edit')
 	def edit_topic(self):
 		""" This view function allows us to edit existing topics. """
-		topic_id = int(request.params.get('forum_id', -1))
-		entry = TopicRecordService.by_id(forum_id)
+		topic_id = int(request.params.get('topic_id', -1))
+		entry = TopicRecordService.by_id(topic_id)
 		if entry:
-			form = ForumUpdateForm(request.POST, entry)
+			form = TopicUpdateForm(request.POST, entry)
 			if self.request.method == 'POST' and form.validate:
 				form.populate_obj(entry)
 				return HTTPFound(location=self.request.route_url(
-					'topic',
-					topic_id=entry.topic_id,
-					slug=entry.slug()
-				))
+						'topic',
+						topic_id=entry.topic_id,
+						slug=entry.slug()
+					)
+				)
 			else:
 				# Users who are members of groups with the power to do so should be
 				# able to move topics to a better forum.
@@ -133,14 +147,13 @@ class TopicEditActions(ViewBase):
 					choice = (forum.forum_id, forum.title)
 					choices.append(choice)
 				
-				forum.forum_id.choices = choices
+				form.forum_id.choices = choices
 				
 				return {
 					'form': form,
 					'action': self.request.matchdict('action'),
 					'forum': entry.forum
 				}
-		
 		else:
 			return HTTPNotFound()
 ########
@@ -161,9 +174,7 @@ class TopicEditActions(ViewBase):
 class PostEditActions(ViewBase):
 	""" This class allows us to create and edit posts. """
 	# Create.
-	@view_config(
-		match_param='action=create'
-	)
+	@view_config(match_param='action=create')
 	def create_post(self):
 		""" This view function allows for messages to be posted. """
 		entry = Post()
@@ -172,7 +183,9 @@ class PostEditActions(ViewBase):
 		# Get the discussion where the action was initiated
 		topic_id = request.matchdict.get('topic_id')
 		
-		if topic_id:
+		# I want to pass the context of the post to make the form better
+		topic = TopicRecordService.by_id(topic_id)
+		if topic:
 			if self.request.method = 'POST' and form.validate:
 				form_populate.populate_obj(entry)
 				DBSession.add(entry)
@@ -184,8 +197,6 @@ class PostEditActions(ViewBase):
 					)
 				)
 			else:
-				# I want to pass the context of the post to make the form better
-				topic = TopicRecordService.by_id(topic_id)
 				return {
 					'form': form, 
 					'action': request.matchdict.get('action'),
@@ -194,12 +205,10 @@ class PostEditActions(ViewBase):
 		else:
 			return HTTPNotFound()
 	
-	@view_config(
-		match_param='action=edit'
-	)
+	@view_config(match_param='action=edit')
 	def edit_post(self):
 		""" This function allows for posted messages to be edited. """
-		post_id = int(request.params.get('forum_id', -1))
+		post_id = int(request.params.get('post_id', -1))
 		entry = PostRecordService.by_id(post_id)
 		if entry:
 			# I am using entry.topic multiple times.

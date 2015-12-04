@@ -105,8 +105,10 @@ def main(global_config, **settings):
  #        ####  #    #  ####  #    #     #####  #     #  #####  ######  
 	##############################
 	
-	# We need to a parameter for the context to use when creating forums.
-	config.add_route('forum_action', 'forum/{action}/{forum_id:\d+}')
+	# We need to a parameter for the context to use when creating forums. The
+	# variable name forum_id doesn't work because that name will be used in a
+	# different way later. So I will instead change its name to current_forum_id
+	config.add_route('forum_action', 'forum/{action}/{current_forum_id:\d+}')
 	config.add_route('forum', 'forum/{forum_id:\d+}/{slug}')
 	
   #####                                  #####  ######  #     # ######  
