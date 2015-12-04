@@ -35,11 +35,14 @@ class ManagementViews(ViewBase):
 
 	def view_management(self):
 		""" This view function provides a view of a group of users. """
-		group_id = int(self.request.matchdict.get('forum_id', -1))
+		group_id = int(self.request.matchdict.get('group_id', -1))
 		group = GroupRecordService.by_id(group_id)
 		
 		if group:
 			return {'group': group}
+		else:
+			return HTTPNotFound()
+	
 
  #     #                                                                  #######                      #                                        
  ##   ##   ##   #    #   ##    ####  ###### #    # ###### #    # #####    #       #####  # #####      # #    ####  ##### #  ####  #    #  ####  
@@ -90,7 +93,7 @@ class ManagementEditActions(ViewBase):
 				form.populate_obj(entry)
 				return HTTPFound(location=request.route_url(
 						'group',
-						groupd_id=entry.groupd_id,
+						group_id=entry.group_id,
 						slug=entry.slug()
 					)
 				)

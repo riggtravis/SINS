@@ -1314,10 +1314,36 @@ class ManagementViewsTests(unittest.TestCase):
 
 class ManagementEditActionsTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
 	
 	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		
+		transaction.abort()
+		DBSession.remove()
 		testing.tearDown()
+	
+	def test_view_management_valid_group(self):
+		from .views.management import ManagementViews
+		
+		request		= testing.DummyRequest(params={'group_id': 1})
+		inst		= ManagementViews(request)
+		response	= inst.view_management()
+		
+		self.assertEqual(response['group'].group_id, 1)
+		self.assertEqual(response['group'].title, "Test Group")
+	
+	def test_view_management_invalid_group(self):
+		from .views.management import ManagementViews
+		from pyramid.httpexceptions import HTTPNotFound
+		
+		request		= testing.DummyRequest(params={'group_id': 2})
+		inst		= ManagementViews(request)
+		response	= inst.view_management()
+		
+		self.assertEqual(response, HTTPNotFound())
 	
 
 class PermissionEditActionsTests(unittest.TestCase):
