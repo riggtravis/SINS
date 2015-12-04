@@ -1306,14 +1306,6 @@ class PostEditActionsTests(unittest.TestCase):
 
 class ManagementViewsTests(unittest.TestCase):
 	def setUp(self):
-		self.config = testing.setUp()
-	
-	def tearDown(self):
-		testing.tearDown()
-	
-
-class ManagementEditActionsTests(unittest.TestCase):
-	def setUp(self):
 		self.session	= _initTestingDB()
 		self.config		= testing.setUp()
 	
@@ -1344,6 +1336,20 @@ class ManagementEditActionsTests(unittest.TestCase):
 		response	= inst.view_management()
 		
 		self.assertEqual(response, HTTPNotFound())
+
+class ManagementEditActionsTests(unittest.TestCase):
+	def setUp(self):
+		self.session	= _initTestingDB()
+		self.config		= testing.setUp()
+	
+	def tearDown(self):
+		import transaction
+		from .models.meta import DBSession
+		
+		transaction.abort()
+		DBSession.remove()
+		testing.tearDown()
+	
 	
 
 class PermissionEditActionsTests(unittest.TestCase):
