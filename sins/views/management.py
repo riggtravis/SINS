@@ -72,18 +72,26 @@ class ManagementEditActions(ViewBase):
 		if self.request.method = 'POST' and form.validate:
 			form_populate.populate_obj(entry)
 			DBSession.add(entry)
-			return HTTPFound(location=self.request.route_url('home'))
+			
+			# Instead of returning how it should go to the newly created group
+			# page using the ManagementViews
+			return HTTPFound(location=self.request.route_url(
+					'group',
+					group_id=entry.group_id,
+					slug=entry.slug
+				)
+			)
 		else:
 			return {'form': form: 'action': request.matchdict.get('action')}
 	
 	# Update.
 	@view_config(
-		match_param='action=create',
+		match_param='action=edit',
 		renderer='sins:templates/edit_group.mako'
 	)
 	def edit_group(self):
 		""" This view function allows us to change existing groups. """
-		group_id = int(request.params.get('forum_id', -1))
+		group_id = int(request.params.get('group_id', -1))
 		entry = GroupRecordService.by_id(group_id)
 		if entry:
 			form = GroupUpdateForm(request.POST, entry)

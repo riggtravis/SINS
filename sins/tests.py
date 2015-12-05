@@ -1336,6 +1336,7 @@ class ManagementViewsTests(unittest.TestCase):
 		response	= inst.view_management()
 		
 		self.assertEqual(response, HTTPNotFound())
+	
 
 class ManagementEditActionsTests(unittest.TestCase):
 	def setUp(self):
@@ -1350,6 +1351,81 @@ class ManagementEditActionsTests(unittest.TestCase):
 		DBSession.remove()
 		testing.tearDown()
 	
+	def test_create_group_valid_form(self):
+		from .views.management import ManagementEditActions
+		from pyramid.httpexceptions import HTTPFound
+		
+		request = testing.DummyRequest(
+			params={'action': 'create'}, 
+			post={'title': "New Group"}
+		)
+		
+		inst		= ManagementEditActions(request)
+		response	= inst.create_group()
+		
+		self.assertEqual(response, HTTPFound(location=request.route_url(
+					'group', 
+					group_id=2,
+					slug="New Group"
+				)
+			)
+		)
+	
+	def test_create_group_invalid_form(self):
+		from .view.management import ManagementEditActions
+		
+		request		= testing.DummyRequest(params={'action': 'create'})
+		inst		= ManagementEditActions(request)
+		response	= inst.create_group()
+		
+		# I don't know how to test the correctness of a returned form.
+		self.assertEqual(response['action'], 'create')
+	
+	def test_edit_group_valid_group_valid_form(self):
+		from .views.management import ManagementEditActions
+		from pyramid.httpexceptions import HTTPFound
+		
+		request = testing.DummyRequest(
+			params={'action': 'edit', 'group_id': 1},
+			post={'title': 'Edited Forum', 'group_id': 1}
+		)
+		
+		inst		= ManagementEditActions(request)
+		response	= inst.edit_group()
+		
+		self.assertEqual(response, HTTPFound(location=request.route_url(
+					'group',
+					group_id=1,
+					slug="Edited Group"
+				)
+			)
+		)
+	
+	def test_edit_group_valid_group_invalid_form(self):
+		from .views.management import ManagementEditActions
+		
+		request = testing.DummyRequest(
+			params={'action': 'edit', 'group_id': 1}
+		)
+		
+		inst		= ManagementEditActions(request)
+		response	= inst.edit_group()
+		
+		# I'm not sure how to test if a form is retured properly
+		self.assertEqual(response['action'], 'edit')
+	
+	def test_edit_group_invalid_group(self):
+		from .view.management import ManagementEditActions
+		from pyramid.httpexceptions import HTTPNotFound
+		
+		request = testing.DummyRequest(
+			params={'action': 'edit', 'group_id': 2}
+		)
+		
+		inst		= ManagementEditActions(request)
+		response	= inst.edit_group()
+		
+		self.assertEqual(response, HTTPNotFound)
 	
 
 class PermissionEditActionsTests(unittest.TestCase):
